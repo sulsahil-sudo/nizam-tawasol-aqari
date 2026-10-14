@@ -73,13 +73,26 @@ if(page==="properties"){
 
 content.innerHTML=`
 
-<h2>العقارات</h2>
+<select id="propertyType"
+style="width:100%;padding:10px;margin:10px 0;">
+<option>فيلا</option>
+<option>شقة</option>
+<option>أرض</option>
+<option>عمارة</option>
+<option>استراحة</option>
+</select>
 
-<input id="propertyTitle"
-placeholder="عنوان العقار"
+<input id="propertyCity"
+placeholder="المدينة"
 style="width:100%;padding:10px;margin:10px 0;">
 
-<input id="propertyPrice"
+<input id="propertyDistrict"
+placeholder="الحي"
+style="width:100%;padding:10px;margin:10px 0;">
+
+<input id="propertyArea"
+placeholder="المساحة بالمتر"
+style="width:100%;padding:10px;margin:10px 0;">
 placeholder="السعر"
 style="width:100%;padding:10px;margin:10px 0;">
 
