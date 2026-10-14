@@ -59,6 +59,19 @@ content.innerHTML=`
 `;
 }
 
+function showPage(page){
+
+const content = document.getElementById("content");
+
+if(page==="home"){
+
+content.innerHTML=`
+<h2>مرحباً بك</h2>
+<p>اختر أحد الأقسام من الأعلى</p>
+`;
+
+}
+
 if(page==="properties"){
 
 content.innerHTML=`
@@ -87,30 +100,22 @@ loadProperties();
 
 }
 
-}
-</button>
+if(page==="customers"){
 
-<hr>
-
-<div id="propertiesList"></div>
-
-`;
-
-loadProperties();
-}
 content.innerHTML=`
-<h2>العقارات</h2>
-
-<input
-placeholder="عنوان العقار"
-style="width:100%;padding:10px;margin:10px 0;">
-
-<input
-placeholder="السعر"
-style="width:100%;padding:10px;margin:10px 0;">
-
-<button>حفظ العقار</button>
+<h2>العملاء</h2>
+<p>قسم العملاء</p>
 `;
+
+}
+
+if(page==="deals"){
+
+content.innerHTML=`
+<h2>الصفقات</h2>
+<p>قسم الصفقات</p>
+`;
+
 }
 
 }
