@@ -60,6 +60,7 @@ content.innerHTML=`
 }
 
 if(page==="properties"){
+
 content.innerHTML=`
 
 <h2>العقارات</h2>
@@ -74,6 +75,19 @@ style="width:100%;padding:10px;margin:10px 0;">
 
 <button onclick="saveProperty()">
 حفظ العقار
+</button>
+
+<hr>
+
+<div id="propertiesList"></div>
+
+`;
+
+loadProperties();
+
+}
+
+}
 </button>
 
 <hr>
