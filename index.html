@@ -129,76 +129,17 @@ content.innerHTML=`
 }
 
 }
-function saveProperty(){
-
-const title =
-document.getElementById("propertyTitle").value;
-
-const price =
-document.getElementById("propertyPrice").value;
-
-if(title === "" || price === ""){
-alert("أكمل البيانات");
-return;
-}
-
-let properties =
-JSON.parse(
-localStorage.getItem("properties")
-) || [];
-
-properties.push({
-title:title,
-price:price
-});
-
-localStorage.setItem(
-"properties",
-JSON.stringify(properties)
-);
-
-loadProperties();
-
-document.getElementById("propertyTitle").value="";
-document.getElementById("propertyPrice").value="";
-
-}
-
-function loadProperties(){
-
-const list =
-document.getElementById("propertiesList");
-
-if(!list) return;
-
-let properties =
-JSON.parse(
-localStorage.getItem("properties")
-) || [];
-
-list.innerHTML="";
-
-properties.forEach(function(item){
-
-list.innerHTML += `
-<div style="
-background:white;
-padding:10px;
-margin-top:10px;
-border:1px solid #ddd;
-border-radius:8px;
-">
-
 <b>${item.title}</b>
 <br>
+النوع: ${item.type}
+<br>
+المدينة: ${item.city}
+<br>
+الحي: ${item.district}
+<br>
+المساحة: ${item.area} م²
+<br>
 السعر: ${item.price} ريال
-
-</div>
-`;
-
-});
-
-}
 </script>
 
 </body>
