@@ -30,18 +30,22 @@ box-shadow:0 2px 10px rgba(0,0,0,.1);
 
 </head>
 <body>
-
 <div class="header">
 <h1>نظام تواصل العقاري</h1>
 </div>
 
-<div class="card">
-<h2>تم تشغيل الموقع بنجاح</h2>
-<p>المرحلة التالية بناء نظام العقارات.</p>
-</div>
+<div style="padding:20px;text-align:center">
 
-</body>
-  <body>
+<button onclick="showPage('home')">
+الرئيسية
+</button>
+
+<button onclick="showPage('properties')">
+العقارات
+</button>
+
+</div>
+<body>
 
 <div class="header">
 <h1>نظام تواصل العقاري</h1>
@@ -49,11 +53,22 @@ box-shadow:0 2px 10px rgba(0,0,0,.1);
 
 <div style="padding:20px;text-align:center">
 
-<button onclick="showPage('home')">الرئيسية</button>
-<button onclick="showPage('properties')">العقارات</button>
+<button onclick="showPage('home')">
+الرئيسية
+</button>
+
+<button onclick="showPage('properties')">
+العقارات
+</button>
 
 </div>
 
+<div id="content" class="card">
+
+<h2>مرحباً بك</h2>
+<p>اختر أحد الأقسام من الأعلى</p>
+
+</div>
 <div id="content" class="card">
 
 <h2>مرحباً بك</h2>
