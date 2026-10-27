@@ -101,7 +101,7 @@ tr:nth-child(even) { background: #f9fafc; }
     <button class="back-btn" onclick="go('home')">← الرئيسية</button>
   </div>
   <div class="form-grid">
-    <div><label>رقم العميل 🔑</label><input type="number" id="c_id"></div>
+  <input type="hidden" id="c_id">
     <div><label>الاسم</label><input type="text" id="c_name"></div>
     <div><label>الجوال</label><input type="text" id="c_phone"></div>
     <div><label>المدينة</label><input type="text" id="c_city"></div>
@@ -120,7 +120,7 @@ tr:nth-child(even) { background: #f9fafc; }
     <button class="back-btn" onclick="go('home')">← الرئيسية</button>
   </div>
   <div class="form-grid">
-    <div><label>رقم العقار 🔑</label><input type="number" id="p_id"></div>
+    <input type="hidden" id="p_id">
     <div><label>النوع</label>
       <select id="p_type">
         <option value="">اختر</option>
@@ -151,7 +151,7 @@ tr:nth-child(even) { background: #f9fafc; }
     <button class="back-btn" onclick="go('home')">← الرئيسية</button>
   </div>
   <div class="form-grid">
-    <div><label>رقم الطلب 🔑</label><input type="number" id="r_id"></div>
+ <input type="hidden" id="d_id">
     <div><label>العميل 🔗</label>
       <select id="r_client"><option value="">اختر</option></select></div>
     <div><label>العقار 🔗</label>
@@ -275,18 +275,28 @@ function refreshSelects() {
     DB.requests.map(r => `<option value="${r.id}">طلب ${r.id} — ${getClientName(r.client)}</option>`).join('');
 }
 
-// ============ العملاء ============
-function saveClient() {
-  const row = { id: v('c_id'), name: v('c_name'), phone: v('c_phone'), city: v('c_city') };
-  if (!row.id || !row.name) return msg('clients', '⚠️ الرقم والاسم مطلوبان', false);
-  if (DB.clients.some(c => String(c.id) === String(row.id)))
-    return msg('clients', '⚠️ الرقم مكرر', false);
+// ============ العملاء ============function saveClient() {
+  // توليد رقم العميل تلقائياً
+  let nextId = 1;
+  if (DB.clients.length > 0) {
+    nextId = Math.max(...DB.clients.map(c => Number(c.id))) + 1;
+  }
+
+  const row = { 
+    id: String(nextId), 
+    name: v('c_name'), 
+    phone: v('c_phone'), 
+    city: v('c_city') 
+  };
+
+  if (!row.name) return msg('clients', '⚠️ الاسم مطلوب', false);
+
   DB.clients.push(row); save();
   renderClients(); refreshSelects();
-  ['c_id','c_name','c_phone','c_city'].forEach(f => document.getElementById(f).value = '');
-  document.getElementById('c_id').focus();
-  msg('clients', '✅ تم حفظ العميل');
-}
+  ['c_name','c_phone','c_city'].forEach(f => document.getElementById(f).value = '');
+  document.getElementById('c_name').focus();
+  msg('clients', '✅ تم حفظ العميل برقم ' + row.id);
+}}
 function renderClients() {
   document.getElementById('t-clients').innerHTML = DB.clients.map((c, i) => `
     <tr><td>${i+1}</td><td>${c.id}</td><td>${c.name}</td><td>${c.phone}</td><td>${c.city}</td>
