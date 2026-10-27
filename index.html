@@ -1,153 +1,533 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>مكتب تواصل عقاري</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Segoe UI', Tahoma, sans-serif;
-      min-height: 100vh;
-      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #6a3093 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 30px;
-    }
-    .screen {
-      background: #fff;
-      width: 100%;
-      max-width: 950px;
-      border-radius: 20px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
-      padding: 45px 35px;
-      text-align: center;
-    }
-    .logo {
-      width: 90px; height: 90px;
-      margin: 0 auto 20px;
-      background: linear-gradient(135deg, #1e3c72, #6a3093);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 42px;
-      box-shadow: 0 8px 20px rgba(30,60,114,0.4);
-    }
-    h1 {
-      color: #1e3c72;
-      font-size: 32px;
-      margin-bottom: 8px;
-      letter-spacing: 0.5px;
-    }
-    .subtitle {
-      color: #7f8c8d;
-      font-size: 15px;
-      margin-bottom: 40px;
-    }
-    .buttons-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
-    /* البحث يأخذ صفًا كاملًا في الأسفل */
-    .btn-search-wide {
-      grid-column: 1 / -1;
-    }
-    .menu-btn {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 30px 20px;
-      border: none;
-      border-radius: 14px;
-      cursor: pointer;
-      font-size: 17px;
-      font-weight: bold;
-      color: #fff;
-      transition: transform 0.2s, box-shadow 0.2s;
-      text-decoration: none;
-    }
-    .menu-btn:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 25px rgba(0,0,0,0.25);
-    }
-    .menu-btn .icon { font-size: 38px; }
-
-    .btn-clients  { background: linear-gradient(135deg, #2980b9, #3498db); }
-    .btn-props    { background: linear-gradient(135deg, #27ae60, #2ecc71); }
-    .btn-requests { background: linear-gradient(135deg, #e67e22, #f39c12); }
-    .btn-deals    { background: linear-gradient(135deg, #8e44ad, #9b59b6); }
-    .btn-search   { background: linear-gradient(135deg, #c0392b, #e74c3c); }
-
-    .btn-search-wide {
-      flex-direction: row !important;
-      gap: 15px !important;
-      padding: 22px 20px !important;
-      font-size: 18px !important;
-    }
-
-    .footer {
-      margin-top: 35px;
-      font-size: 13px;
-      color: #95a5a6;
-      border-top: 1px solid #ecf0f1;
-      padding-top: 15px;
-    }
-
-    @media (max-width: 700px) {
-      .buttons-grid { grid-template-columns: repeat(2, 1fr); }
-      h1 { font-size: 24px; }
-    }
-    @media (max-width: 450px) {
-      .buttons-grid { grid-template-columns: 1fr; }
-    }
-  </style>
+<meta charset="UTF-8">
+<title>مكتب تواصل عقاري</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Tahoma, sans-serif; min-height: 100vh;
+  background: linear-gradient(135deg, #1e3c72, #2a5298, #6a3093);
+  padding: 20px; }
+.screen { background: #fff; max-width: 1100px; margin: 0 auto;
+  border-radius: 16px; padding: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
+.header { text-align: center; margin-bottom: 25px; }
+.logo { width: 70px; height: 70px; margin: 0 auto 12px;
+  background: linear-gradient(135deg, #1e3c72, #6a3093); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 34px; }
+h1 { color: #1e3c72; font-size: 26px; }
+.subtitle { color: #7f8c8d; font-size: 13px; margin-top: 6px; }
+.view { display: none; }
+.view.active { display: block; }
+.view-header { display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 2px solid #ecf0f1; padding-bottom: 12px; margin-bottom: 20px; }
+.view-header h2 { color: #2c3e50; font-size: 20px; }
+.back-btn { background: #7f8c8d; color: #fff; border: none; padding: 8px 16px;
+  border-radius: 6px; cursor: pointer; font-weight: bold; }
+.back-btn:hover { background: #5d6d7e; }
+.home-buttons { display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 14px; margin-top: 25px; }
+.home-btn { display: flex; flex-direction: column; align-items: center;
+  gap: 8px; padding: 26px 15px; border: none; border-radius: 12px;
+  cursor: pointer; font-size: 14px; font-weight: bold; color: #fff; transition: transform 0.2s; }
+.home-btn:hover { transform: translateY(-3px); }
+.home-btn .icon { font-size: 32px; }
+.b1 { background: linear-gradient(135deg, #2980b9, #3498db); }
+.b2 { background: linear-gradient(135deg, #27ae60, #2ecc71); }
+.b3 { background: linear-gradient(135deg, #e67e22, #f39c12); }
+.b4 { background: linear-gradient(135deg, #8e44ad, #9b59b6); }
+.b5 { background: linear-gradient(135deg, #c0392b, #e74c3c); }
+.b6 { background: linear-gradient(135deg, #16a085, #1abc9c); }
+.wide { grid-column: 1 / -1; flex-direction: row !important; padding: 18px !important; }
+.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px; margin-bottom: 15px; }
+label { display: block; font-weight: bold; color: #34495e;
+  margin-bottom: 4px; font-size: 13px; }
+input, select { width: 100%; padding: 9px; border: 1px solid #ccc;
+  border-radius: 6px; font-size: 14px; }
+.buttons { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
+.btn-save { background: #27ae60; color: #fff; border: none; padding: 11px 24px;
+  border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold; }
+.btn-save:hover { background: #219150; }
+.btn-del { background: #e74c3c; color: #fff; border: none; padding: 4px 10px;
+  border-radius: 4px; cursor: pointer; font-size: 12px; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { border: 1px solid #e1e5eb; padding: 8px; text-align: center; }
+th { background: #34495e; color: #fff; }
+tr:nth-child(even) { background: #f9fafc; }
+.msg { margin: 10px 0; padding: 10px; border-radius: 6px; text-align: center;
+  font-weight: bold; display: none; }
+.msg.ok { background: #d5f5e3; color: #186a3b; display: block; }
+.msg.err { background: #fadbd8; color: #922b21; display: block; }
+.search-bar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+.search-bar input { flex: 2; min-width: 200px; padding: 11px; }
+.search-bar select { flex: 1; min-width: 140px; padding: 11px; }
+.empty { text-align: center; color: #95a5a6; padding: 25px; font-style: italic; }
+.results h3 { color: #2c3e50; margin: 18px 0 10px;
+  border-bottom: 2px solid #ecf0f1; padding-bottom: 6px; }
+.badge { background: #3498db; color: #fff; padding: 2px 10px;
+  border-radius: 10px; font-size: 12px; }
+@media (max-width: 700px) { .home-buttons { grid-template-columns: repeat(2, 1fr); } }
+</style>
 </head>
 <body>
-  <div class="screen">
+
+<!-- ======= الرئيسية ======= -->
+<div class="screen view active" id="v-home">
+  <div class="header">
     <div class="logo">🏢</div>
     <h1>مكتب تواصل عقاري</h1>
     <p class="subtitle">نظام إدارة العقارات والعملاء والصفقات</p>
-
-    <div class="buttons-grid">
-      <button class="menu-btn btn-clients" onclick="go('clients.html')">
-        <span class="icon">👥</span>
-        <span>إدخال العملاء</span>
-      </button>
-
-      <button class="menu-btn btn-props" onclick="go('properties.html')">
-        <span class="icon">🏠</span>
-        <span>إدخال العقارات</span>
-      </button>
-
-      <button class="menu-btn btn-requests" onclick="go('requests.html')">
-        <span class="icon">📋</span>
-        <span>إدخال الطلبات</span>
-      </button>
-
-      <button class="menu-btn btn-deals" onclick="go('deals.html')">
-        <span class="icon">💰</span>
-        <span>إدخال الصفقات</span>
-      </button>
-
-      <button class="menu-btn btn-search btn-search-wide" onclick="go('search.html')">
-        <span class="icon">🔍</span>
-        <span>البحث والاستعلام</span>
-      </button>
-    </div>
-
-    <div class="footer">
-      مكتب تواصل عقاري © 2025 — جميع الحقوق محفوظة
-    </div>
   </div>
+  <div class="home-buttons">
+    <button class="home-btn b1" onclick="go('clients')">
+      <span class="icon">👥</span><span>إدخال العملاء</span></button>
+    <button class="home-btn b2" onclick="go('properties')">
+      <span class="icon">🏠</span><span>إدخال العقارات</span></button>
+    <button class="home-btn b3" onclick="go('requests')">
+      <span class="icon">📋</span><span>إدخال الطلبات</span></button>
+    <button class="home-btn b4" onclick="go('deals')">
+      <span class="icon">💰</span><span>إدخال الصفقات</span></button>
+    <button class="home-btn b5 wide" onclick="go('search')">
+      <span class="icon">🔍</span><span>البحث والاستعلام</span></button>
+    <button class="home-btn b6 wide" onclick="exportExcel()">
+      <span class="icon">📦</span><span>تصدير كل البيانات إلى Excel</span></button>
+  </div>
+</div>
 
-  <script>
-    function go(page) {
-      alert('سيتم الانتقال إلى: ' + page);
-      // بعد إنشاء الملفات فعّل هذا السطر بدل alert:
-      // window.location.href = page;
-    }
-  </script>
+<!-- ======= العملاء ======= -->
+<div class="screen view" id="v-clients">
+  <div class="view-header">
+    <h2>👥 العملاء</h2>
+    <button class="back-btn" onclick="go('home')">← الرئيسية</button>
+  </div>
+  <div class="form-grid">
+    <div><label>رقم العميل 🔑</label><input type="number" id="c_id"></div>
+    <div><label>الاسم</label><input type="text" id="c_name"></div>
+    <div><label>الجوال</label><input type="text" id="c_phone"></div>
+    <div><label>المدينة</label><input type="text" id="c_city"></div>
+  </div>
+  <div class="buttons"><button class="btn-save" onclick="saveClient()">💾 حفظ</button></div>
+  <div class="msg" id="m-clients"></div>
+  <table><thead><tr>
+    <th>#</th><th>الرقم</th><th>الاسم</th><th>الجوال</th><th>المدينة</th><th>حذف</th>
+  </tr></thead><tbody id="t-clients"></tbody></table>
+</div>
+
+<!-- ======= العقارات ======= -->
+<div class="screen view" id="v-properties">
+  <div class="view-header">
+    <h2>🏠 العقارات</h2>
+    <button class="back-btn" onclick="go('home')">← الرئيسية</button>
+  </div>
+  <div class="form-grid">
+    <div><label>رقم العقار 🔑</label><input type="number" id="p_id"></div>
+    <div><label>النوع</label>
+      <select id="p_type">
+        <option value="">اختر</option>
+        <option>شقة</option><option>فيلا</option><option>أرض</option>
+        <option>محل تجاري</option><option>مكتب</option>
+      </select></div>
+    <div><label>المدينة</label><input type="text" id="p_city"></div>
+    <div><label>العنوان</label><input type="text" id="p_address"></div>
+    <div><label>المساحة</label><input type="number" id="p_area"></div>
+    <div><label>السعر</label><input type="number" id="p_price"></div>
+    <div><label>الحالة</label>
+      <select id="p_status">
+        <option>متاح</option><option>مؤجر</option><option>مباع</option>
+      </select></div>
+  </div>
+  <div class="buttons"><button class="btn-save" onclick="saveProperty()">💾 حفظ</button></div>
+  <div class="msg" id="m-properties"></div>
+  <table><thead><tr>
+    <th>#</th><th>الرقم</th><th>النوع</th><th>المدينة</th><th>العنوان</th>
+    <th>المساحة</th><th>السعر</th><th>الحالة</th><th>حذف</th>
+  </tr></thead><tbody id="t-properties"></tbody></table>
+</div>
+
+<!-- ======= الطلبات ======= -->
+<div class="screen view" id="v-requests">
+  <div class="view-header">
+    <h2>📋 الطلبات</h2>
+    <button class="back-btn" onclick="go('home')">← الرئيسية</button>
+  </div>
+  <div class="form-grid">
+    <div><label>رقم الطلب 🔑</label><input type="number" id="r_id"></div>
+    <div><label>العميل 🔗</label>
+      <select id="r_client"><option value="">اختر</option></select></div>
+    <div><label>العقار 🔗</label>
+      <select id="r_property"><option value="">اختر</option></select></div>
+    <div><label>النوع</label>
+      <select id="r_type">
+        <option>شراء</option><option>إيجار</option><option>معاينة</option>
+      </select></div>
+    <div><label>التاريخ</label><input type="date" id="r_date"></div>
+    <div><label>الحالة</label>
+      <select id="r_status">
+        <option>جديد</option><option>قيد المعالجة</option>
+        <option>مكتمل</option><option>ملغي</option>
+      </select></div>
+  </div>
+  <div class="buttons"><button class="btn-save" onclick="saveRequest()">💾 حفظ</button></div>
+  <div class="msg" id="m-requests"></div>
+  <table><thead><tr>
+    <th>#</th><th>الرقم</th><th>العميل</th><th>العقار</th>
+    <th>النوع</th><th>التاريخ</th><th>الحالة</th><th>حذف</th>
+  </tr></thead><tbody id="t-requests"></tbody></table>
+</div>
+
+<!-- ======= الصفقات ======= -->
+<div class="screen view" id="v-deals">
+  <div class="view-header">
+    <h2>💰 الصفقات</h2>
+    <button class="back-btn" onclick="go('home')">← الرئيسية</button>
+  </div>
+  <div class="form-grid">
+    <div><label>رقم الصفقة 🔑</label><input type="number" id="d_id"></div>
+    <div><label>الطلب 🔗</label>
+      <select id="d_request"><option value="">اختر</option></select></div>
+    <div><label>العميل 🔗</label>
+      <select id="d_client"><option value="">اختر</option></select></div>
+    <div><label>العقار 🔗</label>
+      <select id="d_property"><option value="">اختر</option></select></div>
+    <div><label>النوع</label>
+      <select id="d_type"><option>بيع</option><option>إيجار</option></select></div>
+    <div><label>المبلغ</label><input type="number" id="d_amount"></div>
+    <div><label>العمولة</label><input type="number" id="d_commission"></div>
+    <div><label>التاريخ</label><input type="date" id="d_date"></div>
+  </div>
+  <div class="buttons"><button class="btn-save" onclick="saveDeal()">💾 حفظ</button></div>
+  <div class="msg" id="m-deals"></div>
+  <table><thead><tr>
+    <th>#</th><th>الرقم</th><th>العميل</th><th>العقار</th>
+    <th>النوع</th><th>المبلغ</th><th>العمولة</th><th>التاريخ</th><th>حذف</th>
+  </tr></thead><tbody id="t-deals"></tbody></table>
+</div>
+
+<!-- ======= البحث ======= -->
+<div class="screen view" id="v-search">
+  <div class="view-header">
+    <h2>🔍 البحث والاستعلام</h2>
+    <button class="back-btn" onclick="go('home')">← الرئيسية</button>
+  </div>
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="اكتب اسم عميل / رقم عقار / رقم صفقة..."
+      onkeydown="if(event.key==='Enter') doSearch()">
+    <select id="searchScope">
+      <option value="all">الكل</option>
+      <option value="clients">العملاء</option>
+      <option value="properties">العقارات</option>
+      <option value="requests">الطلبات</option>
+      <option value="deals">الصفقات</option>
+    </select>
+    <button class="btn-save" onclick="doSearch()">🔎 بحث</button>
+  </div>
+  <div id="searchResults" class="results">
+    <div class="empty">اكتب كلمة للبحث...</div>
+  </div>
+</div>
+
+<script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+<script>
+// ============ قاعدة البيانات (تُحفظ في المتصفح) ============
+let DB = JSON.parse(localStorage.getItem('aqariDB') || '{"clients":[],"properties":[],"requests":[],"deals":[]}');
+function save() { localStorage.setItem('aqariDB', JSON.stringify(DB)); }
+
+// ============ التنقل ============
+function go(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('v-' + name).classList.add('active');
+  if (name === 'search') document.getElementById('searchResults').innerHTML =
+    '<div class="empty">اكتب كلمة للبحث...</div>';
+  refreshSelects();
+}
+
+// ============ أدوات ============
+function v(id) { return document.getElementById(id).value.trim(); }
+function n(id) { return Number(document.getElementById(id).value); }
+function msg(key, text, ok = true) {
+  const el = document.getElementById('m-' + key);
+  el.textContent = text;
+  el.className = 'msg ' + (ok ? 'ok' : 'err');
+  setTimeout(() => el.className = 'msg', 3000);
+}
+function getClientName(id) {
+  const c = DB.clients.find(c => String(c.id) === String(id));
+  return c ? c.name : '⚠️ غير موجود';
+}
+function getPropDesc(id) {
+  const p = DB.properties.find(p => String(p.id) === String(id));
+  return p ? p.type + ' - ' + p.address : '⚠️ غير موجود';
+}
+
+// ============ القوائم المنسدلة ============
+function refreshSelects() {
+  const clients = '<option value="">اختر عميلًا</option>' +
+    DB.clients.map(c => `<option value="${c.id}">${c.name} (${c.id})</option>`).join('');
+  document.getElementById('r_client').innerHTML = clients;
+  document.getElementById('d_client').innerHTML = clients;
+
+  const props = '<option value="">اختر عقارًا</option>' +
+    DB.properties.map(p => `<option value="${p.id}">${p.type} - ${p.address} (${p.id})</option>`).join('');
+  document.getElementById('r_property').innerHTML = props;
+  document.getElementById('d_property').innerHTML = props;
+
+  document.getElementById('d_request').innerHTML = '<option value="">اختر طلبًا</option>' +
+    DB.requests.map(r => `<option value="${r.id}">طلب ${r.id} — ${getClientName(r.client)}</option>`).join('');
+}
+
+// ============ العملاء ============
+function saveClient() {
+  const row = { id: v('c_id'), name: v('c_name'), phone: v('c_phone'), city: v('c_city') };
+  if (!row.id || !row.name) return msg('clients', '⚠️ الرقم والاسم مطلوبان', false);
+  if (DB.clients.some(c => String(c.id) === String(row.id)))
+    return msg('clients', '⚠️ الرقم مكرر', false);
+  DB.clients.push(row); save();
+  renderClients(); refreshSelects();
+  ['c_id','c_name','c_phone','c_city'].forEach(f => document.getElementById(f).value = '');
+  document.getElementById('c_id').focus();
+  msg('clients', '✅ تم حفظ العميل');
+}
+function renderClients() {
+  document.getElementById('t-clients').innerHTML = DB.clients.map((c, i) => `
+    <tr><td>${i+1}</td><td>${c.id}</td><td>${c.name}</td><td>${c.phone}</td><td>${c.city}</td>
+    <td><button class="btn-del" onclick="delClient('${c.id}')">حذف</button></td></tr>`).join('');
+}
+function delClient(id) {
+  if (DB.requests.some(r => String(r.client) === String(id)))
+    return alert('❌ يوجد طلبات مرتبطة بهذا العميل');
+  if (!confirm('حذف؟')) return;
+  DB.clients = DB.clients.filter(c => String(c.id) !== String(id));
+  save(); renderClients(); refreshSelects();
+}
+
+// ============ العقارات ============
+function saveProperty() {
+  const row = { id: v('p_id'), type: v('p_type'), city: v('p_city'),
+    address: v('p_address'), area: n('p_area'), price: n('p_price'), status: v('p_status') };
+  if (!row.id || !row.type || !row.city || !row.address || !row.area || !row.price)
+    return msg('properties', '⚠️ عبّي الحقول', false);
+  if (DB.properties.some(p => String(p.id) === String(row.id)))
+    return msg('properties', '⚠️ الرقم مكرر', false);
+  DB.properties.push(row); save();
+  renderProperties(); refreshSelects();
+  ['p_id','p_city','p_address','p_area','p_price'].forEach(f => document.getElementById(f).value = '');
+  document.getElementById('p_id').focus();
+  msg('properties', '✅ تم حفظ العقار');
+}
+function renderProperties() {
+  document.getElementById('t-properties').innerHTML = DB.properties.map((p, i) => `
+    <tr><td>${i+1}</td><td>${p.id}</td><td>${p.type}</td><td>${p.city}</td>
+    <td>${p.address}</td><td>${p.area}</td><td>${p.price}</td><td>${p.status}</td>
+    <td><button class="btn-del" onclick="delProperty('${p.id}')">حذف</button></td></tr>`).join('');
+}
+function delProperty(id) {
+  if (DB.requests.some(r => String(r.property) === String(id)))
+    return alert('❌ يوجد طلبات مرتبطة بهذا العقار');
+  if (!confirm('حذف؟')) return;
+  DB.properties = DB.properties.filter(p => String(p.id) !== String(id));
+  save(); renderProperties(); refreshSelects();
+}
+
+// ============ الطلبات ============
+function saveRequest() {
+  const row = { id: v('r_id'), client: v('r_client'), property: v('r_property'),
+    type: v('r_type'), date: v('r_date'), status: v('r_status') };
+  if (!row.id || !row.client || !row.property || !row.date)
+    return msg('requests', '⚠️ عبّي الحقول', false);
+  if (DB.requests.some(r => String(r.id) === String(row.id)))
+    return msg('requests', '⚠️ الرقم مكرر', false);
+  if (!DB.clients.some(c => String(c.id) === String(row.client)))
+    return msg('requests', '⚠️ العميل غير موجود', false);
+  if (!DB.properties.some(p => String(p.id) === String(row.property)))
+    return msg('requests', '⚠️ العقار غير موجود', false);
+  DB.requests.push(row); save();
+  renderRequests(); refreshSelects();
+  ['r_id','r_date'].forEach(f => document.getElementById(f).value = '');
+  document.getElementById('r_id').focus();
+  msg('requests', '✅ تم حفظ الطلب');
+}
+function renderRequests() {
+  document.getElementById('t-requests').innerHTML = DB.requests.map((r, i) => `
+    <tr><td>${i+1}</td><td>${r.id}</td><td>${getClientName(r.client)}</td>
+    <td>${getPropDesc(r.property)}</td><td>${r.type}</td><td>${r.date}</td><td>${r.status}</td>
+    <td><button class="btn-del" onclick="delRequest('${r.id}')">حذف</button></td></tr>`).join('');
+}
+function delRequest(id) {
+  if (DB.deals.some(d => String(d.request) === String(id)))
+    return alert('❌ يوجد صفقة مرتبطة بهذا الطلب');
+  if (!confirm('حذف؟')) return;
+  DB.requests = DB.requests.filter(r => String(r.id) !== String(id));
+  save(); renderRequests(); refreshSelects();
+}
+
+// ============ الصفقات ============
+function saveDeal() {
+  const row = { id: v('d_id'), request: v('d_request'), client: v('d_client'),
+    property: v('d_property'), type: v('d_type'),
+    amount: n('d_amount'), commission: n('d_commission'), date: v('d_date') };
+  if (!row.id || !row.request || !row.client || !row.property || !row.amount || !row.date)
+    return msg('deals', '⚠️ عبّي الحقول الأساسية', false);
+  if (DB.deals.some(d => String(d.id) === String(row.id)))
+    return msg('deals', '⚠️ الرقم مكرر', false);
+  DB.deals.push(row); save();
+  renderDeals();
+  ['d_id','d_amount','d_commission','d_date'].forEach(f => document.getElementById(f).value = '');
+  document.getElementById('d_id').focus();
+  msg('deals', '✅ تم حفظ الصفقة');
+}
+function renderDeals() {
+  document.getElementById('t-deals').innerHTML = DB.deals.map((d, i) => `
+    <tr><td>${i+1}</td><td>${d.id}</td><td>${getClientName(d.client)}</td>
+    <td>${getPropDesc(d.property)}</td><td>${d.type}</td><td>${d.amount}</td>
+    <td>${d.commission}</td><td>${d.date}</td>
+    <td><button class="btn-del" onclick="delDeal('${d.id}')">حذف</button></td></tr>`).join('');
+}
+function delDeal(id) {
+  if (!confirm('حذف؟')) return;
+  DB.deals = DB.deals.filter(d => String(d.id) !== String(id));
+  save(); renderDeals();
+}
+
+// ============ البحث ============
+function doSearch() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const scope = document.getElementById('searchScope').value;
+  const box = document.getElementById('searchResults');
+  if (!q) { box.innerHTML = '<div class="empty">اكتب كلمة للبحث</div>'; return; }
+
+  let total = 0, html = '';
+
+  function section(title, rows, keys, heads) {
+    if (!rows.length) return '';
+    total += rows.length;
+    let s = `<h3>${title} <span class="badge">${rows.length}</span></h3><table><thead><tr>`;
+    heads.forEach(h => s += `<th>${h}</th>`);
+    s += '</tr></thead><tbody>';
+    rows.forEach(r => {
+      s += '<tr>';
+      keys.forEach(k => s += `<td>${r[k] ?? ''}</td>`);
+      s += '</tr>';
+    });
+    return s + '</tbody></table>';
+  }
+
+  if (scope === 'all' || scope === 'clients') {
+    const rows = DB.clients.filter(c =>
+      Object.values(c).some(v => String(v).toLowerCase().includes(q)));
+    html += section('👥 العملاء', rows,
+      ['id','name','phone','city'], ['الرقم','الاسم','الجوال','المدينة']);
+  }
+  if (scope === 'all' || scope === 'properties') {
+    const rows = DB.properties.filter(p =>
+      Object.values(p).some(v => String(v).toLowerCase().includes(q)));
+    html += section('🏠 العقارات', rows,
+      ['id','type','city','address','price','status'],
+      ['الرقم','النوع','المدينة','العنوان','السعر','الحالة']);
+  }
+  if (scope === 'all' || scope === 'requests') {
+    const rows = DB.requests.filter(r =>
+      Object.values(r).some(v => String(v).toLowerCase().includes(q)) ||
+      getClientName(r.client).toLowerCase().includes(q) ||
+      getPropDesc(r.property).toLowerCase().includes(q))
+      .map(r => ({...r, client: getClientName(r.client), property: getPropDesc(r.property)}));
+    html += section('📋 الطلبات', rows,
+      ['id','client','property','type','date','status'],
+      ['الرقم','العميل','العقار','النوع','التاريخ','الحالة']);
+  }
+  if (scope === 'all' || scope === 'deals') {
+    const rows = DB.deals.filter(d =>
+      Object.values(d).some(v => String(v).toLowerCase().includes(q)) ||
+      getClientName(d.client).toLowerCase().includes(q) ||
+      getPropDesc(d.property).toLowerCase().includes(q))
+      .map(d => ({...d, client: getClientName(d.client), property: getPropDesc(d.property)}));
+    html += section('💰 الصفقات', rows,
+      ['id','client','property','type','amount','commission','date'],
+      ['الرقم','العميل','العقار','النوع','المبلغ','العمولة','التاريخ']);
+  }
+
+  box.innerHTML = total === 0
+    ? '<div class="empty">لا توجد نتائج</div>'
+    : `<div style="color:#27ae60;font-weight:bold;margin-bottom:10px">✅ ${total} نتيجة</div>` + html;
+}
+
+// ============ التصدير إلى Excel ============
+function exportExcel() {
+  if (DB.clients.length + DB.properties.length + DB.requests.length + DB.deals.length === 0)
+    return alert('⚠️ لا توجد بيانات للتصدير');
+
+  const wb = XLSX.utils.book_new();
+
+  const clientsData = DB.clients.map(c => ({
+    'رقم العميل 🔑': c.id, 'الاسم': c.name, 'الجوال': c.phone, 'المدينة': c.city
+  }));
+  const ws1 = XLSX.utils.json_to_sheet(clientsData.length ? clientsData :
+    [{ 'رقم العميل 🔑': '', 'الاسم': '', 'الجوال': '', 'المدينة': '' }]);
+  XLSX.utils.book_append_sheet(wb, ws1, 'العملاء');
+
+  const propsData = DB.properties.map(p => ({
+    'رقم العقار 🔑': p.id, 'النوع': p.type, 'المدينة': p.city,
+    'العنوان': p.address, 'المساحة': p.area, 'السعر': p.price, 'الحالة': p.status
+  }));
+  const ws2 = XLSX.utils.json_to_sheet(propsData.length ? propsData :
+    [{ 'رقم العقار 🔑': '', 'النوع': '', 'المدينة': '', 'العنوان': '', 'المساحة': '', 'السعر': '', 'الحالة': '' }]);
+  XLSX.utils.book_append_sheet(wb, ws2, 'العقارات');
+
+  const reqData = DB.requests.map(r => ({
+    'رقم الطلب 🔑': r.id,
+    'رقم العميل 🔗': r.client,
+    'اسم العميل ✅': getClientName(r.client),
+    'رقم العقار 🔗': r.property,
+    'وصف العقار ✅': getPropDesc(r.property),
+    'النوع': r.type, 'التاريخ': r.date, 'الحالة': r.status
+  }));
+  const ws3 = XLSX.utils.json_to_sheet(reqData.length ? reqData :
+    [{ 'رقم الطلب 🔑': '', 'رقم العميل 🔗': '', 'اسم العميل ✅': '',
+       'رقم العقار 🔗': '', 'وصف العقار ✅': '', 'النوع': '', 'التاريخ': '', 'الحالة': '' }]);
+  XLSX.utils.book_append_sheet(wb, ws3, 'الطلبات');
+
+  const dealData = DB.deals.map(d => ({
+    'رقم الصفقة 🔑': d.id,
+    'رقم الطلب 🔗': d.request,
+    'رقم العميل 🔗': d.client,
+    'اسم العميل ✅': getClientName(d.client),
+    'رقم العقار 🔗': d.property,
+    'وصف العقار ✅': getPropDesc(d.property),
+    'النوع': d.type, 'المبلغ': d.amount, 'العمولة': d.commission, 'التاريخ': d.date
+  }));
+  const ws4 = XLSX.utils.json_to_sheet(dealData.length ? dealData :
+    [{ 'رقم الصفقة 🔑': '', 'رقم الطلب 🔗': '', 'رقم العميل 🔗': '', 'اسم العميل ✅': '',
+       'رقم العقار 🔗': '', 'وصف العقار ✅': '', 'النوع': '', 'المبلغ': '', 'العمولة': '', 'التاريخ': '' }]);
+  XLSX.utils.book_append_sheet(wb, ws4, 'الصفقات');
+
+  const totalAmount = DB.deals.reduce((s, d) => s + (d.amount || 0), 0);
+  const totalComm = DB.deals.reduce((s, d) => s + (d.commission || 0), 0);
+  const stats = [
+    ['📊 إحصائيات النظام', ''],
+    ['التاريخ', new Date().toLocaleDateString('ar-SA')],
+    ['', ''],
+    ['عدد العملاء', DB.clients.length],
+    ['عدد العقارات', DB.properties.length],
+    ['عدد الطلبات', DB.requests.length],
+    ['عدد الصفقات', DB.deals.length],
+    ['', ''],
+    ['إجمالي المبالغ', totalAmount],
+    ['إجمالي العمولات', totalComm]
+  ];
+  const ws5 = XLSX.utils.aoa_to_sheet(stats);
+  ws5['!cols'] = [{ wch: 25 }, { wch: 20 }];
+  XLSX.utils.book_append_sheet(wb, ws5, 'الإحصائيات');
+
+  const date = new Date().toISOString().slice(0, 10);
+  XLSX.writeFile(wb, `مكتب_تواصل_عقاري_${date}.xlsx`);
+  alert('✅ تم إنشاء الملف!\n\n5 أوراق: العملاء • العقارات • الطلبات • الصفقات • الإحصائيات');
+}
+
+// ============ التشغيل الأولي ============
+renderClients();
+renderProperties();
+renderRequests();
+renderDeals();
+refreshSelects();
+</script>
 </body>
 </html>
