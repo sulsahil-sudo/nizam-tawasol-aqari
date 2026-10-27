@@ -17,7 +17,7 @@
     .screen {
       background: #fff;
       width: 100%;
-      max-width: 900px;
+      max-width: 950px;
       border-radius: 20px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.35);
       padding: 45px 35px;
@@ -45,19 +45,24 @@
     }
     .buttons-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 20px;
+    }
+    /* البحث يأخذ صفًا كاملًا في الأسفل */
+    .btn-search-wide {
+      grid-column: 1 / -1;
     }
     .menu-btn {
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       gap: 10px;
       padding: 30px 20px;
       border: none;
       border-radius: 14px;
       cursor: pointer;
-      font-size: 18px;
+      font-size: 17px;
       font-weight: bold;
       color: #fff;
       transition: transform 0.2s, box-shadow 0.2s;
@@ -67,11 +72,21 @@
       transform: translateY(-4px);
       box-shadow: 0 12px 25px rgba(0,0,0,0.25);
     }
-    .menu-btn .icon { font-size: 40px; }
+    .menu-btn .icon { font-size: 38px; }
+
     .btn-clients  { background: linear-gradient(135deg, #2980b9, #3498db); }
     .btn-props    { background: linear-gradient(135deg, #27ae60, #2ecc71); }
     .btn-requests { background: linear-gradient(135deg, #e67e22, #f39c12); }
     .btn-deals    { background: linear-gradient(135deg, #8e44ad, #9b59b6); }
+    .btn-search   { background: linear-gradient(135deg, #c0392b, #e74c3c); }
+
+    .btn-search-wide {
+      flex-direction: row !important;
+      gap: 15px !important;
+      padding: 22px 20px !important;
+      font-size: 18px !important;
+    }
+
     .footer {
       margin-top: 35px;
       font-size: 13px;
@@ -79,9 +94,13 @@
       border-top: 1px solid #ecf0f1;
       padding-top: 15px;
     }
-    @media (max-width: 600px) {
-      .buttons-grid { grid-template-columns: 1fr; }
+
+    @media (max-width: 700px) {
+      .buttons-grid { grid-template-columns: repeat(2, 1fr); }
       h1 { font-size: 24px; }
+    }
+    @media (max-width: 450px) {
+      .buttons-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -111,6 +130,11 @@
         <span class="icon">💰</span>
         <span>إدخال الصفقات</span>
       </button>
+
+      <button class="menu-btn btn-search btn-search-wide" onclick="go('search.html')">
+        <span class="icon">🔍</span>
+        <span>البحث والاستعلام</span>
+      </button>
     </div>
 
     <div class="footer">
@@ -120,7 +144,6 @@
 
   <script>
     function go(page) {
-      // مؤقتًا: تنبيه
       alert('سيتم الانتقال إلى: ' + page);
       // بعد إنشاء الملفات فعّل هذا السطر بدل alert:
       // window.location.href = page;
