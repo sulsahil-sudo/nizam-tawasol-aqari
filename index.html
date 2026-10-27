@@ -199,8 +199,7 @@ tr:nth-child(even) { background: #f9fafc; }
     <button class="back-btn" onclick="go('home')">← الرئيسية</button>
   </div>
   <div class="search-bar">
-    <input type="text" id="searchInput" placeholder="اكتب اسم عميل / رقم عقار / رقم صفقة..."
-      onkeydown="if(event.key==='Enter') doSearch()">
+    <input type="text" id="searchInput" placeholder="اكتب اسم عميل / رقم عقار / رقم صفقة..." onkeydown="if(event.key==='Enter') doSearch()">
     <select id="searchScope">
       <option value="all">الكل</option>
       <option value="clients">العملاء</option>
@@ -217,7 +216,6 @@ tr:nth-child(even) { background: #f9fafc; }
 
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <script>
-// ============ قاعدة البيانات ============
 let DB = JSON.parse(localStorage.getItem('aqariDB') || '{"clients":[],"properties":[],"requests":[],"deals":[]}');
 function save() { localStorage.setItem('aqariDB', JSON.stringify(DB)); }
 
@@ -229,7 +227,7 @@ function go(name) {
 }
 
 function v(id) { return document.getElementById(id).value.trim(); }
-function n(id) { return Math.abs(Number(document.getElementById(id).value)); } // يمنع السالب
+function n(id) { return Math.abs(Number(document.getElementById(id).value)); }
 function msg(key, text, ok = true) {
   const el = document.getElementById('m-' + key);
   el.textContent = text;
@@ -246,11 +244,8 @@ function getPropDesc(id) {
 }
 function getNextId(array) {
   if (array.length === 0) return "1";
-  const maxId = Math.max(...array.map(item => Number(item.id)));
-  return String(maxId + 1);
+  return String(Math.max(...array.map(item => Number(item.id))) + 1);
 }
-
-// دالة تنظيف رقم الجوال (تقبل العربي والانجليزي)
 function formatPhone(phone) {
   return phone.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/\s/g, '');
 }
@@ -267,7 +262,7 @@ function refreshSelects() {
   document.getElementById('d_request').innerHTML = '<option value="">اختر طلبًا</option>' + DB.requests.map(r => `<option value="${r.id}">طلب ${r.id} — ${getClientName(r.client)}</option>`).join('');
 }
 
-// ============ العملاء ============
+// ======== العملاء ========
 function saveClient() {
   const name = v('c_name');
   let phone = v('c_phone');
@@ -276,7 +271,6 @@ function saveClient() {
   if (!name) return msg('clients', '⚠️ الاسم مطلوب', false);
   if (!city) return msg('clients', '⚠️ اختر المدينة', false);
 
-  // التحقق من الجوال: 10 خانات ويبدأ بـ 05
   phone = formatPhone(phone);
   if (phone.length !== 10 || !phone.startsWith('05')) {
     return msg('clients', '⚠️ رقم الجوال يجب أن يكون 10 أرقام ويبدأ بـ 05', false);
@@ -285,7 +279,9 @@ function saveClient() {
   const row = { id: getNextId(DB.clients), name, phone, city };
   DB.clients.push(row); save();
   renderClients(); refreshSelects();
-  ['c_name','c_phone'].forEach(f => document.getElementById(f).value = '');
+  
+  document.getElementById('c_name').value = '';
+  document.getElementById('c_phone').value = '';
   document.getElementById('c_city').value = '';
   document.getElementById('c_name').focus();
   msg('clients', '✅ تم حفظ العميل برقم ' + row.id);
@@ -302,7 +298,7 @@ function delClient(id) {
   save(); renderClients(); refreshSelects();
 }
 
-// ============ العقارات ============
+// ======== العقارات ========
 function saveProperty() {
   const type = v('p_type'), city = v('p_city'), address = v('p_address');
   const area = n('p_area'), price = n('p_price');
@@ -312,9 +308,12 @@ function saveProperty() {
   const row = { id: getNextId(DB.properties), type, city, address, area, price, status: v('p_status') };
   DB.properties.push(row); save();
   renderProperties(); refreshSelects();
-  ['p_address','p_area','p_price'].forEach(f => document.getElementById(f).value = '');
+  
   document.getElementById('p_type').value = '';
   document.getElementById('p_city').value = '';
+  document.getElementById('p_address').value = '';
+  document.getElementById('p_area').value = '';
+  document.getElementById('p_price').value = '';
   msg('properties', '✅ تم حفظ العقار برقم ' + row.id);
 }
 function renderProperties() {
@@ -329,13 +328,14 @@ function delProperty(id) {
   save(); renderProperties(); refreshSelects();
 }
 
-// ============ الطلبات ============
+// ======== الطلبات ========
 function saveRequest() {
   const client = v('r_client'), property = v('r_property'), date = v('r_date');
   if (!client || !property || !date) return msg('requests', '⚠️ عبّي الحقول', false);
   const row = { id: getNextId(DB.requests), client, property, type: v('r_type'), date, status: v('r_status') };
   DB.requests.push(row); save();
   renderRequests(); refreshSelects();
+  
   document.getElementById('r_client').value = '';
   document.getElementById('r_property').value = '';
   document.getElementById('r_date').value = '';
@@ -353,17 +353,20 @@ function delRequest(id) {
   save(); renderRequests(); refreshSelects();
 }
 
-// ============ الصفقات ============
+// ======== الصفقات ========
 function saveDeal() {
   const req = v('d_request'), client = v('d_client'), property = v('d_property'), date = v('d_date'), amount = n('d_amount');
   if (!req || !client || !property || !amount || !date) return msg('deals', '⚠️ عبّي الحقول', false);
   const row = { id: getNextId(DB.deals), request: req, client, property, type: v('d_type'), amount, commission: n('d_commission'), date };
   DB.deals.push(row); save();
   renderDeals();
-  ['d_amount','d_commission','d_date'].forEach(f => document.getElementById(f).value = '');
+  
   document.getElementById('d_request').value = '';
   document.getElementById('d_client').value = '';
   document.getElementById('d_property').value = '';
+  document.getElementById('d_amount').value = '';
+  document.getElementById('d_commission').value = '';
+  document.getElementById('d_date').value = '';
   msg('deals', '✅ تم حفظ الصفقة برقم ' + row.id);
 }
 function renderDeals() {
@@ -377,7 +380,7 @@ function delDeal(id) {
   save(); renderDeals();
 }
 
-// ============ البحث ============
+// ======== البحث ========
 function doSearch() {
   const q = document.getElementById('searchInput').value.trim().toLowerCase();
   const scope = document.getElementById('searchScope').value;
@@ -419,7 +422,7 @@ function doSearch() {
   box.innerHTML = total === 0 ? '<div class="empty">لا توجد نتائج</div>' : `<div style="color:#27ae60;font-weight:bold;margin-bottom:10px">✅ ${total} نتيجة</div>` + html;
 }
 
-// ============ التصدير إلى Excel ============
+// ======== التصدير إلى Excel ========
 function exportExcel() {
   if (DB.clients.length + DB.properties.length + DB.requests.length + DB.deals.length === 0) return alert('⚠️ لا توجد بيانات للتصدير');
   const wb = XLSX.utils.book_new();
@@ -448,4 +451,12 @@ function exportExcel() {
   alert('✅ تم تصدير الملف بنجاح!');
 }
 
-// ============
+// ======== التشغيل ========
+renderClients();
+renderProperties();
+renderRequests();
+renderDeals();
+refreshSelects();
+</script>
+</body>
+</html>
