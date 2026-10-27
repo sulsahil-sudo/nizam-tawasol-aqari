@@ -101,15 +101,16 @@ tr:nth-child(even) { background: #f9fafc; }
     <button class="back-btn" onclick="go('home')">← الرئيسية</button>
   </div>
   <div class="form-grid">
-  <input type="hidden" id="c_id">
-    <div><label>الاسم</label><input type="text" id="c_name"></div>
-    <div><label>الجوال</label><input type="text" id="c_phone"></div>
-    <div><label>المدينة</label><input type="text" id="c_city"></div>
+    <!-- حقل مخفي لتوليد الرقم تلقائياً -->
+    <input type="hidden" id="c_id">
+    <div><label>الاسم</label><input type="text" id="c_name" placeholder="اسم العميل"></div>
+    <div><label>الجوال</label><input type="text" id="c_phone" placeholder="05xxxxxxxx"></div>
+    <div><label>المدينة</label><input type="text" id="c_city" placeholder="المدينة"></div>
   </div>
   <div class="buttons"><button class="btn-save" onclick="saveClient()">💾 حفظ</button></div>
   <div class="msg" id="m-clients"></div>
   <table><thead><tr>
-    <th>#</th><th>الرقم</th><th>الاسم</th><th>الجوال</th><th>المدينة</th><th>حذف</th>
+    <th>#</th><th>الرقم التلقائي</th><th>الاسم</th><th>الجوال</th><th>المدينة</th><th>حذف</th>
   </tr></thead><tbody id="t-clients"></tbody></table>
 </div>
 
@@ -139,7 +140,7 @@ tr:nth-child(even) { background: #f9fafc; }
   <div class="buttons"><button class="btn-save" onclick="saveProperty()">💾 حفظ</button></div>
   <div class="msg" id="m-properties"></div>
   <table><thead><tr>
-    <th>#</th><th>الرقم</th><th>النوع</th><th>المدينة</th><th>العنوان</th>
+    <th>#</th><th>الرقم التلقائي</th><th>النوع</th><th>المدينة</th><th>العنوان</th>
     <th>المساحة</th><th>السعر</th><th>الحالة</th><th>حذف</th>
   </tr></thead><tbody id="t-properties"></tbody></table>
 </div>
@@ -151,7 +152,7 @@ tr:nth-child(even) { background: #f9fafc; }
     <button class="back-btn" onclick="go('home')">← الرئيسية</button>
   </div>
   <div class="form-grid">
- <input type="hidden" id="d_id">
+    <input type="hidden" id="r_id">
     <div><label>العميل 🔗</label>
       <select id="r_client"><option value="">اختر</option></select></div>
     <div><label>العقار 🔗</label>
@@ -170,7 +171,7 @@ tr:nth-child(even) { background: #f9fafc; }
   <div class="buttons"><button class="btn-save" onclick="saveRequest()">💾 حفظ</button></div>
   <div class="msg" id="m-requests"></div>
   <table><thead><tr>
-    <th>#</th><th>الرقم</th><th>العميل</th><th>العقار</th>
+    <th>#</th><th>الرقم التلقائي</th><th>العميل</th><th>العقار</th>
     <th>النوع</th><th>التاريخ</th><th>الحالة</th><th>حذف</th>
   </tr></thead><tbody id="t-requests"></tbody></table>
 </div>
@@ -182,7 +183,7 @@ tr:nth-child(even) { background: #f9fafc; }
     <button class="back-btn" onclick="go('home')">← الرئيسية</button>
   </div>
   <div class="form-grid">
-    <div><label>رقم الصفقة 🔑</label><input type="number" id="d_id"></div>
+    <input type="hidden" id="d_id">
     <div><label>الطلب 🔗</label>
       <select id="d_request"><option value="">اختر</option></select></div>
     <div><label>العميل 🔗</label>
@@ -198,7 +199,7 @@ tr:nth-child(even) { background: #f9fafc; }
   <div class="buttons"><button class="btn-save" onclick="saveDeal()">💾 حفظ</button></div>
   <div class="msg" id="m-deals"></div>
   <table><thead><tr>
-    <th>#</th><th>الرقم</th><th>العميل</th><th>العقار</th>
+    <th>#</th><th>الرقم التلقائي</th><th>العميل</th><th>العقار</th>
     <th>النوع</th><th>المبلغ</th><th>العمولة</th><th>التاريخ</th><th>حذف</th>
   </tr></thead><tbody id="t-deals"></tbody></table>
 </div>
@@ -228,7 +229,7 @@ tr:nth-child(even) { background: #f9fafc; }
 
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <script>
-// ============ قاعدة البيانات (تُحفظ في المتصفح) ============
+// ============ قاعدة البيانات ============
 let DB = JSON.parse(localStorage.getItem('aqariDB') || '{"clients":[],"properties":[],"requests":[],"deals":[]}');
 function save() { localStorage.setItem('aqariDB', JSON.stringify(DB)); }
 
@@ -259,6 +260,13 @@ function getPropDesc(id) {
   return p ? p.type + ' - ' + p.address : '⚠️ غير موجود';
 }
 
+// دالة توليد الأرقام التلقائية
+function getNextId(array) {
+  if (array.length === 0) return "1";
+  const maxId = Math.max(...array.map(item => Number(item.id)));
+  return String(maxId + 1);
+}
+
 // ============ القوائم المنسدلة ============
 function refreshSelects() {
   const clients = '<option value="">اختر عميلًا</option>' +
@@ -275,28 +283,24 @@ function refreshSelects() {
     DB.requests.map(r => `<option value="${r.id}">طلب ${r.id} — ${getClientName(r.client)}</option>`).join('');
 }
 
-// ============ العملاء ============function saveClient() {
-  // توليد رقم العميل تلقائياً
-  let nextId = 1;
-  if (DB.clients.length > 0) {
-    nextId = Math.max(...DB.clients.map(c => Number(c.id))) + 1;
-  }
+// ============ العملاء ============
+function saveClient() {
+  const name = v('c_name');
+  if (!name) return msg('clients', '⚠️ الاسم مطلوب', false);
 
   const row = { 
-    id: String(nextId), 
-    name: v('c_name'), 
+    id: getNextId(DB.clients), 
+    name: name, 
     phone: v('c_phone'), 
     city: v('c_city') 
   };
-
-  if (!row.name) return msg('clients', '⚠️ الاسم مطلوب', false);
 
   DB.clients.push(row); save();
   renderClients(); refreshSelects();
   ['c_name','c_phone','c_city'].forEach(f => document.getElementById(f).value = '');
   document.getElementById('c_name').focus();
   msg('clients', '✅ تم حفظ العميل برقم ' + row.id);
-}}
+}
 function renderClients() {
   document.getElementById('t-clients').innerHTML = DB.clients.map((c, i) => `
     <tr><td>${i+1}</td><td>${c.id}</td><td>${c.name}</td><td>${c.phone}</td><td>${c.city}</td>
@@ -312,17 +316,26 @@ function delClient(id) {
 
 // ============ العقارات ============
 function saveProperty() {
-  const row = { id: v('p_id'), type: v('p_type'), city: v('p_city'),
-    address: v('p_address'), area: n('p_area'), price: n('p_price'), status: v('p_status') };
-  if (!row.id || !row.type || !row.city || !row.address || !row.area || !row.price)
+  const type = v('p_type');
+  const city = v('p_city');
+  const address = v('p_address');
+  const area = n('p_area');
+  const price = n('p_price');
+
+  if (!type || !city || !address || !area || !price)
     return msg('properties', '⚠️ عبّي الحقول', false);
-  if (DB.properties.some(p => String(p.id) === String(row.id)))
-    return msg('properties', '⚠️ الرقم مكرر', false);
+
+  const row = { 
+    id: getNextId(DB.properties), 
+    type: type, city: city, address: address, 
+    area: area, price: price, status: v('p_status') 
+  };
+
   DB.properties.push(row); save();
   renderProperties(); refreshSelects();
-  ['p_id','p_city','p_address','p_area','p_price'].forEach(f => document.getElementById(f).value = '');
-  document.getElementById('p_id').focus();
-  msg('properties', '✅ تم حفظ العقار');
+  ['p_city','p_address','p_area','p_price'].forEach(f => document.getElementById(f).value = '');
+  document.getElementById('p_type').focus();
+  msg('properties', '✅ تم حفظ العقار برقم ' + row.id);
 }
 function renderProperties() {
   document.getElementById('t-properties').innerHTML = DB.properties.map((p, i) => `
@@ -340,21 +353,23 @@ function delProperty(id) {
 
 // ============ الطلبات ============
 function saveRequest() {
-  const row = { id: v('r_id'), client: v('r_client'), property: v('r_property'),
-    type: v('r_type'), date: v('r_date'), status: v('r_status') };
-  if (!row.id || !row.client || !row.property || !row.date)
+  const client = v('r_client');
+  const property = v('r_property');
+  const date = v('r_date');
+
+  if (!client || !property || !date)
     return msg('requests', '⚠️ عبّي الحقول', false);
-  if (DB.requests.some(r => String(r.id) === String(row.id)))
-    return msg('requests', '⚠️ الرقم مكرر', false);
-  if (!DB.clients.some(c => String(c.id) === String(row.client)))
-    return msg('requests', '⚠️ العميل غير موجود', false);
-  if (!DB.properties.some(p => String(p.id) === String(row.property)))
-    return msg('requests', '⚠️ العقار غير موجود', false);
+
+  const row = { 
+    id: getNextId(DB.requests), 
+    client: client, property: property,
+    type: v('r_type'), date: date, status: v('r_status') 
+  };
+
   DB.requests.push(row); save();
   renderRequests(); refreshSelects();
-  ['r_id','r_date'].forEach(f => document.getElementById(f).value = '');
-  document.getElementById('r_id').focus();
-  msg('requests', '✅ تم حفظ الطلب');
+  document.getElementById('r_date').value = '';
+  msg('requests', '✅ تم حفظ الطلب برقم ' + row.id);
 }
 function renderRequests() {
   document.getElementById('t-requests').innerHTML = DB.requests.map((r, i) => `
@@ -372,18 +387,26 @@ function delRequest(id) {
 
 // ============ الصفقات ============
 function saveDeal() {
-  const row = { id: v('d_id'), request: v('d_request'), client: v('d_client'),
-    property: v('d_property'), type: v('d_type'),
-    amount: n('d_amount'), commission: n('d_commission'), date: v('d_date') };
-  if (!row.id || !row.request || !row.client || !row.property || !row.amount || !row.date)
-    return msg('deals', '⚠️ عبّي الحقول الأساسية', false);
-  if (DB.deals.some(d => String(d.id) === String(row.id)))
-    return msg('deals', '⚠️ الرقم مكرر', false);
+  const req = v('d_request');
+  const client = v('d_client');
+  const property = v('d_property');
+  const amount = n('d_amount');
+  const date = v('d_date');
+
+  if (!req || !client || !property || !amount || !date)
+    return msg('deals', '⚠️ عبّي الحقول', false);
+
+  const row = { 
+    id: getNextId(DB.deals), 
+    request: req, client: client, property: property, 
+    type: v('d_type'), amount: amount, 
+    commission: n('d_commission'), date: date 
+  };
+
   DB.deals.push(row); save();
   renderDeals();
-  ['d_id','d_amount','d_commission','d_date'].forEach(f => document.getElementById(f).value = '');
-  document.getElementById('d_id').focus();
-  msg('deals', '✅ تم حفظ الصفقة');
+  ['d_amount','d_commission','d_date'].forEach(f => document.getElementById(f).value = '');
+  msg('deals', '✅ تم حفظ الصفقة برقم ' + row.id);
 }
 function renderDeals() {
   document.getElementById('t-deals').innerHTML = DB.deals.map((d, i) => `
