@@ -1,182 +1,130 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>نظام تواصل العقاري</title>
-
-<style>
-body{
-margin:0;
-font-family:Tahoma,sans-serif;
-background:#f5f7fb;
-}
-
-.header{
-background:#0f172a;
-color:white;
-padding:20px;
-text-align:center;
-}
-
-.card{
-background:white;
-margin:20px;
-padding:20px;
-border-radius:10px;
-box-shadow:0 2px 10px rgba(0,0,0,.1);
-}
-</style>
-
+  <meta charset="UTF-8">
+  <title>مكتب تواصل عقاري</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #6a3093 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+    }
+    .screen {
+      background: #fff;
+      width: 100%;
+      max-width: 900px;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+      padding: 45px 35px;
+      text-align: center;
+    }
+    .logo {
+      width: 90px; height: 90px;
+      margin: 0 auto 20px;
+      background: linear-gradient(135deg, #1e3c72, #6a3093);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 42px;
+      box-shadow: 0 8px 20px rgba(30,60,114,0.4);
+    }
+    h1 {
+      color: #1e3c72;
+      font-size: 32px;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+    .subtitle {
+      color: #7f8c8d;
+      font-size: 15px;
+      margin-bottom: 40px;
+    }
+    .buttons-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    .menu-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 30px 20px;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: bold;
+      color: #fff;
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+    }
+    .menu-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.25);
+    }
+    .menu-btn .icon { font-size: 40px; }
+    .btn-clients  { background: linear-gradient(135deg, #2980b9, #3498db); }
+    .btn-props    { background: linear-gradient(135deg, #27ae60, #2ecc71); }
+    .btn-requests { background: linear-gradient(135deg, #e67e22, #f39c12); }
+    .btn-deals    { background: linear-gradient(135deg, #8e44ad, #9b59b6); }
+    .footer {
+      margin-top: 35px;
+      font-size: 13px;
+      color: #95a5a6;
+      border-top: 1px solid #ecf0f1;
+      padding-top: 15px;
+    }
+    @media (max-width: 600px) {
+      .buttons-grid { grid-template-columns: 1fr; }
+      h1 { font-size: 24px; }
+    }
+  </style>
 </head>
 <body>
+  <div class="screen">
+    <div class="logo">🏢</div>
+    <h1>مكتب تواصل عقاري</h1>
+    <p class="subtitle">نظام إدارة العقارات والعملاء والصفقات</p>
 
-<div style="padding:20px;text-align:center">
-<button onclick="showPage('home')">الرئيسية</button>
-<button onclick="showPage('properties')">العقارات</button>
-<button onclick="showPage('customers')">العملاء</button>
-<button onclick="showPage('deals')">الصفقات</button>
+    <div class="buttons-grid">
+      <button class="menu-btn btn-clients" onclick="go('clients.html')">
+        <span class="icon">👥</span>
+        <span>إدخال العملاء</span>
+      </button>
 
-</div>
-<div id="content" class="card">
+      <button class="menu-btn btn-props" onclick="go('properties.html')">
+        <span class="icon">🏠</span>
+        <span>إدخال العقارات</span>
+      </button>
 
-<h2>مرحباً بك</h2>
-<p>اختر أحد الأقسام من الأعلى</p>
+      <button class="menu-btn btn-requests" onclick="go('requests.html')">
+        <span class="icon">📋</span>
+        <span>إدخال الطلبات</span>
+      </button>
 
-</div>
+      <button class="menu-btn btn-deals" onclick="go('deals.html')">
+        <span class="icon">💰</span>
+        <span>إدخال الصفقات</span>
+      </button>
+    </div>
 
-<script>
+    <div class="footer">
+      مكتب تواصل عقاري © 2025 — جميع الحقوق محفوظة
+    </div>
+  </div>
 
-document.getElementById("content");
-
-if(page==="home"){
-content.innerHTML=`
-<h2>الصفحة الرئيسية</h2>
-<p>نظام تواصل العقاري</p>
-`;
-}
-
-function showPage(page){
-
-const content = document.getElementById("content");
-
-if(page==="home"){
-
-content.innerHTML=`
-<h2>مرحباً بك</h2>
-<p>اختر أحد الأقسام من الأعلى</p>
-`;
-
-}
-
-if(page==="properties"){
-
-content.innerHTML=`
-<input id="propertyTitle"
-placeholder="عنوان العقار"
-style="width:100%;padding:10px;margin:10px 0;">
-
-<select id="propertyType">
-<input id="propertyTitle"
-placeholder="عنوان العقار"
-style="width:100%;padding:10px;margin:10px 0;">
-
-<select id="propertyType">
-...
-</select>
-
-<input id="propertyCity"
-placeholder="المدينة">
-
-<input id="propertyDistrict"
-placeholder="الحي">
-
-<input id="propertyArea"
-placeholder="المساحة بالمتر">
-
-<input id="propertyPrice"
-placeholder="السعر">
-</select>
-
-<input id="propertyCity"
-placeholder="المدينة">
-
-<input id="propertyDistrict"
-placeholder="الحي">
-
-<input id="propertyArea"
-placeholder="المساحة بالمتر">
-
-<input id="propertyPrice"
-placeholder="السعر">
-<select id="propertyType"
-style="width:100%;padding:10px;margin:10px 0;">
-<option>فيلا</option>
-<option>شقة</option>
-<option>أرض</option>
-<option>عمارة</option>
-<option>استراحة</option>
-</select>
-
-<input id="propertyCity"
-placeholder="المدينة"
-style="width:100%;padding:10px;margin:10px 0;">
-
-<input id="propertyDistrict"
-placeholder="الحي"
-style="width:100%;padding:10px;margin:10px 0;">
-
-<input id="propertyArea"
-placeholder="المساحة بالمتر"
-style="width:100%;padding:10px;margin:10px 0;">
-<input id="propertyPrice"
-placeholder="السعر"
-style="width:100%;padding:10px;margin:10px 0;">
-<button onclick="saveProperty()">
-حفظ العقار
-</button>
-
-<hr>
-
-<div id="propertiesList"></div>
-
-`;
-
-loadProperties();
-
-}
-
-if(page==="customers"){
-
-content.innerHTML=`
-<h2>العملاء</h2>
-<p>قسم العملاء</p>
-`;
-
-}
-
-if(page==="deals"){
-
-content.innerHTML=`
-<h2>الصفقات</h2>
-<p>قسم الصفقات</p>
-`;
-
-}
-
-}
-<b>${item.title}</b>
-<br>
-النوع: ${item.type}
-<br>
-المدينة: ${item.city}
-<br>
-الحي: ${item.district}
-<br>
-المساحة: ${item.area} م²
-<br>
-السعر: ${item.price} ريال
-</script>
-
+  <script>
+    function go(page) {
+      // مؤقتًا: تنبيه
+      alert('سيتم الانتقال إلى: ' + page);
+      // بعد إنشاء الملفات فعّل هذا السطر بدل alert:
+      // window.location.href = page;
+    }
+  </script>
 </body>
 </html>
