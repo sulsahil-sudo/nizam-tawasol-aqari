@@ -222,7 +222,7 @@ tr:nth-child(even) { background: #f9fafc; }
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 // ==========================================
-// تم وضع بياناتك هنا (تأكد من الرابط بدون حرف z)
+// تم وضع بياناتك هنا
 // ==========================================
 const SUPABASE_URL = 'https://hxgienqrffuqqiyomoz.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_oSj-7xYUogxnSHLD0c46lg_PEN-W6bV';
@@ -230,23 +230,23 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let DB = { clients: [], properties: [], requests: [], deals: [] };
 
+// دالة التنقل
 function go(name) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.getElementById('v-' + name).classList.add('active');
-  if (name === 'search') document.getElementById('searchResults').innerHTML = '<div class="empty">اكتب كلمة للبحث...</div>';
 }
 
+// أدوات مساعدة
 function v(id) { return document.getElementById(id).value.trim(); }
 function n(id) { return Math.abs(Number(document.getElementById(id).value)); }
+
 function msg(key, text, ok = true) {
   const el = document.getElementById('m-' + key);
   el.textContent = text;
   el.className = 'msg ' + (ok ? 'ok' : 'err');
   setTimeout(() => el.className = 'msg', 3000);
 }
-function formatPhone(phone) {
-  return phone.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/\s/g, '');
-}
+
 function getClientName(id) {
   const c = DB.clients.find(c => String(c.id) === String(id));
   return c ? c.name : '⚠️ غير موجود';
