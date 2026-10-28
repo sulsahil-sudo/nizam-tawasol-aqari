@@ -2,48 +2,442 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>تجربة الأزرار</title>
+<title>مكتب تواصل عقاري (سحابي)</title>
 <style>
-  body { font-family: Tahoma; text-align: center; padding: 50px; background: #f4f6f9; }
-  .box { display: none; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); margin-top: 20px; }
-  .active { display: block; }
-  button { padding: 15px 30px; font-size: 18px; margin: 10px; cursor: pointer; border: none; border-radius: 8px; color: white; }
-  .btn1 { background: #2980b9; }
-  .btn2 { background: #27ae60; }
-  .btn-back { background: #7f8c8d; font-size: 14px; padding: 10px 20px;}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Tahoma, sans-serif; min-height: 100vh; background: linear-gradient(135deg, #1e3c72, #2a5298, #6a3093); padding: 20px; }
+.screen { background: #fff; max-width: 1100px; margin: 0 auto; border-radius: 16px; padding: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
+.header { text-align: center; margin-bottom: 25px; }
+.logo { width: 70px; height: 70px; margin: 0 auto 12px; background: linear-gradient(135deg, #1e3c72, #6a3093); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 34px; }
+h1 { color: #1e3c72; font-size: 26px; }
+.subtitle { color: #7f8c8d; font-size: 13px; margin-top: 6px; }
+.view { display: none; }
+.view.active { display: block; }
+.view-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ecf0f1; padding-bottom: 12px; margin-bottom: 20px; }
+.view-header h2 { color: #2c3e50; font-size: 20px; }
+.back-btn { background: #7f8c8d; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+.home-buttons { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 25px; }
+.home-btn { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 26px 15px; border: none; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: bold; color: #fff; transition: transform 0.2s; }
+.home-btn:hover { transform: translateY(-3px); }
+.home-btn .icon { font-size: 32px; }
+.b1 { background: linear-gradient(135deg, #2980b9, #3498db); }
+.b2 { background: linear-gradient(135deg, #27ae60, #2ecc71); }
+.b3 { background: linear-gradient(135deg, #e67e22, #f39c12); }
+.b4 { background: linear-gradient(135deg, #8e44ad, #9b59b6); }
+.b5 { background: linear-gradient(135deg, #c0392b, #e74c3c); }
+.b6 { background: linear-gradient(135deg, #16a085, #1abc9c); }
+.wide { grid-column: 1 / -1; flex-direction: row !important; padding: 18px !important; }
+.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 15px; }
+label { display: block; font-weight: bold; color: #34495e; margin-bottom: 4px; font-size: 13px; }
+input, select { width: 100%; padding: 9px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
+.buttons { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
+.btn-save { background: #27ae60; color: #fff; border: none; padding: 11px 24px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold; }
+.btn-del { background: #e74c3c; color: #fff; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { border: 1px solid #e1e5eb; padding: 8px; text-align: center; }
+th { background: #34495e; color: #fff; }
+tr:nth-child(even) { background: #f9fafc; }
+.msg { margin: 10px 0; padding: 10px; border-radius: 6px; text-align: center; font-weight: bold; display: none; }
+.msg.ok { background: #d5f5e3; color: #186a3b; display: block; }
+.msg.err { background: #fadbd8; color: #922b21; display: block; }
+.search-bar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+.search-bar input { flex: 2; min-width: 200px; padding: 11px; }
+.search-bar select { flex: 1; min-width: 140px; padding: 11px; }
+.empty { text-align: center; color: #95a5a6; padding: 25px; font-style: italic; }
+.results h3 { color: #2c3e50; margin: 18px 0 10px; border-bottom: 2px solid #ecf0f1; padding-bottom: 6px; }
+.badge { background: #3498db; color: #fff; padding: 2px 10px; border-radius: 10px; font-size: 12px; }
+@media (max-width: 700px) { .home-buttons { grid-template-columns: repeat(2, 1fr); } }
 </style>
 </head>
 <body>
 
-  <h1>اختبار الأزرار</h1>
-  <p>اضغط على أي زر، إذا ظهرت شاشة جديدة يعني الأزرار سليمة.</p>
-
-  <button class="btn1" onclick="show('screen1')">فتح شاشة 1</button>
-  <button class="btn2" onclick="show('screen2')">فتح شاشة 2</button>
-
-  <div id="screen1" class="box">
-    <h2>أنت الآن في شاشة 1</h2>
-    <button class="btn-back" onclick="show('home')">رجوع</button>
+<!-- ======= الرئيسية ======= -->
+<div class="screen view active" id="v-home">
+  <div class="header">
+    <div class="logo">🏢</div>
+    <h1>مكتب تواصل عقاري</h1>
+    <p class="subtitle">نظام إدارة العقارات والعملاء والصفقات (السحابي)</p>
   </div>
-
-  <div id="screen2" class="box">
-    <h2>أنت الآن في شاشة 2</h2>
-    <button class="btn-back" onclick="show('home')">رجوع</button>
+  <div class="home-buttons">
+    <button class="home-btn b1" onclick="go('clients')"><span class="icon">👥</span><span>إدخال العملاء</span></button>
+    <button class="home-btn b2" onclick="go('properties')"><span class="icon">🏠</span><span>إدخال العقارات</span></button>
+    <button class="home-btn b3" onclick="go('requests')"><span class="icon">📋</span><span>إدخال الطلبات</span></button>
+    <button class="home-btn b4" onclick="go('deals')"><span class="icon">💰</span><span>إدخال الصفقات</span></button>
+    <button class="home-btn b5 wide" onclick="go('search')"><span class="icon">🔍</span><span>البحث والاستعلام</span></button>
+    <button class="home-btn b6 wide" onclick="exportExcel()"><span class="icon">📦</span><span>تصدير كل البيانات إلى Excel</span></button>
   </div>
+</div>
 
-  <script>
-    function show(id) {
-      // إخفاء كل الشاشات
-      document.querySelectorAll('.box').forEach(function(box) {
-        box.classList.remove('active');
-      });
-      
-      // إذا كان المطلوب هو "الرئيسية"، لا نظهر شيء
-      if (id !== 'home') {
-        // إظهار الشاشة المطلوبة
-        document.getElementById(id).classList.add('active');
-      }
-    }
-  </script>
+<!-- ======= العملاء ======= -->
+<div class="screen view" id="v-clients">
+  <div class="view-header">
+    <h2>👥 العملاء</h2>
+    <button class="back-btn" onclick="go('home')">← الرئيسية</button>
+  </div>
+  <div class="form-grid">
+    <div><label>الاسم</label><input type="text" id="c_name"></div>
+    <div><label>الجوال (10 أرقام تبدأ بـ 05)</label><input type="text" id="c_phone" maxlength="10"></div>
+    <div><label>المدينة</label>
+      <select id="c_city">
+        <option value="">اختر المدينة</option>
+        <option>الرياض</option><option>جدة</option><option>مكة المكرمة</option><option>المدينة المنورة</option>
+        <option>الدمام</option><option>الخبر</option><option>الظهران</option><option>الأحساء</option>
+        <option>الطائف</option><option>بريدة</option><option>عنيزة</option><option>حائل</option>
+        <option>تبوك</option><option>أبها</option><option>خميس مشيط</option><option>نجران</option>
+        <option>جيزان</option><option>الجبيل</option><option>ينبع</option><option>عرعر</option><option>سكاكا</option>
+      </select>
+    </div>
+  </div>
+  <div class="buttons"><button class="btn-save" onclick="saveClient()">💾 حفظ</button></div>
+  <div class="msg" id="m-clients"></div>
+  <table><thead><tr>
+    <th>#</th><th>الرقم</th><th>الاسم</th><th>الجوال</th><th>المدينة</th><th>حذف</th>
+  </tr></thead><tbody id="t-clients"></tbody></table>
+</div>
+
+<!-- ======= العقارات ======= -->
+<div class="screen view" id="v-properties">
+  <div class="view-header">
+    <h2>🏠 العقارات</h2>
+    <button class="back-btn" onclick="go('home')">← الرئيسية</button>
+  </div>
+  <div class="form-grid">
+    <div><label>النوع</label>
+      <select id="p_type"><option value="">اختر</option><option>شقة</option><option>فيلا</option><option>أرض</option><option>محل تجاري</option><option>مكتب</option></select></div>
+    <div><label>المدينة</label>
+      <select id="p_city">
+        <option value="">اختر المدينة</option>
+        <option>الرياض</option><option>جدة</option><option>مكة المكرمة</option><option>المدينة المنورة</option>
+        <option>الدمام</option><option>الخبر</option><option>الظهران</option><option>الأحساء</option>
+        <option>الطائف</option><option>بريدة</option><option>عنيزة</option><option>حائل</option>
+        <option>تبوك</option><option>أبها</option><option>خميس مشيط</option><option>نجران</option>
+        <option>جيزان</option><option>الجبيل</option><option>ينبع</option><option>عرعر</option><option>سكاكا</option>
+      </select>
+    </div>
+    <div><label>العنوان</label><input type="text" id="p_address"></div>
+    <div><label>المساحة (م²)</label><input type="number" id="p_area" min="1"></div>
+    <div><label>السعر</label><input type="number" id="p_price" min="0"></div>
+    <div><label>الحالة</label>
+      <select id="p_status"><option>متاح</option><option>مؤجر</option><option>مباع</option></select></div>
+    <div style="grid-column: 1 / -1;">
+      <label>صورة العقار (اختياري)</label>
+      <input type="file" id="p_media" accept="image/*">
+    </div>
+  </div>
+  <div class="buttons"><button class="btn-save" onclick="saveProperty()">💾 حفظ</button></div>
+  <div class="msg" id="m-properties"></div>
+  <table><thead><tr>
+    <th>#</th><th>الرقم</th><th>النوع</th><th>المدينة</th><th>العنوان</th><th>المساحة</th><th>السعر</th><th>الحالة</th><th>الصورة</th><th>حذف</th>
+  </tr></thead><tbody id="t-properties"></tbody></table>
+</div>
+
+<!-- ======= الطلبات ======= -->
+<div class="screen view" id="v-requests">
+  <div class="view-header">
+    <h2>📋 الطلبات</h2>
+    <button class="back-btn" onclick="go('home')">← الرئيسية</button>
+  </div>
+  <div class="form-grid">
+    <div><label>العميل 🔗</label><select id="r_client"><option value="">اختر</option></select></div>
+    <div><label>العقار 🔗</label><select id="r_property"><option value="">اختر</option></select></div>
+    <div><label>النوع</label>
+      <select id="r_type"><option>شراء</option><option>إيجار</option><option>معاينة</option></select></div>
+    <div><label>التاريخ</label><input type="date" id="r_date"></div>
+    <div><label>الحالة</label>
+      <select id="r_status"><option>جديد</option><option>قيد المعالجة</option><option>مكتمل</option><option>ملغي</option></select></div>
+  </div>
+  <div class="buttons"><button class="btn-save" onclick="saveRequest()">💾 حفظ</button></div>
+  <div class="msg" id="m-requests"></div>
+  <table><thead><tr>
+    <th>#</th><th>الرقم</th><th>العميل</th><th>العقار</th><th>النوع</th><th>التاريخ</th><th>الحالة</th><th>حذف</th>
+  </tr></thead><tbody id="t-requests"></tbody></table>
+</div>
+
+<!-- ======= الصفقات ======= -->
+<div class="screen view" id="v-deals">
+  <div class="view-header">
+    <h2>💰 الصفقات</h2>
+    <button class="back-btn" onclick="go('home')">← الرئيسية</button>
+  </div>
+  <div class="form-grid">
+    <div><label>الطلب 🔗</label><select id="d_request"><option value="">اختر</option></select></div>
+    <div><label>العميل 🔗</label><select id="d_client"><option value="">اختر</option></select></div>
+    <div><label>العقار 🔗</label><select id="d_property"><option value="">اختر</option></select></div>
+    <div><label>النوع</label>
+      <select id="d_type"><option>بيع</option><option>إيجار</option></select></div>
+    <div><label>المبلغ</label><input type="number" id="d_amount" min="0"></div>
+    <div><label>العمولة</label><input type="number" id="d_commission" min="0"></div>
+    <div><label>التاريخ</label><input type="date" id="d_date"></div>
+  </div>
+  <div class="buttons"><button class="btn-save" onclick="saveDeal()">💾 حفظ</button></div>
+  <div class="msg" id="m-deals"></div>
+  <table><thead><tr>
+    <th>#</th><th>الرقم</th><th>العميل</th><th>العقار</th><th>النوع</th><th>المبلغ</th><th>العمولة</th><th>التاريخ</th><th>حذف</th>
+  </tr></thead><tbody id="t-deals"></tbody></table>
+</div>
+
+<!-- ======= البحث ======= -->
+<div class="screen view" id="v-search">
+  <div class="view-header">
+    <h2>🔍 البحث والاستعلام</h2>
+    <button class="back-btn" onclick="go('home')">← الرئيسية</button>
+  </div>
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="اكتب اسم عميل / رقم عقار / رقم صفقة..." onkeydown="if(event.key==='Enter') doSearch()">
+    <select id="searchScope">
+      <option value="all">الكل</option>
+      <option value="clients">العملاء</option>
+      <option value="properties">العقارات</option>
+      <option value="requests">الطلبات</option>
+      <option value="deals">الصفقات</option>
+    </select>
+    <button class="btn-save" onclick="doSearch()">🔎 بحث</button>
+  </div>
+  <div id="searchResults" class="results">
+    <div class="empty">اكتب كلمة للبحث...</div>
+  </div>
+</div>
+
+<!-- تحميل المكتبات -->
+<script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+// ==========================================
+// إعدادات قاعدة البيانات
+// ==========================================
+const SUPABASE_URL = 'https://hxgienqrffuqqiyomoz.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_oSj-7xYUogxnSHLD0c46lg_PEN-W6bV';
+const dbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let DB = { clients: [], properties: [], requests: [], deals: [] };
+
+// دالة التنقل بين الشاشات
+function go(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('v-' + name).classList.add('active');
+  if (name === 'search') document.getElementById('searchResults').innerHTML = '<div class="empty">اكتب كلمة للبحث...</div>';
+}
+
+// أدوات مساعدة
+function v(id) { return document.getElementById(id).value.trim(); }
+function n(id) { return Math.abs(Number(document.getElementById(id).value)); }
+
+function msg(key, text, ok = true) {
+  const el = document.getElementById('m-' + key);
+  el.textContent = text;
+  el.className = 'msg ' + (ok ? 'ok' : 'err');
+  setTimeout(() => el.className = 'msg', 3000);
+}
+
+function getClientName(id) {
+  const c = DB.clients.find(c => String(c.id) === String(id));
+  return c ? c.name : '⚠️ غير موجود';
+}
+function getPropDesc(id) {
+  const p = DB.properties.find(p => String(p.id) === String(id));
+  return p ? p.type + ' - ' + p.address : '⚠️ غير موجود';
+}
+function formatPhone(phone) {
+  return phone.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/\s/g, '');
+}
+
+// جلب البيانات من السحابة
+async function loadData() {
+  const { data: c } = await dbClient.from('clients').select('*').order('id');
+  const { data: p } = await dbClient.from('properties').select('*').order('id');
+  const { data: r } = await dbClient.from('requests').select('*').order('id');
+  const { data: d } = await dbClient.from('deals').select('*').order('id');
+  
+  DB.clients = c || []; DB.properties = p || []; DB.requests = r || []; DB.deals = d || [];
+  
+  renderAll();
+  refreshSelects();
+}
+
+function renderAll() {
+  document.getElementById('t-clients').innerHTML = DB.clients.map((c, i) => `<tr><td>${i+1}</td><td>${c.id}</td><td>${c.name}</td><td>${c.phone}</td><td>${c.city}</td><td><button class="btn-del" onclick="delClient('${c.id}')">حذف</button></td></tr>`).join('');
+  
+  document.getElementById('t-properties').innerHTML = DB.properties.map((p, i) => `
+    <tr><td>${i+1}</td><td>${p.id}</td><td>${p.type}</td><td>${p.city}</td><td>${p.address}</td><td>${p.area}</td><td>${p.price}</td><td>${p.status}</td>
+    <td>${p.media_url ? `<a href="${p.media_url}" target="_blank" style="color:#2980b9;font-weight:bold;">عرض</a>` : '—'}</td>
+    <td><button class="btn-del" onclick="delProperty('${p.id}')">حذف</button></td></tr>`).join('');
+    
+  document.getElementById('t-requests').innerHTML = DB.requests.map((r, i) => `<tr><td>${i+1}</td><td>${r.id}</td><td>${getClientName(r.client_id)}</td><td>${getPropDesc(r.property_id)}</td><td>${r.type}</td><td>${r.date}</td><td>${r.status}</td><td><button class="btn-del" onclick="delRequest('${r.id}')">حذف</button></td></tr>`).join('');
+  document.getElementById('t-deals').innerHTML = DB.deals.map((d, i) => `<tr><td>${i+1}</td><td>${d.id}</td><td>${getClientName(d.client_id)}</td><td>${getPropDesc(d.property_id)}</td><td>${d.type}</td><td>${d.amount}</td><td>${d.commission}</td><td>${d.date}</td><td><button class="btn-del" onclick="delDeal('${d.id}')">حذف</button></td></tr>`).join('');
+}
+
+function refreshSelects() {
+  const clients = '<option value="">اختر عميلًا</option>' + DB.clients.map(c => `<option value="${c.id}">${c.name} (${c.id})</option>`).join('');
+  document.getElementById('r_client').innerHTML = clients;
+  document.getElementById('d_client').innerHTML = clients;
+
+  const props = '<option value="">اختر عقارًا</option>' + DB.properties.map(p => `<option value="${p.id}">${p.type} - ${p.address} (${p.id})</option>`).join('');
+  document.getElementById('r_property').innerHTML = props;
+  document.getElementById('d_property').innerHTML = props;
+
+  document.getElementById('d_request').innerHTML = '<option value="">اختر طلبًا</option>' + DB.requests.map(r => `<option value="${r.id}">طلب ${r.id} — ${getClientName(r.client_id)}</option>`).join('');
+}
+
+// ======== الحفظ في السحابة ========
+async function saveClient() {
+  const name = v('c_name'), city = v('c_city');
+  let phone = formatPhone(v('c_phone'));
+
+  if (!name || !city) return msg('clients', '⚠️ الاسم والمدينة مطلوبان', false);
+  if (phone.length !== 10 || !phone.startsWith('05')) return msg('clients', '⚠️ رقم الجوال خطأ', false);
+
+  const { error } = await dbClient.from('clients').insert([{ name, phone, city }]);
+  if (error) return msg('clients', '❌ خطأ: ' + error.message, false);
+  
+  await loadData();
+  document.getElementById('c_name').value = '';
+  document.getElementById('c_phone').value = '';
+  document.getElementById('c_city').value = '';
+  msg('clients', '✅ تم الحفظ بنجاح');
+}
+
+async function saveProperty() {
+  const type = v('p_type'), city = v('p_city'), address = v('p_address'), area = n('p_area'), price = n('p_price');
+  const fileInput = document.getElementById('p_media');
+  
+  if (!type || !city || !address || !area || !price) return msg('properties', '⚠️ عبّي الحقول', false);
+
+  let mediaUrl = null;
+  const file = fileInput.files[0];
+
+  if (file) {
+    msg('properties', '⏳ جاري رفع الصورة...', true);
+    const fileName = `${Date.now()}_${file.name.replace(/\s/g, '_')}`;
+    const { error: uploadError } = await dbClient.storage.from('property-media').upload(fileName, file);
+    
+    if (uploadError) return msg('properties', '❌ فشل الرفع: ' + uploadError.message, false);
+    const { data: urlData } = dbClient.storage.from('property-media').getPublicUrl(fileName);
+    mediaUrl = urlData.publicUrl;
+  }
+
+  const { error } = await dbClient.from('properties').insert([{ type, city, address, area, price, status: v('p_status'), media_url: mediaUrl }]);
+  if (error) return msg('properties', '❌ خطأ: ' + error.message, false);
+  
+  await loadData();
+  document.getElementById('p_type').value = '';
+  document.getElementById('p_city').value = '';
+  document.getElementById('p_address').value = '';
+  document.getElementById('p_area').value = '';
+  document.getElementById('p_price').value = '';
+  fileInput.value = '';
+  msg('properties', '✅ تم حفظ العقار بنجاح');
+}
+
+async function saveRequest() {
+  const client_id = v('r_client'), property_id = v('r_property'), date = v('r_date');
+  if (!client_id || !property_id || !date) return msg('requests', '⚠️ عبّي الحقول', false);
+  const { error } = await dbClient.from('requests').insert([{ client_id, property_id, type: v('r_type'), date, status: v('r_status') }]);
+  if (error) return msg('requests', '❌ خطأ: ' + error.message, false);
+  
+  await loadData();
+  document.getElementById('r_client').value = '';
+  document.getElementById('r_property').value = '';
+  document.getElementById('r_date').value = '';
+  msg('requests', '✅ تم حفظ الطلب بنجاح');
+}
+
+async function saveDeal() {
+  const req_id = v('d_request'), client_id = v('d_client'), property_id = v('d_property'), date = v('d_date'), amount = n('d_amount');
+  if (!req_id || !client_id || !property_id || !amount || !date) return msg('deals', '⚠️ عبّي الحقول', false);
+  const { error } = await dbClient.from('deals').insert([{ request_id: req_id, client_id, property_id, type: v('d_type'), amount, commission: n('d_commission'), date }]);
+  if (error) return msg('deals', '❌ خطأ: ' + error.message, false);
+  
+  await loadData();
+  document.getElementById('d_request').value = '';
+  document.getElementById('d_client').value = '';
+  document.getElementById('d_property').value = '';
+  document.getElementById('d_amount').value = '';
+  document.getElementById('d_commission').value = '';
+  document.getElementById('d_date').value = '';
+  msg('deals', '✅ تم حفظ الصفقة بنجاح');
+}
+
+// ======== الحذف من السحابة ========
+async function delClient(id) {
+  if (DB.requests.some(r => String(r.client_id) === String(id))) return alert('❌ يوجد طلبات مرتبطة بهذا العميل');
+  if (!confirm('حذف العميل؟')) return;
+  await dbClient.from('clients').delete().eq('id', id);
+  await loadData();
+}
+async function delProperty(id) {
+  if (DB.requests.some(r => String(r.property_id) === String(id))) return alert('❌ يوجد طلبات مرتبطة بهذا العقار');
+  if (!confirm('حذف العقار؟')) return;
+  await dbClient.from('properties').delete().eq('id', id);
+  await loadData();
+}
+async function delRequest(id) {
+  if (DB.deals.some(d => String(d.request_id) === String(id))) return alert('❌ يوجد صفقة مرتبطة بهذا الطلب');
+  if (!confirm('حذف الطلب؟')) return;
+  await dbClient.from('requests').delete().eq('id', id);
+  await loadData();
+}
+async function delDeal(id) {
+  if (!confirm('حذف الصفقة؟')) return;
+  await dbClient.from('deals').delete().eq('id', id);
+  await loadData();
+}
+
+// ======== البحث ========
+function doSearch() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const scope = document.getElementById('searchScope').value;
+  const box = document.getElementById('searchResults');
+  if (!q) { box.innerHTML = '<div class="empty">اكتب كلمة للبحث</div>'; return; }
+
+  let total = 0, html = '';
+  function section(title, rows, keys, heads) {
+    if (!rows.length) return '';
+    total += rows.length;
+    let s = `<h3>${title} <span class="badge">${rows.length}</span></h3><table><thead><tr>`;
+    heads.forEach(h => s += `<th>${h}</th>`);
+    s += '</tr></thead><tbody>';
+    rows.forEach(r => { s += '<tr>'; keys.forEach(k => s += `<td>${r[k] ?? ''}</td>`); s += '</tr>'; });
+    return s + '</tbody></table>';
+  }
+
+  if (scope === 'all' || scope === 'clients') {
+    const rows = DB.clients.filter(c => Object.values(c).some(v => String(v).toLowerCase().includes(q)));
+    html += section('👥 العملاء', rows, ['id','name','phone','city'], ['الرقم','الاسم','الجوال','المدينة']);
+  }
+  if (scope === 'all' || scope === 'properties') {
+    const rows = DB.properties.filter(p => Object.values(p).some(v => String(v).toLowerCase().includes(q)));
+    html += section('🏠 العقارات', rows, ['id','type','city','address','price','status'], ['الرقم','النوع','المدينة','العنوان','السعر','الحالة']);
+  }
+  if (scope === 'all' || scope === 'requests') {
+    const rows = DB.requests.filter(r => Object.values(r).some(v => String(v).toLowerCase().includes(q)) || getClientName(r.client_id).toLowerCase().includes(q) || getPropDesc(r.property_id).toLowerCase().includes(q)).map(r => ({...r, client: getClientName(r.client_id), property: getPropDesc(r.property_id)}));
+    html += section('📋 الطلبات', rows, ['id','client','property','type','date','status'], ['الرقم','العميل','العقار','النوع','التاريخ','الحالة']);
+  }
+  if (scope === 'all' || scope === 'deals') {
+    const rows = DB.deals.filter(d => Object.values(d).some(v => String(v).toLowerCase().includes(q)) || getClientName(d.client_id).toLowerCase().includes(q) || getPropDesc(d.property_id).toLowerCase().includes(q)).map(d => ({...d, client: getClientName(d.client_id), property: getPropDesc(d.property_id)}));
+    html += section('💰 الصفقات', rows, ['id','client','property','type','amount','commission','date'], ['الرقم','العميل','العقار','النوع','المبلغ','العمولة','التاريخ']);
+  }
+
+  box.innerHTML = total === 0 ? '<div class="empty">لا توجد نتائج</div>' : `<div style="color:#27ae60;font-weight:bold;margin-bottom:10px">✅ ${total} نتيجة</div>` + html;
+}
+
+// ======== تصدير Excel ========
+function exportExcel() {
+  if (DB.clients.length + DB.properties.length + DB.requests.length + DB.deals.length === 0) return alert('⚠️ لا توجد بيانات');
+  const wb = XLSX.utils.book_new();
+
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(DB.clients.map(c => ({ 'رقم العميل': c.id, 'الاسم': c.name, 'الجوال': c.phone, 'المدينة': c.city }))), 'العملاء');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(DB.properties.map(p => ({ 'رقم العقار': p.id, 'النوع': p.type, 'المدينة': p.city, 'العنوان': p.address, 'المساحة': p.area, 'السعر': p.price, 'الحالة': p.status, 'الصورة': p.media_url || 'لا يوجد' }))), 'العقارات');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(DB.requests.map(r => ({ 'رقم الطلب': r.id, 'اسم العميل': getClientName(r.client_id), 'وصف العقار': getPropDesc(r.property_id), 'النوع': r.type, 'التاريخ': r.date, 'الحالة': r.status }))), 'الطلبات');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(DB.deals.map(d => ({ 'رقم الصفقة': d.id, 'اسم العميل': getClientName(d.client_id), 'وصف العقار': getPropDesc(d.property_id), 'النوع': d.type, 'المبلغ': d.amount, 'العمولة': d.commission, 'التاريخ': d.date }))), 'الصفقات');
+
+  const date = new Date().toISOString().slice(0, 10);
+  XLSX.writeFile(wb, `مكتب_تواصل_عقاري_${date}.xlsx`);
+  alert('✅ تم تصدير الملف بنجاح!');
+}
+
+// التشغيل عند فتح الصفحة
+loadData();
+</script>
 </body>
 </html>
