@@ -32,7 +32,9 @@ label { display: block; font-weight: bold; color: #34495e; margin-bottom: 4px; f
 input, select { width: 100%; padding: 9px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
 .buttons { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
 .btn-save { background: #27ae60; color: #fff; border: none; padding: 11px 24px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold; }
-.btn-del { background: #e74c3c; color: #fff; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+.btn-search-modal { background: #2980b9; color: #fff; border: none; padding: 11px 24px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold; }
+.btn-edit { background: #f39c12; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; margin-left: 5px; font-weight: bold; }
+.btn-del { background: #e74c3c; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; }
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
 th, td { border: 1px solid #e1e5eb; padding: 8px; text-align: center; }
 th { background: #34495e; color: #fff; }
@@ -46,6 +48,21 @@ tr:nth-child(even) { background: #f9fafc; }
 .empty { text-align: center; color: #95a5a6; padding: 25px; font-style: italic; }
 .results h3 { color: #2c3e50; margin: 18px 0 10px; border-bottom: 2px solid #ecf0f1; padding-bottom: 6px; }
 .badge { background: #3498db; color: #fff; padding: 2px 10px; border-radius: 10px; font-size: 12px; }
+
+/* تنسيق النافذة المنبثقة (Modal) */
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
+.modal-content { background: #fff; padding: 20px; border-radius: 10px; width: 90%; max-width: 700px; max-height: 80vh; display: flex; flex-direction: column; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+.modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ecf0f1; padding-bottom: 10px; margin-bottom: 15px; }
+.modal-header h3 { color: #2c3e50; margin: 0; }
+.close-btn { background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+.modal-search { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; }
+.modal-table-container { overflow-y: auto; flex-grow: 1; }
+.modal-table-container table { width: 100%; border-collapse: collapse; }
+.modal-table-container th, .modal-table-container td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+.modal-table-container th { background: #34495e; color: white; position: sticky; top: 0; }
+.modal-table-container tbody tr { cursor: pointer; transition: background 0.2s; }
+.modal-table-container tbody tr:hover { background: #d5f5e3; }
+
 @media (max-width: 700px) { .home-buttons { grid-template-columns: repeat(2, 1fr); } }
 </style>
 </head>
@@ -88,10 +105,14 @@ tr:nth-child(even) { background: #f9fafc; }
       </select>
     </div>
   </div>
-  <div class="buttons"><button class="btn-save" onclick="saveClient()">💾 حفظ</button></div>
+  <div class="buttons">
+    <button class="btn-save" onclick="saveClient()" id="btn-save-client">💾 حفظ</button>
+    <button class="btn-search-modal" onclick="openModal('clients')">🔍 بحث وتعديل عميل</button>
+    <button class="btn-edit" onclick="cancelEdit('clients')" id="btn-cancel-client" style="display:none; background:#95a5a6;">❌ إلغاء التعديل</button>
+  </div>
   <div class="msg" id="m-clients"></div>
   <table><thead><tr>
-    <th>#</th><th>الرقم</th><th>الاسم</th><th>الجوال</th><th>المدينة</th><th>حذف</th>
+    <th>#</th><th>الرقم</th><th>الاسم</th><th>الجوال</th><th>المدينة</th><th>إجراء</th>
   </tr></thead><tbody id="t-clients"></tbody></table>
 </div>
 
@@ -124,10 +145,14 @@ tr:nth-child(even) { background: #f9fafc; }
       <input type="file" id="p_media" accept="image/*">
     </div>
   </div>
-  <div class="buttons"><button class="btn-save" onclick="saveProperty()">💾 حفظ</button></div>
+  <div class="buttons">
+    <button class="btn-save" onclick="saveProperty()" id="btn-save-property">💾 حفظ</button>
+    <button class="btn-search-modal" onclick="openModal('properties')">🔍 بحث وتعديل عقار</button>
+    <button class="btn-edit" onclick="cancelEdit('properties')" id="btn-cancel-property" style="display:none; background:#95a5a6;">❌ إلغاء التعديل</button>
+  </div>
   <div class="msg" id="m-properties"></div>
   <table><thead><tr>
-    <th>#</th><th>الرقم</th><th>النوع</th><th>المدينة</th><th>العنوان</th><th>المساحة</th><th>السعر</th><th>الحالة</th><th>الصورة</th><th>حذف</th>
+    <th>#</th><th>الرقم</th><th>النوع</th><th>المدينة</th><th>العنوان</th><th>المساحة</th><th>السعر</th><th>الحالة</th><th>الصورة</th><th>إجراء</th>
   </tr></thead><tbody id="t-properties"></tbody></table>
 </div>
 
@@ -146,10 +171,14 @@ tr:nth-child(even) { background: #f9fafc; }
     <div><label>الحالة</label>
       <select id="r_status"><option>جديد</option><option>قيد المعالجة</option><option>مكتمل</option><option>ملغي</option></select></div>
   </div>
-  <div class="buttons"><button class="btn-save" onclick="saveRequest()">💾 حفظ</button></div>
+  <div class="buttons">
+    <button class="btn-save" onclick="saveRequest()" id="btn-save-request">💾 حفظ</button>
+    <button class="btn-search-modal" onclick="openModal('requests')">🔍 بحث وتعديل طلب</button>
+    <button class="btn-edit" onclick="cancelEdit('requests')" id="btn-cancel-request" style="display:none; background:#95a5a6;">❌ إلغاء التعديل</button>
+  </div>
   <div class="msg" id="m-requests"></div>
   <table><thead><tr>
-    <th>#</th><th>الرقم</th><th>العميل</th><th>العقار</th><th>النوع</th><th>التاريخ</th><th>الحالة</th><th>حذف</th>
+    <th>#</th><th>الرقم</th><th>العميل</th><th>العقار</th><th>النوع</th><th>التاريخ</th><th>الحالة</th><th>إجراء</th>
   </tr></thead><tbody id="t-requests"></tbody></table>
 </div>
 
@@ -169,21 +198,25 @@ tr:nth-child(even) { background: #f9fafc; }
     <div><label>العمولة</label><input type="number" id="d_commission" min="0"></div>
     <div><label>التاريخ</label><input type="date" id="d_date"></div>
   </div>
-  <div class="buttons"><button class="btn-save" onclick="saveDeal()">💾 حفظ</button></div>
+  <div class="buttons">
+    <button class="btn-save" onclick="saveDeal()" id="btn-save-deal">💾 حفظ</button>
+    <button class="btn-search-modal" onclick="openModal('deals')">🔍 بحث وتعديل صفقة</button>
+    <button class="btn-edit" onclick="cancelEdit('deals')" id="btn-cancel-deal" style="display:none; background:#95a5a6;">❌ إلغاء التعديل</button>
+  </div>
   <div class="msg" id="m-deals"></div>
   <table><thead><tr>
-    <th>#</th><th>الرقم</th><th>العميل</th><th>العقار</th><th>النوع</th><th>المبلغ</th><th>العمولة</th><th>التاريخ</th><th>حذف</th>
+    <th>#</th><th>الرقم</th><th>العميل</th><th>العقار</th><th>النوع</th><th>المبلغ</th><th>العمولة</th><th>التاريخ</th><th>إجراء</th>
   </tr></thead><tbody id="t-deals"></tbody></table>
 </div>
 
-<!-- ======= البحث ======= -->
+<!-- ======= البحث الشامل ======= -->
 <div class="screen view" id="v-search">
   <div class="view-header">
-    <h2>🔍 البحث والاستعلام</h2>
+    <h2>🔍 البحث والاستعلام (تقرير)</h2>
     <button class="back-btn" onclick="go('home')">← الرئيسية</button>
   </div>
   <div class="search-bar">
-    <input type="text" id="searchInput" placeholder="اكتب اسم عميل / رقم عقار / رقم صفقة..." onkeydown="if(event.key==='Enter') doSearch()">
+    <input type="text" id="searchInput" placeholder="ابحث بالاسم، الجوال، المدينة، العنوان، أو المبلغ..." onkeydown="if(event.key==='Enter') doSearch()">
     <select id="searchScope">
       <option value="all">الكل</option>
       <option value="clients">العملاء</option>
@@ -198,21 +231,38 @@ tr:nth-child(even) { background: #f9fafc; }
   </div>
 </div>
 
-<!-- تحميل المكتبات -->
+<!-- ======= النافذة المنبثقة للبحث والتعديل ======= -->
+<div id="searchModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 id="modalTitle">اختر السجل</h3>
+      <button class="close-btn" onclick="closeModal()">إغلاق ✖</button>
+    </div>
+    <input type="text" id="modalSearchInput" class="modal-search" placeholder="ابحث بالاسم أو رقم الجوال أو العنوان..." onkeyup="filterModalData()">
+    <div class="modal-table-container">
+      <table id="modalTable">
+        <thead id="modalTableHead"></thead>
+        <tbody id="modalTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
 // ==========================================
 // إعدادات قاعدة البيانات
 // ==========================================
-const SUPABASE_URL = 'https://hxgienqrffuqqiyomoz.supabase.co';
+const SUPABASE_URL = 'https://hxgienqrffuqqiyomzoz.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_oSj-7xYUogxnSHLD0c46lg_PEN-W6bV';
 const dbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let DB = { clients: [], properties: [], requests: [], deals: [] };
+let editingId = { clients: null, properties: null, requests: null, deals: null };
+let currentModalType = null;
 
-// دالة التنقل بين الشاشات
+// دالة التنقل
 function go(name) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.getElementById('v-' + name).classList.add('active');
@@ -222,25 +272,15 @@ function go(name) {
 // أدوات مساعدة
 function v(id) { return document.getElementById(id).value.trim(); }
 function n(id) { return Math.abs(Number(document.getElementById(id).value)); }
-
 function msg(key, text, ok = true) {
   const el = document.getElementById('m-' + key);
   el.textContent = text;
   el.className = 'msg ' + (ok ? 'ok' : 'err');
   setTimeout(() => el.className = 'msg', 3000);
 }
-
-function getClientName(id) {
-  const c = DB.clients.find(c => String(c.id) === String(id));
-  return c ? c.name : '⚠️ غير موجود';
-}
-function getPropDesc(id) {
-  const p = DB.properties.find(p => String(p.id) === String(id));
-  return p ? p.type + ' - ' + p.address : '⚠️ غير موجود';
-}
-function formatPhone(phone) {
-  return phone.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/\s/g, '');
-}
+function getClientName(id) { const c = DB.clients.find(c => String(c.id) === String(id)); return c ? c.name : '⚠️ غير موجود'; }
+function getPropDesc(id) { const p = DB.properties.find(p => String(p.id) === String(id)); return p ? p.type + ' - ' + p.address : '⚠️ غير موجود'; }
+function formatPhone(phone) { return phone.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/\s/g, ''); }
 
 // جلب البيانات من السحابة
 async function loadData() {
@@ -256,15 +296,38 @@ async function loadData() {
 }
 
 function renderAll() {
-  document.getElementById('t-clients').innerHTML = DB.clients.map((c, i) => `<tr><td>${i+1}</td><td>${c.id}</td><td>${c.name}</td><td>${c.phone}</td><td>${c.city}</td><td><button class="btn-del" onclick="delClient('${c.id}')">حذف</button></td></tr>`).join('');
+  // العملاء
+  document.getElementById('t-clients').innerHTML = DB.clients.map((c, i) => `
+    <tr><td>${i+1}</td><td>${c.id}</td><td>${c.name}</td><td>${c.phone}</td><td>${c.city}</td>
+    <td>
+      <button class="btn-edit" onclick="editClient('${c.id}')">تعديل سريع</button>
+      <button class="btn-del" onclick="delClient('${c.id}')">حذف</button>
+    </td></tr>`).join('');
   
+  // العقارات
   document.getElementById('t-properties').innerHTML = DB.properties.map((p, i) => `
     <tr><td>${i+1}</td><td>${p.id}</td><td>${p.type}</td><td>${p.city}</td><td>${p.address}</td><td>${p.area}</td><td>${p.price}</td><td>${p.status}</td>
     <td>${p.media_url ? `<a href="${p.media_url}" target="_blank" style="color:#2980b9;font-weight:bold;">عرض</a>` : '—'}</td>
-    <td><button class="btn-del" onclick="delProperty('${p.id}')">حذف</button></td></tr>`).join('');
+    <td>
+      <button class="btn-edit" onclick="editProperty('${p.id}')">تعديل سريع</button>
+      <button class="btn-del" onclick="delProperty('${p.id}')">حذف</button>
+    </td></tr>`).join('');
     
-  document.getElementById('t-requests').innerHTML = DB.requests.map((r, i) => `<tr><td>${i+1}</td><td>${r.id}</td><td>${getClientName(r.client_id)}</td><td>${getPropDesc(r.property_id)}</td><td>${r.type}</td><td>${r.date}</td><td>${r.status}</td><td><button class="btn-del" onclick="delRequest('${r.id}')">حذف</button></td></tr>`).join('');
-  document.getElementById('t-deals').innerHTML = DB.deals.map((d, i) => `<tr><td>${i+1}</td><td>${d.id}</td><td>${getClientName(d.client_id)}</td><td>${getPropDesc(d.property_id)}</td><td>${d.type}</td><td>${d.amount}</td><td>${d.commission}</td><td>${d.date}</td><td><button class="btn-del" onclick="delDeal('${d.id}')">حذف</button></td></tr>`).join('');
+  // الطلبات
+  document.getElementById('t-requests').innerHTML = DB.requests.map((r, i) => `
+    <tr><td>${i+1}</td><td>${r.id}</td><td>${getClientName(r.client_id)}</td><td>${getPropDesc(r.property_id)}</td><td>${r.type}</td><td>${r.date}</td><td>${r.status}</td>
+    <td>
+      <button class="btn-edit" onclick="editRequest('${r.id}')">تعديل سريع</button>
+      <button class="btn-del" onclick="delRequest('${r.id}')">حذف</button>
+    </td></tr>`).join('');
+
+  // الصفقات
+  document.getElementById('t-deals').innerHTML = DB.deals.map((d, i) => `
+    <tr><td>${i+1}</td><td>${d.id}</td><td>${getClientName(d.client_id)}</td><td>${getPropDesc(d.property_id)}</td><td>${d.type}</td><td>${d.amount}</td><td>${d.commission}</td><td>${d.date}</td>
+    <td>
+      <button class="btn-edit" onclick="editDeal('${d.id}')">تعديل سريع</button>
+      <button class="btn-del" onclick="delDeal('${d.id}')">حذف</button>
+    </td></tr>`).join('');
 }
 
 function refreshSelects() {
@@ -279,7 +342,183 @@ function refreshSelects() {
   document.getElementById('d_request').innerHTML = '<option value="">اختر طلبًا</option>' + DB.requests.map(r => `<option value="${r.id}">طلب ${r.id} — ${getClientName(r.client_id)}</option>`).join('');
 }
 
-// ======== الحفظ في السحابة ========
+// ==========================================
+// دوال التعديل (مفصلة)
+// ==========================================
+function editClient(id) {
+  const c = DB.clients.find(x => String(x.id) === String(id));
+  if (!c) return;
+  document.getElementById('c_name').value = c.name;
+  document.getElementById('c_phone').value = c.phone;
+  document.getElementById('c_city').value = c.city;
+  editingId.clients = id;
+  document.getElementById('btn-save-client').innerHTML = '💾 تحديث البيانات';
+  document.getElementById('btn-cancel-client').style.display = 'inline-block';
+  window.scrollTo(0, 0);
+}
+
+function editProperty(id) {
+  const p = DB.properties.find(x => String(x.id) === String(id));
+  if (!p) return;
+  document.getElementById('p_type').value = p.type;
+  document.getElementById('p_city').value = p.city;
+  document.getElementById('p_address').value = p.address;
+  document.getElementById('p_area').value = p.area;
+  document.getElementById('p_price').value = p.price;
+  document.getElementById('p_status').value = p.status;
+  editingId.properties = id;
+  document.getElementById('btn-save-property').innerHTML = '💾 تحديث البيانات';
+  document.getElementById('btn-cancel-property').style.display = 'inline-block';
+  window.scrollTo(0, 0);
+}
+
+function editRequest(id) {
+  const r = DB.requests.find(x => String(x.id) === String(id));
+  if (!r) return;
+  document.getElementById('r_client').value = r.client_id;
+  document.getElementById('r_property').value = r.property_id;
+  document.getElementById('r_type').value = r.type;
+  document.getElementById('r_date').value = r.date;
+  document.getElementById('r_status').value = r.status;
+  editingId.requests = id;
+  document.getElementById('btn-save-request').innerHTML = '💾 تحديث البيانات';
+  document.getElementById('btn-cancel-request').style.display = 'inline-block';
+  window.scrollTo(0, 0);
+}
+
+function editDeal(id) {
+  const d = DB.deals.find(x => String(x.id) === String(id));
+  if (!d) return;
+  document.getElementById('d_request').value = d.request_id;
+  document.getElementById('d_client').value = d.client_id;
+  document.getElementById('d_property').value = d.property_id;
+  document.getElementById('d_type').value = d.type;
+  document.getElementById('d_amount').value = d.amount;
+  document.getElementById('d_commission').value = d.commission;
+  document.getElementById('d_date').value = d.date;
+  editingId.deals = id;
+  document.getElementById('btn-save-deal').innerHTML = '💾 تحديث البيانات';
+  document.getElementById('btn-cancel-deal').style.display = 'inline-block';
+  window.scrollTo(0, 0);
+}
+
+function cancelEdit(type) {
+  editingId[type] = null;
+  if (type === 'clients') {
+    document.getElementById('c_name').value = '';
+    document.getElementById('c_phone').value = '';
+    document.getElementById('c_city').value = '';
+    document.getElementById('btn-save-client').innerHTML = '💾 حفظ';
+    document.getElementById('btn-cancel-client').style.display = 'none';
+  } else if (type === 'properties') {
+    document.getElementById('p_type').value = '';
+    document.getElementById('p_city').value = '';
+    document.getElementById('p_address').value = '';
+    document.getElementById('p_area').value = '';
+    document.getElementById('p_price').value = '';
+    document.getElementById('p_media').value = '';
+    document.getElementById('btn-save-property').innerHTML = '💾 حفظ';
+    document.getElementById('btn-cancel-property').style.display = 'none';
+  } else if (type === 'requests') {
+    document.getElementById('r_client').value = '';
+    document.getElementById('r_property').value = '';
+    document.getElementById('r_date').value = '';
+    document.getElementById('btn-save-request').innerHTML = '💾 حفظ';
+    document.getElementById('btn-cancel-request').style.display = 'none';
+  } else if (type === 'deals') {
+    document.getElementById('d_request').value = '';
+    document.getElementById('d_client').value = '';
+    document.getElementById('d_property').value = '';
+    document.getElementById('d_amount').value = '';
+    document.getElementById('d_commission').value = '';
+    document.getElementById('d_date').value = '';
+    document.getElementById('btn-save-deal').innerHTML = '💾 حفظ';
+    document.getElementById('btn-cancel-deal').style.display = 'none';
+  }
+}
+
+// ==========================================
+// دوال النافذة المنبثقة (البحث والتعديل)
+// ==========================================
+function openModal(type) {
+  currentModalType = type;
+  document.getElementById('searchModal').style.display = 'flex';
+  document.getElementById('modalSearchInput').value = '';
+  
+  let title = '', head = '';
+  
+  if (type === 'clients') {
+    title = 'اختر عميلاً للتعديل';
+    head = '<tr><th>الرقم</th><th>الاسم</th><th>الجوال</th><th>المدينة</th></tr>';
+  } else if (type === 'properties') {
+    title = 'اختر عقاراً للتعديل';
+    head = '<tr><th>الرقم</th><th>النوع</th><th>العنوان</th><th>السعر</th></tr>';
+  } else if (type === 'requests') {
+    title = 'اختر طلباً للتعديل';
+    head = '<tr><th>الرقم</th><th>العميل</th><th>العقار</th><th>النوع</th></tr>';
+  } else if (type === 'deals') {
+    title = 'اختر صفقة للتعديل';
+    head = '<tr><th>الرقم</th><th>العميل</th><th>المبلغ</th><th>التاريخ</th></tr>';
+  }
+
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalTableHead').innerHTML = head;
+  filterModalData();
+}
+
+function closeModal() {
+  document.getElementById('searchModal').style.display = 'none';
+  currentModalType = null;
+}
+
+function filterModalData() {
+  const q = document.getElementById('modalSearchInput').value.toLowerCase();
+  let rowsHtml = '';
+  
+  if (currentModalType === 'clients') {
+    const filtered = DB.clients.filter(c => c.name.toLowerCase().includes(q) || c.phone.includes(q) || c.city.toLowerCase().includes(q));
+    rowsHtml = filtered.map(c => `
+      <tr onclick="selectFromModal('clients', '${c.id}')">
+        <td>${c.id}</td><td>${c.name}</td><td>${c.phone}</td><td>${c.city}</td>
+      </tr>`).join('');
+  } 
+  else if (currentModalType === 'properties') {
+    const filtered = DB.properties.filter(p => p.type.toLowerCase().includes(q) || p.address.toLowerCase().includes(q) || p.city.toLowerCase().includes(q) || String(p.price).includes(q));
+    rowsHtml = filtered.map(p => `
+      <tr onclick="selectFromModal('properties', '${p.id}')">
+        <td>${p.id}</td><td>${p.type}</td><td>${p.address}</td><td>${p.price}</td>
+      </tr>`).join('');
+  } 
+  else if (currentModalType === 'requests') {
+    const filtered = DB.requests.filter(r => getClientName(r.client_id).toLowerCase().includes(q) || getPropDesc(r.property_id).toLowerCase().includes(q) || r.type.toLowerCase().includes(q));
+    rowsHtml = filtered.map(r => `
+      <tr onclick="selectFromModal('requests', '${r.id}')">
+        <td>${r.id}</td><td>${getClientName(r.client_id)}</td><td>${getPropDesc(r.property_id)}</td><td>${r.type}</td>
+      </tr>`).join('');
+  } 
+  else if (currentModalType === 'deals') {
+    const filtered = DB.deals.filter(d => getClientName(d.client_id).toLowerCase().includes(q) || getPropDesc(d.property_id).toLowerCase().includes(q) || String(d.amount).includes(q));
+    rowsHtml = filtered.map(d => `
+      <tr onclick="selectFromModal('deals', '${d.id}')">
+        <td>${d.id}</td><td>${getClientName(d.client_id)}</td><td>${d.amount}</td><td>${d.date}</td>
+      </tr>`).join('');
+  }
+
+  if (!rowsHtml) rowsHtml = '<tr><td colspan="4" style="text-align:center; padding:20px;">لا توجد نتائج مطابقة</td></tr>';
+  document.getElementById('modalTableBody').innerHTML = rowsHtml;
+}
+
+function selectFromModal(type, id) {
+  closeModal();
+  if (type === 'clients') editClient(id);
+  else if (type === 'properties') editProperty(id);
+  else if (type === 'requests') editRequest(id);
+  else if (type === 'deals') editDeal(id);
+}
+
+// ==========================================
+// دوال الحفظ والتحديث
+// ==========================================
 async function saveClient() {
   const name = v('c_name'), city = v('c_city');
   let phone = formatPhone(v('c_phone'));
@@ -287,14 +526,23 @@ async function saveClient() {
   if (!name || !city) return msg('clients', '⚠️ الاسم والمدينة مطلوبان', false);
   if (phone.length !== 10 || !phone.startsWith('05')) return msg('clients', '⚠️ رقم الجوال خطأ', false);
 
-  const { error } = await dbClient.from('clients').insert([{ name, phone, city }]);
+  const isDuplicate = DB.clients.some(c => c.name === name && c.phone === phone && String(c.id) !== String(editingId.clients));
+  if (isDuplicate) return msg('clients', '⚠️ هذا العميل مسجل مسبقاً بنفس الاسم والجوال', false);
+
+  let error;
+  if (editingId.clients) {
+    const res = await dbClient.from('clients').update({ name, phone, city }).eq('id', editingId.clients);
+    error = res.error;
+  } else {
+    const res = await dbClient.from('clients').insert([{ name, phone, city }]);
+    error = res.error;
+  }
+
   if (error) return msg('clients', '❌ خطأ: ' + error.message, false);
   
   await loadData();
-  document.getElementById('c_name').value = '';
-  document.getElementById('c_phone').value = '';
-  document.getElementById('c_city').value = '';
-  msg('clients', '✅ تم الحفظ بنجاح');
+  cancelEdit('clients');
+  msg('clients', editingId.clients ? '✅ تم التحديث بنجاح' : '✅ تم الحفظ بنجاح');
 }
 
 async function saveProperty() {
@@ -316,49 +564,70 @@ async function saveProperty() {
     mediaUrl = urlData.publicUrl;
   }
 
-  const { error } = await dbClient.from('properties').insert([{ type, city, address, area, price, status: v('p_status'), media_url: mediaUrl }]);
+  let error;
+  const payload = { type, city, address, area, price, status: v('p_status') };
+  if (mediaUrl) payload.media_url = mediaUrl;
+
+  if (editingId.properties) {
+    const res = await dbClient.from('properties').update(payload).eq('id', editingId.properties);
+    error = res.error;
+  } else {
+    const res = await dbClient.from('properties').insert([payload]);
+    error = res.error;
+  }
+
   if (error) return msg('properties', '❌ خطأ: ' + error.message, false);
   
   await loadData();
-  document.getElementById('p_type').value = '';
-  document.getElementById('p_city').value = '';
-  document.getElementById('p_address').value = '';
-  document.getElementById('p_area').value = '';
-  document.getElementById('p_price').value = '';
-  fileInput.value = '';
-  msg('properties', '✅ تم حفظ العقار بنجاح');
+  cancelEdit('properties');
+  msg('properties', editingId.properties ? '✅ تم التحديث بنجاح' : '✅ تم حفظ العقار بنجاح');
 }
 
 async function saveRequest() {
   const client_id = v('r_client'), property_id = v('r_property'), date = v('r_date');
   if (!client_id || !property_id || !date) return msg('requests', '⚠️ عبّي الحقول', false);
-  const { error } = await dbClient.from('requests').insert([{ client_id, property_id, type: v('r_type'), date, status: v('r_status') }]);
+
+  const payload = { client_id, property_id, type: v('r_type'), date, status: v('r_status') };
+  let error;
+
+  if (editingId.requests) {
+    const res = await dbClient.from('requests').update(payload).eq('id', editingId.requests);
+    error = res.error;
+  } else {
+    const res = await dbClient.from('requests').insert([payload]);
+    error = res.error;
+  }
+
   if (error) return msg('requests', '❌ خطأ: ' + error.message, false);
   
   await loadData();
-  document.getElementById('r_client').value = '';
-  document.getElementById('r_property').value = '';
-  document.getElementById('r_date').value = '';
-  msg('requests', '✅ تم حفظ الطلب بنجاح');
+  cancelEdit('requests');
+  msg('requests', editingId.requests ? '✅ تم التحديث بنجاح' : '✅ تم حفظ الطلب بنجاح');
 }
 
 async function saveDeal() {
   const req_id = v('d_request'), client_id = v('d_client'), property_id = v('d_property'), date = v('d_date'), amount = n('d_amount');
   if (!req_id || !client_id || !property_id || !amount || !date) return msg('deals', '⚠️ عبّي الحقول', false);
-  const { error } = await dbClient.from('deals').insert([{ request_id: req_id, client_id, property_id, type: v('d_type'), amount, commission: n('d_commission'), date }]);
+
+  const payload = { request_id: req_id, client_id, property_id, type: v('d_type'), amount, commission: n('d_commission'), date };
+  let error;
+
+  if (editingId.deals) {
+    const res = await dbClient.from('deals').update(payload).eq('id', editingId.deals);
+    error = res.error;
+  } else {
+    const res = await dbClient.from('deals').insert([payload]);
+    error = res.error;
+  }
+
   if (error) return msg('deals', '❌ خطأ: ' + error.message, false);
   
   await loadData();
-  document.getElementById('d_request').value = '';
-  document.getElementById('d_client').value = '';
-  document.getElementById('d_property').value = '';
-  document.getElementById('d_amount').value = '';
-  document.getElementById('d_commission').value = '';
-  document.getElementById('d_date').value = '';
-  msg('deals', '✅ تم حفظ الصفقة بنجاح');
+  cancelEdit('deals');
+  msg('deals', editingId.deals ? '✅ تم التحديث بنجاح' : '✅ تم حفظ الصفقة بنجاح');
 }
 
-// ======== الحذف من السحابة ========
+// ======== الحذف ========
 async function delClient(id) {
   if (DB.requests.some(r => String(r.client_id) === String(id))) return alert('❌ يوجد طلبات مرتبطة بهذا العميل');
   if (!confirm('حذف العميل؟')) return;
@@ -383,7 +652,7 @@ async function delDeal(id) {
   await loadData();
 }
 
-// ======== البحث ========
+// ======== البحث الشامل ========
 function doSearch() {
   const q = document.getElementById('searchInput').value.trim().toLowerCase();
   const scope = document.getElementById('searchScope').value;
@@ -391,6 +660,7 @@ function doSearch() {
   if (!q) { box.innerHTML = '<div class="empty">اكتب كلمة للبحث</div>'; return; }
 
   let total = 0, html = '';
+  
   function section(title, rows, keys, heads) {
     if (!rows.length) return '';
     total += rows.length;
@@ -402,19 +672,19 @@ function doSearch() {
   }
 
   if (scope === 'all' || scope === 'clients') {
-    const rows = DB.clients.filter(c => Object.values(c).some(v => String(v).toLowerCase().includes(q)));
+    const rows = DB.clients.filter(c => c.name.toLowerCase().includes(q) || c.phone.includes(q) || c.city.toLowerCase().includes(q));
     html += section('👥 العملاء', rows, ['id','name','phone','city'], ['الرقم','الاسم','الجوال','المدينة']);
   }
   if (scope === 'all' || scope === 'properties') {
-    const rows = DB.properties.filter(p => Object.values(p).some(v => String(v).toLowerCase().includes(q)));
+    const rows = DB.properties.filter(p => p.type.toLowerCase().includes(q) || p.city.toLowerCase().includes(q) || p.address.toLowerCase().includes(q) || String(p.price).includes(q) || p.status.toLowerCase().includes(q));
     html += section('🏠 العقارات', rows, ['id','type','city','address','price','status'], ['الرقم','النوع','المدينة','العنوان','السعر','الحالة']);
   }
   if (scope === 'all' || scope === 'requests') {
-    const rows = DB.requests.filter(r => Object.values(r).some(v => String(v).toLowerCase().includes(q)) || getClientName(r.client_id).toLowerCase().includes(q) || getPropDesc(r.property_id).toLowerCase().includes(q)).map(r => ({...r, client: getClientName(r.client_id), property: getPropDesc(r.property_id)}));
+    const rows = DB.requests.filter(r => getClientName(r.client_id).toLowerCase().includes(q) || getPropDesc(r.property_id).toLowerCase().includes(q) || r.type.toLowerCase().includes(q) || r.date.includes(q) || r.status.toLowerCase().includes(q)).map(r => ({...r, client: getClientName(r.client_id), property: getPropDesc(r.property_id)}));
     html += section('📋 الطلبات', rows, ['id','client','property','type','date','status'], ['الرقم','العميل','العقار','النوع','التاريخ','الحالة']);
   }
   if (scope === 'all' || scope === 'deals') {
-    const rows = DB.deals.filter(d => Object.values(d).some(v => String(v).toLowerCase().includes(q)) || getClientName(d.client_id).toLowerCase().includes(q) || getPropDesc(d.property_id).toLowerCase().includes(q)).map(d => ({...d, client: getClientName(d.client_id), property: getPropDesc(d.property_id)}));
+    const rows = DB.deals.filter(d => getClientName(d.client_id).toLowerCase().includes(q) || getPropDesc(d.property_id).toLowerCase().includes(q) || String(d.amount).includes(q) || String(d.commission).includes(q) || d.date.includes(q) || d.type.toLowerCase().includes(q)).map(d => ({...d, client: getClientName(d.client_id), property: getPropDesc(d.property_id)}));
     html += section('💰 الصفقات', rows, ['id','client','property','type','amount','commission','date'], ['الرقم','العميل','العقار','النوع','المبلغ','العمولة','التاريخ']);
   }
 
