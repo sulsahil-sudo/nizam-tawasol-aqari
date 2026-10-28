@@ -226,7 +226,7 @@ tr:nth-child(even) { background: #f9fafc; }
 // ==========================================
 const SUPABASE_URL = 'https://hxgienqrffuqqiyomoz.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_oSj-7xYUogxnSHLD0c46lg_PEN-W6bV';
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY); // تم تغيير الاسم لتجنب التداخل
 
 let DB = { clients: [], properties: [], requests: [], deals: [] };
 
@@ -258,10 +258,10 @@ function getPropDesc(id) {
 
 // جلب البيانات
 async function loadData() {
-  const { data: clients } = await supabase.from('clients').select('*').order('id');
-  const { data: properties } = await supabase.from('properties').select('*').order('id');
-  const { data: requests } = await supabase.from('requests').select('*').order('id');
-  const { data: deals } = await supabase.from('deals').select('*').order('id');
+  const { data: clients } = await supabaseClient.from('clients').select('*').order('id');
+  const { data: properties } = await supabaseClient.from('properties').select('*').order('id');
+  const { data: requests } = await supabaseClient.from('requests').select('*').order('id');
+  const { data: deals } = await supabaseClient.from('deals').select('*').order('id');
   
   DB.clients = clients || [];
   DB.properties = properties || [];
@@ -296,6 +296,10 @@ function refreshSelects() {
   document.getElementById('d_request').innerHTML = '<option value="">اختر طلبًا</option>' + DB.requests.map(r => `<option value="${r.id}">طلب ${r.id} — ${getClientName(r.client_id)}</option>`).join('');
 }
 
+function formatPhone(phone) {
+  return phone.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/\s/g, '');
+}
+
 // ======== الحفظ ========
 async function saveClient() {
   const name = v('c_name'), city = v('c_city');
@@ -304,7 +308,7 @@ async function saveClient() {
   if (!name || !city) return msg('clients', '⚠️ الاسم والمدينة مطلوبان', false);
   if (phone.length !== 10 || !phone.startsWith('05')) return msg('clients', '⚠️ رقم الجوال خطأ', false);
 
-  const { error } = await supabase.from('clients').insert([{ name, phone, city }]);
+  const { error } = await supabaseClient.from('clients').insert([{ name, phone, city }]);
   if (error) return msg('clients', '❌ خطأ: ' + error.message, false);
   
   await loadData();
@@ -326,14 +330,14 @@ async function saveProperty() {
   if (file) {
     msg('properties', '⏳ جاري رفع الصورة...', true);
     const fileName = `${Date.now()}_${file.name.replace(/\s/g, '_')}`;
-    const { error: uploadError } = await supabase.storage.from('property-media').upload(fileName, file);
+    const { error: uploadError } = await supabaseClient.storage.from('property-media').upload(fileName, file);
     
     if (uploadError) return msg('properties', '❌ فشل الرفع: ' + uploadError.message, false);
-    const { data: urlData } = supabase.storage.from('property-media').getPublicUrl(fileName);
+    const { data: urlData } = supabaseClient.storage.from('property-media').getPublicUrl(fileName);
     mediaUrl = urlData.publicUrl;
   }
 
-  const { error } = await supabase.from('properties').insert([{ type, city, address, area, price, status: v('p_status'), media_url: mediaUrl }]);
+  const { error } = await supabaseClient.from('properties').insert([{ type, city, address, area, price, status: v('p_status'), media_url: mediaUrl }]);
   if (error) return msg('properties', '❌ خطأ: ' + error.message, false);
   
   await loadData();
@@ -349,7 +353,7 @@ async function saveProperty() {
 async function saveRequest() {
   const client_id = v('r_client'), property_id = v('r_property'), date = v('r_date');
   if (!client_id || !property_id || !date) return msg('requests', '⚠️ عبّي الحقول', false);
-  const { error } = await supabase.from('requests').insert([{ client_id, property_id, type: v('r_type'), date, status: v('r_status') }]);
+  const { error } = await supabaseClient.from('requests').insert([{ client_id, property_id, type: v('r_type'), date, status: v('r_status') }]);
   if (error) return msg('requests', '❌ خطأ: ' + error.message, false);
   
   await loadData();
@@ -362,7 +366,7 @@ async function saveRequest() {
 async function saveDeal() {
   const req_id = v('d_request'), client_id = v('d_client'), property_id = v('d_property'), date = v('d_date'), amount = n('d_amount');
   if (!req_id || !client_id || !property_id || !amount || !date) return msg('deals', '⚠️ عبّي الحقول', false);
-  const { error } = await supabase.from('deals').insert([{ request_id: req_id, client_id, property_id, type: v('d_type'), amount, commission: n('d_commission'), date }]);
+  const { error } = await supabaseClient.from('deals').insert([{ request_id: req_id, client_id, property_id, type: v('d_type'), amount, commission: n('d_commission'), date }]);
   if (error) return msg('deals', '❌ خطأ: ' + error.message, false);
   
   await loadData();
@@ -379,24 +383,24 @@ async function saveDeal() {
 async function delClient(id) {
   if (DB.requests.some(r => String(r.client_id) === String(id))) return alert('❌ يوجد طلبات مرتبطة بهذا العميل');
   if (!confirm('حذف العميل؟')) return;
-  await supabase.from('clients').delete().eq('id', id);
+  await supabaseClient.from('clients').delete().eq('id', id);
   await loadData();
 }
 async function delProperty(id) {
   if (DB.requests.some(r => String(r.property_id) === String(id))) return alert('❌ يوجد طلبات مرتبطة بهذا العقار');
   if (!confirm('حذف العقار؟')) return;
-  await supabase.from('properties').delete().eq('id', id);
+  await supabaseClient.from('properties').delete().eq('id', id);
   await loadData();
 }
 async function delRequest(id) {
   if (DB.deals.some(d => String(d.request_id) === String(id))) return alert('❌ يوجد صفقة مرتبطة بهذا الطلب');
   if (!confirm('حذف الطلب؟')) return;
-  await supabase.from('requests').delete().eq('id', id);
+  await supabaseClient.from('requests').delete().eq('id', id);
   await loadData();
 }
 async function delDeal(id) {
   if (!confirm('حذف الصفقة؟')) return;
-  await supabase.from('deals').delete().eq('id', id);
+  await supabaseClient.from('deals').delete().eq('id', id);
   await loadData();
 }
 
@@ -450,11 +454,4 @@ function exportExcel() {
 
   const date = new Date().toISOString().slice(0, 10);
   XLSX.writeFile(wb, `مكتب_تواصل_عقاري_${date}.xlsx`);
-  alert('✅ تم تصدير الملف بنجاح!');
-}
-
-// ======== التشغيل ========
-loadData();
-</script>
-</body>
-</html>
+  alert('✅ تم تصدير الملف بنجاح!
