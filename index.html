@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>مكتب تواصل عقاري</title>
+<title>مكتب تواصل عقاري (سحابي)</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: Tahoma, sans-serif; min-height: 100vh;
@@ -76,7 +76,7 @@ tr:nth-child(even) { background: #f9fafc; }
   <div class="header">
     <div class="logo">🏢</div>
     <h1>مكتب تواصل عقاري</h1>
-    <p class="subtitle">نظام إدارة العقارات والعملاء والصفقات</p>
+    <p class="subtitle">نظام إدارة العقارات والعملاء والصفقات (السحابي)</p>
   </div>
   <div class="home-buttons">
     <button class="home-btn b1" onclick="go('clients')"><span class="icon">👥</span><span>إدخال العملاء</span></button>
@@ -95,8 +95,8 @@ tr:nth-child(even) { background: #f9fafc; }
     <button class="back-btn" onclick="go('home')">← الرئيسية</button>
   </div>
   <div class="form-grid">
-    <div><label>الاسم</label><input type="text" id="c_name" placeholder="اسم العميل"></div>
-    <div><label>الجوال (10 أرقام تبدأ بـ 05)</label><input type="text" id="c_phone" placeholder="05xxxxxxxx" maxlength="10"></div>
+    <div><label>الاسم</label><input type="text" id="c_name"></div>
+    <div><label>الجوال (10 أرقام تبدأ بـ 05)</label><input type="text" id="c_phone" maxlength="10"></div>
     <div><label>المدينة</label>
       <select id="c_city">
         <option value="">اختر المدينة</option>
@@ -134,16 +134,20 @@ tr:nth-child(even) { background: #f9fafc; }
         <option>جيزان</option><option>الجبيل</option><option>ينبع</option><option>عرعر</option><option>سكاكا</option>
       </select>
     </div>
-    <div><label>العنوان</label><input type="text" id="p_address" placeholder="الحي / الشارع"></div>
+    <div><label>العنوان</label><input type="text" id="p_address"></div>
     <div><label>المساحة (م²)</label><input type="number" id="p_area" min="1"></div>
     <div><label>السعر</label><input type="number" id="p_price" min="0"></div>
     <div><label>الحالة</label>
       <select id="p_status"><option>متاح</option><option>مؤجر</option><option>مباع</option></select></div>
+    <div style="grid-column: 1 / -1;">
+      <label>صورة العقار (اختياري)</label>
+      <input type="file" id="p_media" accept="image/*">
+    </div>
   </div>
   <div class="buttons"><button class="btn-save" onclick="saveProperty()">💾 حفظ</button></div>
   <div class="msg" id="m-properties"></div>
   <table><thead><tr>
-    <th>#</th><th>الرقم</th><th>النوع</th><th>المدينة</th><th>العنوان</th><th>المساحة</th><th>السعر</th><th>الحالة</th><th>حذف</th>
+    <th>#</th><th>الرقم</th><th>النوع</th><th>المدينة</th><th>العنوان</th><th>المساحة</th><th>السعر</th><th>الحالة</th><th>الصورة</th><th>حذف</th>
   </tr></thead><tbody id="t-properties"></tbody></table>
 </div>
 
@@ -215,15 +219,21 @@ tr:nth-child(even) { background: #f9fafc; }
 </div>
 
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-let DB = JSON.parse(localStorage.getItem('aqariDB') || '{"clients":[],"properties":[],"requests":[],"deals":[]}');
-function save() { localStorage.setItem('aqariDB', JSON.stringify(DB)); }
+// ==========================================
+// تم وضع بياناتك هنا
+// ==========================================
+const SUPABASE_URL = 'https://hxgienqrffuqqiyomoz.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_oSj-7xYUogxnSHLD0c46lg_PEN-W6bV';
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let DB = { clients: [], properties: [], requests: [], deals: [] };
 
 function go(name) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.getElementById('v-' + name).classList.add('active');
   if (name === 'search') document.getElementById('searchResults').innerHTML = '<div class="empty">اكتب كلمة للبحث...</div>';
-  refreshSelects();
 }
 
 function v(id) { return document.getElementById(id).value.trim(); }
@@ -234,6 +244,9 @@ function msg(key, text, ok = true) {
   el.className = 'msg ' + (ok ? 'ok' : 'err');
   setTimeout(() => el.className = 'msg', 3000);
 }
+function formatPhone(phone) {
+  return phone.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/\s/g, '');
+}
 function getClientName(id) {
   const c = DB.clients.find(c => String(c.id) === String(id));
   return c ? c.name : '⚠️ غير موجود';
@@ -242,12 +255,33 @@ function getPropDesc(id) {
   const p = DB.properties.find(p => String(p.id) === String(id));
   return p ? p.type + ' - ' + p.address : '⚠️ غير موجود';
 }
-function getNextId(array) {
-  if (array.length === 0) return "1";
-  return String(Math.max(...array.map(item => Number(item.id))) + 1);
+
+// جلب البيانات
+async function loadData() {
+  const { data: clients } = await supabase.from('clients').select('*').order('id');
+  const { data: properties } = await supabase.from('properties').select('*').order('id');
+  const { data: requests } = await supabase.from('requests').select('*').order('id');
+  const { data: deals } = await supabase.from('deals').select('*').order('id');
+  
+  DB.clients = clients || [];
+  DB.properties = properties || [];
+  DB.requests = requests || [];
+  DB.deals = deals || [];
+  
+  renderAll();
+  refreshSelects();
 }
-function formatPhone(phone) {
-  return phone.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/\s/g, '');
+
+function renderAll() {
+  document.getElementById('t-clients').innerHTML = DB.clients.map((c, i) => `<tr><td>${i+1}</td><td>${c.id}</td><td>${c.name}</td><td>${c.phone}</td><td>${c.city}</td><td><button class="btn-del" onclick="delClient('${c.id}')">حذف</button></td></tr>`).join('');
+  
+  document.getElementById('t-properties').innerHTML = DB.properties.map((p, i) => `
+    <tr><td>${i+1}</td><td>${p.id}</td><td>${p.type}</td><td>${p.city}</td><td>${p.address}</td><td>${p.area}</td><td>${p.price}</td><td>${p.status}</td>
+    <td>${p.media_url ? `<a href="${p.media_url}" target="_blank" style="color:#2980b9;font-weight:bold;">عرض</a>` : '—'}</td>
+    <td><button class="btn-del" onclick="delProperty('${p.id}')">حذف</button></td></tr>`).join('');
+    
+  document.getElementById('t-requests').innerHTML = DB.requests.map((r, i) => `<tr><td>${i+1}</td><td>${r.id}</td><td>${getClientName(r.client_id)}</td><td>${getPropDesc(r.property_id)}</td><td>${r.type}</td><td>${r.date}</td><td>${r.status}</td><td><button class="btn-del" onclick="delRequest('${r.id}')">حذف</button></td></tr>`).join('');
+  document.getElementById('t-deals').innerHTML = DB.deals.map((d, i) => `<tr><td>${i+1}</td><td>${d.id}</td><td>${getClientName(d.client_id)}</td><td>${getPropDesc(d.property_id)}</td><td>${d.type}</td><td>${d.amount}</td><td>${d.commission}</td><td>${d.date}</td><td><button class="btn-del" onclick="delDeal('${d.id}')">حذف</button></td></tr>`).join('');
 }
 
 function refreshSelects() {
@@ -259,125 +293,111 @@ function refreshSelects() {
   document.getElementById('r_property').innerHTML = props;
   document.getElementById('d_property').innerHTML = props;
 
-  document.getElementById('d_request').innerHTML = '<option value="">اختر طلبًا</option>' + DB.requests.map(r => `<option value="${r.id}">طلب ${r.id} — ${getClientName(r.client)}</option>`).join('');
+  document.getElementById('d_request').innerHTML = '<option value="">اختر طلبًا</option>' + DB.requests.map(r => `<option value="${r.id}">طلب ${r.id} — ${getClientName(r.client_id)}</option>`).join('');
 }
 
-// ======== العملاء ========
-function saveClient() {
-  const name = v('c_name');
-  let phone = v('c_phone');
-  const city = v('c_city');
+// ======== الحفظ ========
+async function saveClient() {
+  const name = v('c_name'), city = v('c_city');
+  let phone = formatPhone(v('c_phone'));
 
-  if (!name) return msg('clients', '⚠️ الاسم مطلوب', false);
-  if (!city) return msg('clients', '⚠️ اختر المدينة', false);
+  if (!name || !city) return msg('clients', '⚠️ الاسم والمدينة مطلوبان', false);
+  if (phone.length !== 10 || !phone.startsWith('05')) return msg('clients', '⚠️ رقم الجوال خطأ', false);
 
-  phone = formatPhone(phone);
-  if (phone.length !== 10 || !phone.startsWith('05')) {
-    return msg('clients', '⚠️ رقم الجوال يجب أن يكون 10 أرقام ويبدأ بـ 05', false);
-  }
-
-  const row = { id: getNextId(DB.clients), name, phone, city };
-  DB.clients.push(row); save();
-  renderClients(); refreshSelects();
+  const { error } = await supabase.from('clients').insert([{ name, phone, city }]);
+  if (error) return msg('clients', '❌ خطأ: ' + error.message, false);
   
+  await loadData();
   document.getElementById('c_name').value = '';
   document.getElementById('c_phone').value = '';
   document.getElementById('c_city').value = '';
-  document.getElementById('c_name').focus();
-  msg('clients', '✅ تم حفظ العميل برقم ' + row.id);
-}
-function renderClients() {
-  document.getElementById('t-clients').innerHTML = DB.clients.map((c, i) => `
-    <tr><td>${i+1}</td><td>${c.id}</td><td>${c.name}</td><td>${c.phone}</td><td>${c.city}</td>
-    <td><button class="btn-del" onclick="delClient('${c.id}')">حذف</button></td></tr>`).join('');
-}
-function delClient(id) {
-  if (DB.requests.some(r => String(r.client) === String(id))) return alert('❌ يوجد طلبات مرتبطة بهذا العميل');
-  if (!confirm('حذف العميل؟')) return;
-  DB.clients = DB.clients.filter(c => String(c.id) !== String(id));
-  save(); renderClients(); refreshSelects();
+  msg('clients', '✅ تم الحفظ بنجاح');
 }
 
-// ======== العقارات ========
-function saveProperty() {
-  const type = v('p_type'), city = v('p_city'), address = v('p_address');
-  const area = n('p_area'), price = n('p_price');
-
+async function saveProperty() {
+  const type = v('p_type'), city = v('p_city'), address = v('p_address'), area = n('p_area'), price = n('p_price');
+  const fileInput = document.getElementById('p_media');
+  
   if (!type || !city || !address || !area || !price) return msg('properties', '⚠️ عبّي الحقول', false);
 
-  const row = { id: getNextId(DB.properties), type, city, address, area, price, status: v('p_status') };
-  DB.properties.push(row); save();
-  renderProperties(); refreshSelects();
+  let mediaUrl = null;
+  const file = fileInput.files[0];
+
+  if (file) {
+    msg('properties', '⏳ جاري رفع الصورة...', true);
+    const fileName = `${Date.now()}_${file.name.replace(/\s/g, '_')}`;
+    const { error: uploadError } = await supabase.storage.from('property-media').upload(fileName, file);
+    
+    if (uploadError) return msg('properties', '❌ فشل الرفع: ' + uploadError.message, false);
+    const { data: urlData } = supabase.storage.from('property-media').getPublicUrl(fileName);
+    mediaUrl = urlData.publicUrl;
+  }
+
+  const { error } = await supabase.from('properties').insert([{ type, city, address, area, price, status: v('p_status'), media_url: mediaUrl }]);
+  if (error) return msg('properties', '❌ خطأ: ' + error.message, false);
   
+  await loadData();
   document.getElementById('p_type').value = '';
   document.getElementById('p_city').value = '';
   document.getElementById('p_address').value = '';
   document.getElementById('p_area').value = '';
   document.getElementById('p_price').value = '';
-  msg('properties', '✅ تم حفظ العقار برقم ' + row.id);
-}
-function renderProperties() {
-  document.getElementById('t-properties').innerHTML = DB.properties.map((p, i) => `
-    <tr><td>${i+1}</td><td>${p.id}</td><td>${p.type}</td><td>${p.city}</td><td>${p.address}</td><td>${p.area}</td><td>${p.price}</td><td>${p.status}</td>
-    <td><button class="btn-del" onclick="delProperty('${p.id}')">حذف</button></td></tr>`).join('');
-}
-function delProperty(id) {
-  if (DB.requests.some(r => String(r.property) === String(id))) return alert('❌ يوجد طلبات مرتبطة بهذا العقار');
-  if (!confirm('حذف العقار؟')) return;
-  DB.properties = DB.properties.filter(p => String(p.id) !== String(id));
-  save(); renderProperties(); refreshSelects();
+  fileInput.value = '';
+  msg('properties', '✅ تم حفظ العقار بنجاح');
 }
 
-// ======== الطلبات ========
-function saveRequest() {
-  const client = v('r_client'), property = v('r_property'), date = v('r_date');
-  if (!client || !property || !date) return msg('requests', '⚠️ عبّي الحقول', false);
-  const row = { id: getNextId(DB.requests), client, property, type: v('r_type'), date, status: v('r_status') };
-  DB.requests.push(row); save();
-  renderRequests(); refreshSelects();
+async function saveRequest() {
+  const client_id = v('r_client'), property_id = v('r_property'), date = v('r_date');
+  if (!client_id || !property_id || !date) return msg('requests', '⚠️ عبّي الحقول', false);
+  const { error } = await supabase.from('requests').insert([{ client_id, property_id, type: v('r_type'), date, status: v('r_status') }]);
+  if (error) return msg('requests', '❌ خطأ: ' + error.message, false);
   
+  await loadData();
   document.getElementById('r_client').value = '';
   document.getElementById('r_property').value = '';
   document.getElementById('r_date').value = '';
-  msg('requests', '✅ تم حفظ الطلب برقم ' + row.id);
-}
-function renderRequests() {
-  document.getElementById('t-requests').innerHTML = DB.requests.map((r, i) => `
-    <tr><td>${i+1}</td><td>${r.id}</td><td>${getClientName(r.client)}</td><td>${getPropDesc(r.property)}</td><td>${r.type}</td><td>${r.date}</td><td>${r.status}</td>
-    <td><button class="btn-del" onclick="delRequest('${r.id}')">حذف</button></td></tr>`).join('');
-}
-function delRequest(id) {
-  if (DB.deals.some(d => String(d.request) === String(id))) return alert('❌ يوجد صفقة مرتبطة بهذا الطلب');
-  if (!confirm('حذف الطلب؟')) return;
-  DB.requests = DB.requests.filter(r => String(r.id) !== String(id));
-  save(); renderRequests(); refreshSelects();
+  msg('requests', '✅ تم حفظ الطلب بنجاح');
 }
 
-// ======== الصفقات ========
-function saveDeal() {
-  const req = v('d_request'), client = v('d_client'), property = v('d_property'), date = v('d_date'), amount = n('d_amount');
-  if (!req || !client || !property || !amount || !date) return msg('deals', '⚠️ عبّي الحقول', false);
-  const row = { id: getNextId(DB.deals), request: req, client, property, type: v('d_type'), amount, commission: n('d_commission'), date };
-  DB.deals.push(row); save();
-  renderDeals();
+async function saveDeal() {
+  const req_id = v('d_request'), client_id = v('d_client'), property_id = v('d_property'), date = v('d_date'), amount = n('d_amount');
+  if (!req_id || !client_id || !property_id || !amount || !date) return msg('deals', '⚠️ عبّي الحقول', false);
+  const { error } = await supabase.from('deals').insert([{ request_id: req_id, client_id, property_id, type: v('d_type'), amount, commission: n('d_commission'), date }]);
+  if (error) return msg('deals', '❌ خطأ: ' + error.message, false);
   
+  await loadData();
   document.getElementById('d_request').value = '';
   document.getElementById('d_client').value = '';
   document.getElementById('d_property').value = '';
   document.getElementById('d_amount').value = '';
   document.getElementById('d_commission').value = '';
   document.getElementById('d_date').value = '';
-  msg('deals', '✅ تم حفظ الصفقة برقم ' + row.id);
+  msg('deals', '✅ تم حفظ الصفقة بنجاح');
 }
-function renderDeals() {
-  document.getElementById('t-deals').innerHTML = DB.deals.map((d, i) => `
-    <tr><td>${i+1}</td><td>${d.id}</td><td>${getClientName(d.client)}</td><td>${getPropDesc(d.property)}</td><td>${d.type}</td><td>${d.amount}</td><td>${d.commission}</td><td>${d.date}</td>
-    <td><button class="btn-del" onclick="delDeal('${d.id}')">حذف</button></td></tr>`).join('');
+
+// ======== الحذف ========
+async function delClient(id) {
+  if (DB.requests.some(r => String(r.client_id) === String(id))) return alert('❌ يوجد طلبات مرتبطة بهذا العميل');
+  if (!confirm('حذف العميل؟')) return;
+  await supabase.from('clients').delete().eq('id', id);
+  await loadData();
 }
-function delDeal(id) {
+async function delProperty(id) {
+  if (DB.requests.some(r => String(r.property_id) === String(id))) return alert('❌ يوجد طلبات مرتبطة بهذا العقار');
+  if (!confirm('حذف العقار؟')) return;
+  await supabase.from('properties').delete().eq('id', id);
+  await loadData();
+}
+async function delRequest(id) {
+  if (DB.deals.some(d => String(d.request_id) === String(id))) return alert('❌ يوجد صفقة مرتبطة بهذا الطلب');
+  if (!confirm('حذف الطلب؟')) return;
+  await supabase.from('requests').delete().eq('id', id);
+  await loadData();
+}
+async function delDeal(id) {
   if (!confirm('حذف الصفقة؟')) return;
-  DB.deals = DB.deals.filter(d => String(d.id) !== String(id));
-  save(); renderDeals();
+  await supabase.from('deals').delete().eq('id', id);
+  await loadData();
 }
 
 // ======== البحث ========
@@ -394,11 +414,7 @@ function doSearch() {
     let s = `<h3>${title} <span class="badge">${rows.length}</span></h3><table><thead><tr>`;
     heads.forEach(h => s += `<th>${h}</th>`);
     s += '</tr></thead><tbody>';
-    rows.forEach(r => {
-      s += '<tr>';
-      keys.forEach(k => s += `<td>${r[k] ?? ''}</td>`);
-      s += '</tr>';
-    });
+    rows.forEach(r => { s += '<tr>'; keys.forEach(k => s += `<td>${r[k] ?? ''}</td>`); s += '</tr>'; });
     return s + '</tbody></table>';
   }
 
@@ -411,40 +427,26 @@ function doSearch() {
     html += section('🏠 العقارات', rows, ['id','type','city','address','price','status'], ['الرقم','النوع','المدينة','العنوان','السعر','الحالة']);
   }
   if (scope === 'all' || scope === 'requests') {
-    const rows = DB.requests.filter(r => Object.values(r).some(v => String(v).toLowerCase().includes(q)) || getClientName(r.client).toLowerCase().includes(q) || getPropDesc(r.property).toLowerCase().includes(q)).map(r => ({...r, client: getClientName(r.client), property: getPropDesc(r.property)}));
+    const rows = DB.requests.filter(r => Object.values(r).some(v => String(v).toLowerCase().includes(q)) || getClientName(r.client_id).toLowerCase().includes(q) || getPropDesc(r.property_id).toLowerCase().includes(q)).map(r => ({...r, client: getClientName(r.client_id), property: getPropDesc(r.property_id)}));
     html += section('📋 الطلبات', rows, ['id','client','property','type','date','status'], ['الرقم','العميل','العقار','النوع','التاريخ','الحالة']);
   }
   if (scope === 'all' || scope === 'deals') {
-    const rows = DB.deals.filter(d => Object.values(d).some(v => String(v).toLowerCase().includes(q)) || getClientName(d.client).toLowerCase().includes(q) || getPropDesc(d.property).toLowerCase().includes(q)).map(d => ({...d, client: getClientName(d.client), property: getPropDesc(d.property)}));
+    const rows = DB.deals.filter(d => Object.values(d).some(v => String(v).toLowerCase().includes(q)) || getClientName(d.client_id).toLowerCase().includes(q) || getPropDesc(d.property_id).toLowerCase().includes(q)).map(d => ({...d, client: getClientName(d.client_id), property: getPropDesc(d.property_id)}));
     html += section('💰 الصفقات', rows, ['id','client','property','type','amount','commission','date'], ['الرقم','العميل','العقار','النوع','المبلغ','العمولة','التاريخ']);
   }
 
   box.innerHTML = total === 0 ? '<div class="empty">لا توجد نتائج</div>' : `<div style="color:#27ae60;font-weight:bold;margin-bottom:10px">✅ ${total} نتيجة</div>` + html;
 }
 
-// ======== التصدير إلى Excel ========
+// ======== تصدير Excel ========
 function exportExcel() {
-  if (DB.clients.length + DB.properties.length + DB.requests.length + DB.deals.length === 0) return alert('⚠️ لا توجد بيانات للتصدير');
+  if (DB.clients.length + DB.properties.length + DB.requests.length + DB.deals.length === 0) return alert('⚠️ لا توجد بيانات');
   const wb = XLSX.utils.book_new();
 
-  const clientsData = DB.clients.map(c => ({ 'رقم العميل 🔑': c.id, 'الاسم': c.name, 'الجوال': c.phone, 'المدينة': c.city }));
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(clientsData), 'العملاء');
-
-  const propsData = DB.properties.map(p => ({ 'رقم العقار 🔑': p.id, 'النوع': p.type, 'المدينة': p.city, 'العنوان': p.address, 'المساحة': p.area, 'السعر': p.price, 'الحالة': p.status }));
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(propsData), 'العقارات');
-
-  const reqData = DB.requests.map(r => ({ 'رقم الطلب 🔑': r.id, 'رقم العميل 🔗': r.client, 'اسم العميل ✅': getClientName(r.client), 'رقم العقار 🔗': r.property, 'وصف العقار ✅': getPropDesc(r.property), 'النوع': r.type, 'التاريخ': r.date, 'الحالة': r.status }));
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(reqData), 'الطلبات');
-
-  const dealData = DB.deals.map(d => ({ 'رقم الصفقة 🔑': d.id, 'رقم الطلب 🔗': d.request, 'رقم العميل 🔗': d.client, 'اسم العميل ✅': getClientName(d.client), 'رقم العقار 🔗': d.property, 'وصف العقار ✅': getPropDesc(d.property), 'النوع': d.type, 'المبلغ': d.amount, 'العمولة': d.commission, 'التاريخ': d.date }));
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(dealData), 'الصفقات');
-
-  const totalAmount = DB.deals.reduce((s, d) => s + (d.amount || 0), 0);
-  const totalComm = DB.deals.reduce((s, d) => s + (d.commission || 0), 0);
-  const stats = [['📊 إحصائيات النظام', ''], ['التاريخ', new Date().toLocaleDateString('ar-SA')], [''], ['عدد العملاء', DB.clients.length], ['عدد العقارات', DB.properties.length], ['عدد الطلبات', DB.requests.length], ['عدد الصفقات', DB.deals.length], [''], ['إجمالي المبالغ', totalAmount], ['إجمالي العمولات', totalComm]];
-  const ws5 = XLSX.utils.aoa_to_sheet(stats);
-  ws5['!cols'] = [{ wch: 25 }, { wch: 20 }];
-  XLSX.utils.book_append_sheet(wb, ws5, 'الإحصائيات');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(DB.clients.map(c => ({ 'رقم العميل': c.id, 'الاسم': c.name, 'الجوال': c.phone, 'المدينة': c.city }))), 'العملاء');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(DB.properties.map(p => ({ 'رقم العقار': p.id, 'النوع': p.type, 'المدينة': p.city, 'العنوان': p.address, 'المساحة': p.area, 'السعر': p.price, 'الحالة': p.status, 'الصورة': p.media_url || 'لا يوجد' }))), 'العقارات');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(DB.requests.map(r => ({ 'رقم الطلب': r.id, 'اسم العميل': getClientName(r.client_id), 'وصف العقار': getPropDesc(r.property_id), 'النوع': r.type, 'التاريخ': r.date, 'الحالة': r.status }))), 'الطلبات');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(DB.deals.map(d => ({ 'رقم الصفقة': d.id, 'اسم العميل': getClientName(d.client_id), 'وصف العقار': getPropDesc(d.property_id), 'النوع': d.type, 'المبلغ': d.amount, 'العمولة': d.commission, 'التاريخ': d.date }))), 'الصفقات');
 
   const date = new Date().toISOString().slice(0, 10);
   XLSX.writeFile(wb, `مكتب_تواصل_عقاري_${date}.xlsx`);
@@ -452,11 +454,7 @@ function exportExcel() {
 }
 
 // ======== التشغيل ========
-renderClients();
-renderProperties();
-renderRequests();
-renderDeals();
-refreshSelects();
+loadData();
 </script>
 </body>
 </html>
