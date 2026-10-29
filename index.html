@@ -239,8 +239,9 @@ function checkClientForm() {
   const name = document.getElementById('c_name').value.trim();
   const phone = document.getElementById('c_phone').value.trim();
   const city = document.getElementById('c_city').value;
-  // التحقق من أن الاسم موجود، والجوال 10 أرقام ويبدأ بـ 05، والمدينة مختارة
-  document.getElementById('btn-save-client').disabled = !(name && phone.length === 10 && phone.startsWith('05') && city);
+  // التحقق من أن الاسم موجود، والجوال 10 أرقام ويبدأ بـ 05 أو 06، والمدينة مختارة
+  const validPhone = (phone.length === 10 && (phone.startsWith('05') || phone.startsWith('06')));
+  document.getElementById('btn-save-client').disabled = !(name && validPhone && city);
 }
 
 function checkPropertyForm() {
@@ -283,6 +284,14 @@ function msg(key, text, ok = true) {
 function getClientName(id) { const c = DB.clients.find(c => String(c.id) === String(id)); return c ? c.name : '⚠️ غير موجود'; }
 function getPropDesc(id) { const p = DB.properties.find(p => String(p.id) === String(id)); return p ? p.type + ' - ' + p.address : '⚠️ غير موجود'; }
 function formatPhone(phone) { return phone.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/\s/g, ''); }
+
+// دالة لمسح الألوان (تمت إعادتها لحل مشكلة الحفظ)
+function clearAllErrors() {
+  document.querySelectorAll('input, select, textarea').forEach(el => {
+    el.style.border = '1px solid #ccc';
+    el.style.backgroundColor = '#fff';
+  });
+}
 
 async function loadData() {
   const { data: c } = await dbClient.from('clients').select('*').order('id');
@@ -338,7 +347,7 @@ function editClient(id) {
   if (!c) return;
   document.getElementById('c_name').value = c.name; document.getElementById('c_phone').value = c.phone; document.getElementById('c_city').value = c.city;
   editingId.clients = id; document.getElementById('btn-save-client').innerHTML = '💾 تحديث البيانات'; document.getElementById('btn-cancel-client').style.display = 'inline-block'; window.scrollTo(0, 0);
-  checkClientForm(); // تفعيل الزر لأن البيانات مكتملة
+  checkClientForm();
 }
 
 function editProperty(id) {
@@ -389,6 +398,7 @@ function cancelEdit(type) {
     document.getElementById('btn-save-deal').innerHTML = '💾 حفظ'; document.getElementById('btn-cancel-deal').style.display = 'none';
     document.getElementById('btn-save-deal').disabled = true;
   }
+  clearAllErrors();
 }
 
 function openWaModal(name, phone) {
@@ -460,7 +470,7 @@ async function saveClient() {
   const name = v('c_name'), city = v('c_city'); let phone = formatPhone(v('c_phone')); let hasError = false;
   if (!name) { highlightField('c_name', true); hasError = true; }
   if (!city) { highlightField('c_city', true); hasError = true; }
-  if (phone.length !== 10 || !phone.startsWith('05')) { highlightField('c_phone', true); hasError = true; }
+  if (phone.length !== 10 || (!phone.startsWith('05') && !phone.startsWith('06'))) { highlightField('c_phone', true); hasError = true; }
   if (hasError) return msg('clients', '⚠️ عبّي الحقول الإجبارية', false);
   const isDuplicate = DB.clients.some(c => c.name === name && c.phone === phone && String(c.id) !== String(editingId.clients));
   if (isDuplicate) return msg('clients', '⚠️ هذا العميل مسجل مسبقاً', false);
