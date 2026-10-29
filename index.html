@@ -257,7 +257,9 @@ function highlightField(id, isError) {
   if (isError) el.classList.add('required-error');
   else el.classList.remove('required-error');
 }
-
+function clearAllErrors() {
+  document.querySelectorAll('.required-error').forEach(el => el.classList.remove('required-error'));
+}
 document.querySelectorAll('input, select').forEach(el => {
   el.addEventListener('input', () => el.classList.remove('required-error'));
   el.addEventListener('change', () => el.classList.remove('required-error'));
