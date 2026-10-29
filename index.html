@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>مكتب وجه التواصل للعقار (سحابي)</title>
+<title>مكتب وجه التواصل للعقار</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 body { font-family: Tahoma, sans-serif; min-height: 100vh; background: linear-gradient(135deg, #1e3c72, #2a5298, #6a3093); padding: 15px; }
@@ -77,7 +77,7 @@ tr:nth-child(even) { background: #f9fafc; }
 
 <!-- ======= الرئيسية ======= -->
 <div class="screen view active" id="v-home">
-  <div class="header"><div class="logo">🏢</div><h1><h1>مكتب وجه التواصل للعقار</h1></h1><p class="subtitle">نظام إدارة العقارات والعملاء والصفقات</p></div>
+  <div class="header"><div class="logo">🏢</div><h1>مكتب وجه التواصل للعقار</h1><p class="subtitle">نظام إدارة العقارات والعملاء والصفقات</p></div>
   <div class="home-buttons">
     <button class="home-btn b1" onclick="go('clients')"><span class="icon">👥</span><span>إدخال العملاء</span></button>
     <button class="home-btn b2" onclick="go('properties')"><span class="icon">🏠</span><span>إدخال العقارات</span></button>
@@ -257,9 +257,11 @@ function highlightField(id, isError) {
   if (isError) el.classList.add('required-error');
   else el.classList.remove('required-error');
 }
+
 function clearAllErrors() {
   document.querySelectorAll('.required-error').forEach(el => el.classList.remove('required-error'));
 }
+
 document.querySelectorAll('input, select').forEach(el => {
   el.addEventListener('input', () => el.classList.remove('required-error'));
   el.addEventListener('change', () => el.classList.remove('required-error'));
@@ -362,14 +364,15 @@ function cancelEdit(type) {
     document.getElementById('d_amount').value = ''; document.getElementById('d_commission').value = '';
     document.getElementById('btn-save-deal').innerHTML = '💾 حفظ'; document.getElementById('btn-cancel-deal').style.display = 'none';
   }
+  clearAllErrors(); // إزالة الألوان الحمراء عند الإلغاء
 }
 
 function openWaModal(name, phone) {
   currentWaPhone = phone;
   document.getElementById('waClientName').textContent = name;
   document.getElementById('waClientPhone').textContent = phone;
-  document.getElementById('waMessage').value = `مرحباً ${name}،\n`; 
-  document.getElementById('waSuccessMessage').style.display = 'none'; // إخفاء رسالة النجاح عند الفتح
+  document.getElementById('waMessage').value = `مرحباً ${name}،\n`;
+  document.getElementById('waSuccessMessage').style.display = 'none';
   document.getElementById('whatsappModal').style.display = 'flex';
 }
 
@@ -389,7 +392,6 @@ function sendWaMessage() {
   const url = `https://wa.me/${formattedPhone}?text=${encodeURIComponent(message)}`;
   window.open(url, '_blank');
   
-  // إظهار رسالة النجاح بعد الفتح
   document.getElementById('waSuccessMessage').style.display = 'block';
 }
 
@@ -430,6 +432,7 @@ function selectFromModal(type, id) {
 }
 
 async function saveClient() {
+  clearAllErrors();
   const name = v('c_name'), city = v('c_city'); let phone = formatPhone(v('c_phone')); let hasError = false;
   if (!name) { highlightField('c_name', true); hasError = true; }
   if (!city) { highlightField('c_city', true); hasError = true; }
@@ -445,6 +448,7 @@ async function saveClient() {
 }
 
 async function saveProperty() {
+  clearAllErrors();
   const type = v('p_type'), city = v('p_city'), address = v('p_address'), area = n('p_area'), price = n('p_price'); const fileInput = document.getElementById('p_media'); let hasError = false;
   if (!type) { highlightField('p_type', true); hasError = true; }
   if (!city) { highlightField('p_city', true); hasError = true; }
@@ -469,6 +473,7 @@ async function saveProperty() {
 }
 
 async function saveRequest() {
+  clearAllErrors();
   const client_id = v('r_client'), property_id = v('r_property'), date = todayStr; let hasError = false;
   if (!client_id) { highlightField('r_client', true); hasError = true; }
   if (!property_id) { highlightField('r_property', true); hasError = true; }
@@ -482,6 +487,7 @@ async function saveRequest() {
 }
 
 async function saveDeal() {
+  clearAllErrors();
   const req_id = v('d_request'), client_id = v('d_client'), property_id = v('d_property'), date = todayStr, amount = n('d_amount'); let hasError = false;
   if (!req_id) { highlightField('d_request', true); hasError = true; }
   if (!client_id) { highlightField('d_client', true); hasError = true; }
@@ -520,7 +526,7 @@ function exportExcel() {
   XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(DB.properties.map(p => ({ 'رقم العقار': p.id, 'النوع': p.type, 'المدينة': p.city, 'العنوان': p.address, 'المساحة': p.area, 'السعر': p.price, 'الحالة': p.status, 'الصورة': p.media_url || 'لا يوجد' }))), 'العقارات');
   XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(DB.requests.map(r => ({ 'رقم الطلب': r.id, 'اسم العميل': getClientName(r.client_id), 'وصف العقار': getPropDesc(r.property_id), 'النوع': r.type, 'التاريخ': r.date, 'الحالة': r.status }))), 'الطلبات');
   XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(DB.deals.map(d => ({ 'رقم الصفقة': d.id, 'اسم العميل': getClientName(d.client_id), 'وصف العقار': getPropDesc(d.property_id), 'النوع': d.type, 'المبلغ': d.amount, 'العمولة': d.commission, 'التاريخ': d.date }))), 'الصفقات');
-  const date = new Date().toISOString().slice(0, 10); XLSX.writeFile(wb, `مكتب_تواصل_عقاري_${date}.xlsx`); alert('✅ تم تصدير الملف بنجاح!');
+  const date = new Date().toISOString().slice(0, 10); XLSX.writeFile(wb, `مكتب_وجه_التواصل_${date}.xlsx`); alert('✅ تم تصدير الملف بنجاح!');
 }
 
 loadData();
