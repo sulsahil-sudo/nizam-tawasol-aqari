@@ -36,6 +36,7 @@ label { display: block; font-weight: bold; color: #34495e; margin-bottom: 6px; f
 input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; transition: border 0.3s, background-color 0.3s; font-family: inherit; }
 .buttons { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
 .btn-save { background: #27ae60; color: #fff; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; width: 100%; }
+.btn-save:disabled { background: #bdc3c7; cursor: not-allowed; opacity: 0.7; }
 .btn-search-modal { background: #2980b9; color: #fff; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; width: 100%; }
 .btn-edit { background: #f39c12; color: #fff; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; }
 .btn-del { background: #e74c3c; color: #fff; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; }
@@ -91,14 +92,14 @@ tr:nth-child(even) { background: #f9fafc; }
 <div class="screen view" id="v-clients">
   <div class="view-header"><h2>👥 العملاء</h2><button class="back-btn" onclick="go('home')">← الرئيسية</button></div>
   <div class="form-grid">
-    <div><label>الاسم <span style="color:red">*</span></label><input type="text" id="c_name"></div>
-    <div><label>الجوال (10 أرقام تبدأ بـ 05) <span style="color:red">*</span></label><input type="text" id="c_phone" maxlength="10"></div>
+    <div><label>الاسم <span style="color:red">*</span></label><input type="text" id="c_name" oninput="checkClientForm()"></div>
+    <div><label>الجوال (10 أرقام تبدأ بـ 05) <span style="color:red">*</span></label><input type="text" id="c_phone" maxlength="10" oninput="checkClientForm()"></div>
     <div><label>المدينة <span style="color:red">*</span></label>
-      <select id="c_city"><option value="">اختر المدينة</option><option>الرياض</option><option>جدة</option><option>مكة المكرمة</option><option>المدينة المنورة</option><option>الدمام</option><option>الخبر</option><option>الظهران</option><option>الأحساء</option><option>الطائف</option><option>بريدة</option><option>عنيزة</option><option>حائل</option><option>تبوك</option><option>أبها</option><option>خميس مشيط</option><option>نجران</option><option>جيزان</option><option>الجبيل</option><option>ينبع</option><option>عرعر</option><option>سكاكا</option></select>
+      <select id="c_city" onchange="checkClientForm()"><option value="">اختر المدينة</option><option>الرياض</option><option>جدة</option><option>مكة المكرمة</option><option>المدينة المنورة</option><option>الدمام</option><option>الخبر</option><option>الظهران</option><option>الأحساء</option><option>الطائف</option><option>بريدة</option><option>عنيزة</option><option>حائل</option><option>تبوك</option><option>أبها</option><option>خميس مشيط</option><option>نجران</option><option>جيزان</option><option>الجبيل</option><option>ينبع</option><option>عرعر</option><option>سكاكا</option></select>
     </div>
   </div>
   <div class="buttons">
-    <button class="btn-save" onclick="saveClient()" id="btn-save-client">💾 حفظ</button>
+    <button class="btn-save" onclick="saveClient()" id="btn-save-client" disabled>💾 حفظ</button>
     <button class="btn-search-modal" onclick="openModal('clients')">🔍 بحث وتعديل عميل</button>
     <button class="btn-edit" onclick="cancelEdit('clients')" id="btn-cancel-client" style="display:none; background:#95a5a6; width:100%; padding:15px; font-size:16px;">❌ إلغاء التعديل</button>
   </div>
@@ -112,16 +113,16 @@ tr:nth-child(even) { background: #f9fafc; }
 <div class="screen view" id="v-properties">
   <div class="view-header"><h2>🏠 العقارات</h2><button class="back-btn" onclick="go('home')">← الرئيسية</button></div>
   <div class="form-grid">
-    <div><label>النوع <span style="color:red">*</span></label><select id="p_type"><option value="">اختر</option><option>شقة</option><option>فيلا</option><option>أرض</option><option>محل تجاري</option><option>مكتب</option></select></div>
-    <div><label>المدينة <span style="color:red">*</span></label><select id="p_city"><option value="">اختر المدينة</option><option>الرياض</option><option>جدة</option><option>مكة المكرمة</option><option>المدينة المنورة</option><option>الدمام</option><option>الخبر</option><option>الظهران</option><option>الأحساء</option><option>الطائف</option><option>بريدة</option><option>عنيزة</option><option>حائل</option><option>تبوك</option><option>أبها</option><option>خميس مشيط</option><option>نجران</option><option>جيزان</option><option>الجبيل</option><option>ينبع</option><option>عرعر</option><option>سكاكا</option></select></div>
-    <div><label>العنوان <span style="color:red">*</span></label><input type="text" id="p_address"></div>
-    <div><label>المساحة (م²) <span style="color:red">*</span></label><input type="number" id="p_area" min="1"></div>
-    <div><label>السعر <span style="color:red">*</span></label><input type="number" id="p_price" min="0"></div>
-    <div><label>الحالة <span style="color:red">*</span></label><select id="p_status"><option>متاح</option><option>مؤجر</option><option>مباع</option></select></div>
+    <div><label>النوع <span style="color:red">*</span></label><select id="p_type" onchange="checkPropertyForm()"><option value="">اختر</option><option>شقة</option><option>فيلا</option><option>أرض</option><option>محل تجاري</option><option>مكتب</option></select></div>
+    <div><label>المدينة <span style="color:red">*</span></label><select id="p_city" onchange="checkPropertyForm()"><option value="">اختر المدينة</option><option>الرياض</option><option>جدة</option><option>مكة المكرمة</option><option>المدينة المنورة</option><option>الدمام</option><option>الخبر</option><option>الظهران</option><option>الأحساء</option><option>الطائف</option><option>بريدة</option><option>عنيزة</option><option>حائل</option><option>تبوك</option><option>أبها</option><option>خميس مشيط</option><option>نجران</option><option>جيزان</option><option>الجبيل</option><option>ينبع</option><option>عرعر</option><option>سكاكا</option></select></div>
+    <div><label>العنوان <span style="color:red">*</span></label><input type="text" id="p_address" oninput="checkPropertyForm()"></div>
+    <div><label>المساحة (م²) <span style="color:red">*</span></label><input type="number" id="p_area" min="1" oninput="checkPropertyForm()"></div>
+    <div><label>السعر <span style="color:red">*</span></label><input type="number" id="p_price" min="0" oninput="checkPropertyForm()"></div>
+    <div><label>الحالة <span style="color:red">*</span></label><select id="p_status" onchange="checkPropertyForm()"><option>متاح</option><option>مؤجر</option><option>مباع</option></select></div>
     <div><label>صورة العقار (اختياري)</label><input type="file" id="p_media" accept="image/*"></div>
   </div>
   <div class="buttons">
-    <button class="btn-save" onclick="saveProperty()" id="btn-save-property">💾 حفظ</button>
+    <button class="btn-save" onclick="saveProperty()" id="btn-save-property" disabled>💾 حفظ</button>
     <button class="btn-search-modal" onclick="openModal('properties')">🔍 بحث وتعديل عقار</button>
     <button class="btn-edit" onclick="cancelEdit('properties')" id="btn-cancel-property" style="display:none; background:#95a5a6; width:100%; padding:15px; font-size:16px;">❌ إلغاء التعديل</button>
   </div>
@@ -135,13 +136,13 @@ tr:nth-child(even) { background: #f9fafc; }
 <div class="screen view" id="v-requests">
   <div class="view-header"><h2>📋 الطلبات</h2><button class="back-btn" onclick="go('home')">← الرئيسية</button></div>
   <div class="form-grid">
-    <div><label>العميل <span style="color:red">*</span></label><select id="r_client"><option value="">اختر</option></select></div>
-    <div><label>العقار <span style="color:red">*</span></label><select id="r_property"><option value="">اختر</option></select></div>
-    <div><label>النوع <span style="color:red">*</span></label><select id="r_type"><option>شراء</option><option>إيجار</option><option>معاينة</option></select></div>
-    <div><label>الحالة <span style="color:red">*</span></label><select id="r_status"><option>جديد</option><option>قيد المعالجة</option><option>مكتمل</option><option>ملغي</option></select></div>
+    <div><label>العميل <span style="color:red">*</span></label><select id="r_client" onchange="checkRequestForm()"><option value="">اختر</option></select></div>
+    <div><label>العقار <span style="color:red">*</span></label><select id="r_property" onchange="checkRequestForm()"><option value="">اختر</option></select></div>
+    <div><label>النوع <span style="color:red">*</span></label><select id="r_type" onchange="checkRequestForm()"><option>شراء</option><option>إيجار</option><option>معاينة</option></select></div>
+    <div><label>الحالة <span style="color:red">*</span></label><select id="r_status" onchange="checkRequestForm()"><option>جديد</option><option>قيد المعالجة</option><option>مكتمل</option><option>ملغي</option></select></div>
   </div>
   <div class="buttons">
-    <button class="btn-save" onclick="saveRequest()" id="btn-save-request">💾 حفظ</button>
+    <button class="btn-save" onclick="saveRequest()" id="btn-save-request" disabled>💾 حفظ</button>
     <button class="btn-search-modal" onclick="openModal('requests')">🔍 بحث وتعديل طلب</button>
     <button class="btn-edit" onclick="cancelEdit('requests')" id="btn-cancel-request" style="display:none; background:#95a5a6; width:100%; padding:15px; font-size:16px;">❌ إلغاء التعديل</button>
   </div>
@@ -155,15 +156,15 @@ tr:nth-child(even) { background: #f9fafc; }
 <div class="screen view" id="v-deals">
   <div class="view-header"><h2>💰 الصفقات</h2><button class="back-btn" onclick="go('home')">← الرئيسية</button></div>
   <div class="form-grid">
-    <div><label>الطلب <span style="color:red">*</span></label><select id="d_request"><option value="">اختر</option></select></div>
-    <div><label>العميل <span style="color:red">*</span></label><select id="d_client"><option value="">اختر</option></select></div>
-    <div><label>العقار <span style="color:red">*</span></label><select id="d_property"><option value="">اختر</option></select></div>
-    <div><label>النوع <span style="color:red">*</span></label><select id="d_type"><option>بيع</option><option>إيجار</option></select></div>
-    <div><label>المبلغ <span style="color:red">*</span></label><input type="number" id="d_amount" min="0"></div>
+    <div><label>الطلب <span style="color:red">*</span></label><select id="d_request" onchange="checkDealForm()"><option value="">اختر</option></select></div>
+    <div><label>العميل <span style="color:red">*</span></label><select id="d_client" onchange="checkDealForm()"><option value="">اختر</option></select></div>
+    <div><label>العقار <span style="color:red">*</span></label><select id="d_property" onchange="checkDealForm()"><option value="">اختر</option></select></div>
+    <div><label>النوع <span style="color:red">*</span></label><select id="d_type" onchange="checkDealForm()"><option>بيع</option><option>إيجار</option></select></div>
+    <div><label>المبلغ <span style="color:red">*</span></label><input type="number" id="d_amount" min="0" oninput="checkDealForm()"></div>
     <div><label>العمولة (اختياري)</label><input type="number" id="d_commission" min="0"></div>
   </div>
   <div class="buttons">
-    <button class="btn-save" onclick="saveDeal()" id="btn-save-deal">💾 حفظ</button>
+    <button class="btn-save" onclick="saveDeal()" id="btn-save-deal" disabled>💾 حفظ</button>
     <button class="btn-search-modal" onclick="openModal('deals')">🔍 بحث وتعديل صفقة</button>
     <button class="btn-edit" onclick="cancelEdit('deals')" id="btn-cancel-deal" style="display:none; background:#95a5a6; width:100%; padding:15px; font-size:16px;">❌ إلغاء التعديل</button>
   </div>
@@ -233,6 +234,38 @@ let currentWaPhone = '';
 
 const todayStr = new Date().toISOString().split('T')[0];
 
+// دوال التحقق من اكتمال الفورم لتفعيل زر الحفظ
+function checkClientForm() {
+  const name = document.getElementById('c_name').value.trim();
+  const phone = document.getElementById('c_phone').value.trim();
+  const city = document.getElementById('c_city').value;
+  // التحقق من أن الاسم موجود، والجوال 10 أرقام ويبدأ بـ 05، والمدينة مختارة
+  document.getElementById('btn-save-client').disabled = !(name && phone.length === 10 && phone.startsWith('05') && city);
+}
+
+function checkPropertyForm() {
+  const type = document.getElementById('p_type').value;
+  const city = document.getElementById('p_city').value;
+  const address = document.getElementById('p_address').value.trim();
+  const area = document.getElementById('p_area').value;
+  const price = document.getElementById('p_price').value;
+  document.getElementById('btn-save-property').disabled = !(type && city && address && area && price);
+}
+
+function checkRequestForm() {
+  const client = document.getElementById('r_client').value;
+  const property = document.getElementById('r_property').value;
+  document.getElementById('btn-save-request').disabled = !(client && property);
+}
+
+function checkDealForm() {
+  const req = document.getElementById('d_request').value;
+  const client = document.getElementById('d_client').value;
+  const property = document.getElementById('d_property').value;
+  const amount = document.getElementById('d_amount').value;
+  document.getElementById('btn-save-deal').disabled = !(req && client && property && amount);
+}
+
 function go(name) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.getElementById('v-' + name).classList.add('active');
@@ -250,31 +283,6 @@ function msg(key, text, ok = true) {
 function getClientName(id) { const c = DB.clients.find(c => String(c.id) === String(id)); return c ? c.name : '⚠️ غير موجود'; }
 function getPropDesc(id) { const p = DB.properties.find(p => String(p.id) === String(id)); return p ? p.type + ' - ' + p.address : '⚠️ غير موجود'; }
 function formatPhone(phone) { return phone.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/\s/g, ''); }
-
-// الدالة الجديدة والمضمونة لتمييز الحقل باللون الأحمر
-function highlightField(id, isError) {
-  const el = document.getElementById(id);
-  if (isError) {
-    el.style.border = '2px solid #e74c3c';
-    el.style.backgroundColor = '#fadbd8';
-  } else {
-    el.style.border = '1px solid #ccc';
-    el.style.backgroundColor = '#fff';
-  }
-}
-
-// دالة مسح الألوان الحمراء من كل الحقول
-function clearAllErrors() {
-  document.querySelectorAll('input, select, textarea').forEach(el => {
-    el.style.border = '1px solid #ccc';
-    el.style.backgroundColor = '#fff';
-  });
-}
-
-document.querySelectorAll('input, select').forEach(el => {
-  el.addEventListener('input', () => { el.style.border = '1px solid #ccc'; el.style.backgroundColor = '#fff'; });
-  el.addEventListener('change', () => { el.style.border = '1px solid #ccc'; el.style.backgroundColor = '#fff'; });
-});
 
 async function loadData() {
   const { data: c } = await dbClient.from('clients').select('*').order('id');
@@ -330,6 +338,7 @@ function editClient(id) {
   if (!c) return;
   document.getElementById('c_name').value = c.name; document.getElementById('c_phone').value = c.phone; document.getElementById('c_city').value = c.city;
   editingId.clients = id; document.getElementById('btn-save-client').innerHTML = '💾 تحديث البيانات'; document.getElementById('btn-cancel-client').style.display = 'inline-block'; window.scrollTo(0, 0);
+  checkClientForm(); // تفعيل الزر لأن البيانات مكتملة
 }
 
 function editProperty(id) {
@@ -338,6 +347,7 @@ function editProperty(id) {
   document.getElementById('p_type').value = p.type; document.getElementById('p_city').value = p.city; document.getElementById('p_address').value = p.address;
   document.getElementById('p_area').value = p.area; document.getElementById('p_price').value = p.price; document.getElementById('p_status').value = p.status;
   editingId.properties = id; document.getElementById('btn-save-property').innerHTML = '💾 تحديث البيانات'; document.getElementById('btn-cancel-property').style.display = 'inline-block'; window.scrollTo(0, 0);
+  checkPropertyForm();
 }
 
 function editRequest(id) {
@@ -346,6 +356,7 @@ function editRequest(id) {
   document.getElementById('r_client').value = r.client_id; document.getElementById('r_property').value = r.property_id;
   document.getElementById('r_type').value = r.type; document.getElementById('r_status').value = r.status;
   editingId.requests = id; document.getElementById('btn-save-request').innerHTML = '💾 تحديث البيانات'; document.getElementById('btn-cancel-request').style.display = 'inline-block'; window.scrollTo(0, 0);
+  checkRequestForm();
 }
 
 function editDeal(id) {
@@ -354,6 +365,7 @@ function editDeal(id) {
   document.getElementById('d_request').value = d.request_id; document.getElementById('d_client').value = d.client_id; document.getElementById('d_property').value = d.property_id;
   document.getElementById('d_type').value = d.type; document.getElementById('d_amount').value = d.amount; document.getElementById('d_commission').value = d.commission;
   editingId.deals = id; document.getElementById('btn-save-deal').innerHTML = '💾 تحديث البيانات'; document.getElementById('btn-cancel-deal').style.display = 'inline-block'; window.scrollTo(0, 0);
+  checkDealForm();
 }
 
 function cancelEdit(type) {
@@ -361,19 +373,22 @@ function cancelEdit(type) {
   if (type === 'clients') {
     document.getElementById('c_name').value = ''; document.getElementById('c_phone').value = ''; document.getElementById('c_city').value = '';
     document.getElementById('btn-save-client').innerHTML = '💾 حفظ'; document.getElementById('btn-cancel-client').style.display = 'none';
+    document.getElementById('btn-save-client').disabled = true;
   } else if (type === 'properties') {
     document.getElementById('p_type').value = ''; document.getElementById('p_city').value = ''; document.getElementById('p_address').value = '';
     document.getElementById('p_area').value = ''; document.getElementById('p_price').value = ''; document.getElementById('p_media').value = '';
     document.getElementById('btn-save-property').innerHTML = '💾 حفظ'; document.getElementById('btn-cancel-property').style.display = 'none';
+    document.getElementById('btn-save-property').disabled = true;
   } else if (type === 'requests') {
     document.getElementById('r_client').value = ''; document.getElementById('r_property').value = '';
     document.getElementById('btn-save-request').innerHTML = '💾 حفظ'; document.getElementById('btn-cancel-request').style.display = 'none';
+    document.getElementById('btn-save-request').disabled = true;
   } else if (type === 'deals') {
     document.getElementById('d_request').value = ''; document.getElementById('d_client').value = ''; document.getElementById('d_property').value = '';
     document.getElementById('d_amount').value = ''; document.getElementById('d_commission').value = '';
     document.getElementById('btn-save-deal').innerHTML = '💾 حفظ'; document.getElementById('btn-cancel-deal').style.display = 'none';
+    document.getElementById('btn-save-deal').disabled = true;
   }
-  clearAllErrors(); // إزالة الألوان عند الإلغاء
 }
 
 function openWaModal(name, phone) {
