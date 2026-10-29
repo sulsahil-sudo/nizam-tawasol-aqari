@@ -29,13 +29,13 @@ h1 { color: #1e3c72; font-size: 26px; }
 .wide { grid-column: 1 / -1; flex-direction: row !important; padding: 18px !important; }
 .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 15px; }
 label { display: block; font-weight: bold; color: #34495e; margin-bottom: 4px; font-size: 13px; }
-input, select { width: 100%; padding: 9px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; transition: border 0.3s, background-color 0.3s; }
+input, select, textarea { width: 100%; padding: 9px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; transition: border 0.3s, background-color 0.3s; font-family: inherit; }
 .buttons { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
 .btn-save { background: #27ae60; color: #fff; border: none; padding: 11px 24px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold; }
 .btn-search-modal { background: #2980b9; color: #fff; border: none; padding: 11px 24px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold; }
 .btn-edit { background: #f39c12; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; margin-left: 5px; font-weight: bold; }
 .btn-del { background: #e74c3c; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; }
-.btn-wa { background: #25D366; color: #fff; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; margin-left: 5px; font-weight: bold; text-decoration: none; display: inline-block; }
+.btn-wa { background: #25D366; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; margin-left: 5px; font-weight: bold; }
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
 th, td { border: 1px solid #e1e5eb; padding: 8px; text-align: center; }
 th { background: #34495e; color: #fff; }
@@ -169,12 +169,31 @@ tr:nth-child(even) { background: #f9fafc; }
   <div id="searchResults" class="results"><div class="empty">اكتب كلمة للبحث...</div></div>
 </div>
 
-<!-- ======= النافذة المنبثقة ======= -->
+<!-- ======= النافذة المنبثقة للبحث ======= -->
 <div id="searchModal" class="modal">
   <div class="modal-content">
     <div class="modal-header"><h3 id="modalTitle">اختر السجل</h3><button class="close-btn" onclick="closeModal()">إغلاق ✖</button></div>
     <input type="text" id="modalSearchInput" class="modal-search" placeholder="ابحث..." onkeyup="filterModalData()">
     <div class="modal-table-container"><table id="modalTable"><thead id="modalTableHead"></thead><tbody id="modalTableBody"></tbody></table></div>
+  </div>
+</div>
+
+<!-- ======= نافذة إرسال الواتساب ======= -->
+<div id="whatsappModal" class="modal">
+  <div class="modal-content" style="max-width: 500px;">
+    <div class="modal-header">
+      <h3>إرسال رسالة واتساب للعميل</h3>
+      <button class="close-btn" onclick="closeWaModal()">إغلاق ✖</button>
+    </div>
+    <div style="margin-bottom: 10px;">
+      <label>اسم العميل: <span id="waClientName" style="color: #2980b9;"></span></label>
+      <label>رقم الجوال: <span id="waClientPhone" style="color: #2980b9;"></span></label>
+    </div>
+    <label>نص الرسالة:</label>
+    <textarea id="waMessage" rows="4" placeholder="اكتب رسالتك هنا..."></textarea>
+    <div class="buttons" style="margin-top: 15px;">
+      <button class="btn-wa" onclick="sendWaMessage()" style="padding: 11px 24px; font-size: 14px;">🚀 إرسال عبر واتساب</button>
+    </div>
   </div>
 </div>
 
@@ -188,6 +207,7 @@ const dbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 let DB = { clients: [], properties: [], requests: [], deals: [] };
 let editingId = { clients: null, properties: null, requests: null, deals: null };
 let currentModalType = null;
+let currentWaPhone = '';
 
 const todayStr = new Date().toISOString().split('T')[0];
 
@@ -231,7 +251,6 @@ async function loadData() {
 }
 
 function renderAll() {
-  // جدول العملاء مع إضافة زر الواتساب
   document.getElementById('t-clients').innerHTML = DB.clients.map((c, i) => `
     <tr>
       <td>${i+1}</td>
@@ -242,7 +261,7 @@ function renderAll() {
       <td>
         <button class="btn-edit" onclick="editClient('${c.id}')">تعديل سريع</button>
         <button class="btn-del" onclick="delClient('${c.id}')">حذف</button>
-        <a href="https://wa.me/966${c.phone.substring(1)}" target="_blank" class="btn-wa">واتساب</a>
+        <button class="btn-wa" onclick="openWaModal('${c.name}', '${c.phone}')">واتساب</button>
       </td>
     </tr>`).join('');
   
@@ -318,6 +337,36 @@ function cancelEdit(type) {
     document.getElementById('d_amount').value = ''; document.getElementById('d_commission').value = '';
     document.getElementById('btn-save-deal').innerHTML = '💾 حفظ'; document.getElementById('btn-cancel-deal').style.display = 'none';
   }
+}
+
+// ==========================================
+// نافذة الواتساب
+// ==========================================
+function openWaModal(name, phone) {
+  currentWaPhone = phone;
+  document.getElementById('waClientName').textContent = name;
+  document.getElementById('waClientPhone').textContent = phone;
+  document.getElementById('waMessage').value = `مرحباً ${name}،\n`; // رسالة افتراضية
+  document.getElementById('whatsappModal').style.display = 'flex';
+}
+
+function closeWaModal() {
+  document.getElementById('whatsappModal').style.display = 'none';
+}
+
+function sendWaMessage() {
+  const message = document.getElementById('waMessage').value;
+  if (!message) return alert('اكتب رسالتك أولاً');
+  
+  // تنسيق رقم الجوال للسعودية (استبدال الصفر بـ 966)
+  let formattedPhone = currentWaPhone;
+  if (formattedPhone.startsWith('0')) {
+    formattedPhone = '966' + formattedPhone.substring(1);
+  }
+  
+  const url = `https://wa.me/${formattedPhone}?text=${encodeURIComponent(message)}`;
+  window.open(url, '_blank');
+  closeWaModal();
 }
 
 function openModal(type) {
