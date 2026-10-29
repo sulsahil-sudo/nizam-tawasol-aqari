@@ -252,12 +252,14 @@ function getClientName(id) { const c = DB.clients.find(c => String(c.id) === Str
 function getPropDesc(id) { const p = DB.properties.find(p => String(p.id) === String(id)); return p ? p.type + ' - ' + p.address : '⚠️ غير موجود'; }
 function formatPhone(phone) { return phone.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/\s/g, ''); }
 
+// دالة تمييز الحقل باللون الأحمر
 function highlightField(id, isError) {
   const el = document.getElementById(id);
   if (isError) el.classList.add('required-error');
   else el.classList.remove('required-error');
 }
 
+// دالة مسح الألوان الحمراء من كل الحقول
 function clearAllErrors() {
   document.querySelectorAll('.required-error').forEach(el => el.classList.remove('required-error'));
 }
@@ -364,14 +366,14 @@ function cancelEdit(type) {
     document.getElementById('d_amount').value = ''; document.getElementById('d_commission').value = '';
     document.getElementById('btn-save-deal').innerHTML = '💾 حفظ'; document.getElementById('btn-cancel-deal').style.display = 'none';
   }
-  clearAllErrors(); // إزالة الألوان الحمراء عند الإلغاء
+  clearAllErrors(); // إزالة الألوان عند الإلغاء
 }
 
 function openWaModal(name, phone) {
   currentWaPhone = phone;
   document.getElementById('waClientName').textContent = name;
   document.getElementById('waClientPhone').textContent = phone;
-  document.getElementById('waMessage').value = `مرحباً ${name}،\n`;
+  document.getElementById('waMessage').value = `مرحباً ${name}،\n`; 
   document.getElementById('waSuccessMessage').style.display = 'none';
   document.getElementById('whatsappModal').style.display = 'flex';
 }
