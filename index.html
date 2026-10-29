@@ -2,81 +2,89 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>مكتب تواصل عقاري (سحابي)</title>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: Tahoma, sans-serif; min-height: 100vh; background: linear-gradient(135deg, #1e3c72, #2a5298, #6a3093); padding: 20px; }
-.screen { background: #fff; max-width: 1100px; margin: 0 auto; border-radius: 16px; padding: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
-.header { text-align: center; margin-bottom: 25px; }
-.logo { width: 70px; height: 70px; margin: 0 auto 12px; background: linear-gradient(135deg, #1e3c72, #6a3093); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 34px; }
-h1 { color: #1e3c72; font-size: 26px; }
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { font-family: Tahoma, sans-serif; min-height: 100vh; background: linear-gradient(135deg, #1e3c72, #2a5298, #6a3093); padding: 15px; }
+.screen { background: #fff; max-width: 1100px; margin: 0 auto; border-radius: 16px; padding: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
+.header { text-align: center; margin-bottom: 20px; }
+.logo { width: 60px; height: 60px; margin: 0 auto 10px; background: linear-gradient(135deg, #1e3c72, #6a3093); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; }
+h1 { color: #1e3c72; font-size: 22px; }
 .subtitle { color: #7f8c8d; font-size: 13px; margin-top: 6px; }
 .view { display: none; }
 .view.active { display: block; }
 .view-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ecf0f1; padding-bottom: 12px; margin-bottom: 20px; }
-.view-header h2 { color: #2c3e50; font-size: 20px; }
-.back-btn { background: #7f8c8d; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; }
-.home-buttons { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 25px; }
-.home-btn { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 26px 15px; border: none; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: bold; color: #fff; transition: transform 0.2s; }
-.home-btn:hover { transform: translateY(-3px); }
-.home-btn .icon { font-size: 32px; }
+.view-header h2 { color: #2c3e50; font-size: 18px; }
+.back-btn { background: #7f8c8d; color: #fff; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; }
+
+/* الأزرار الرئيسية - تصميم مخصص للجوال */
+.home-buttons { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 20px; }
+.home-btn { display: flex; align-items: center; justify-content: flex-start; gap: 15px; padding: 20px; border: none; border-radius: 12px; cursor: pointer; font-size: 16px; font-weight: bold; color: #fff; transition: transform 0.2s; width: 100%; }
+.home-btn:active { transform: scale(0.98); }
+.home-btn .icon { font-size: 28px; }
 .b1 { background: linear-gradient(135deg, #2980b9, #3498db); }
 .b2 { background: linear-gradient(135deg, #27ae60, #2ecc71); }
 .b3 { background: linear-gradient(135deg, #e67e22, #f39c12); }
 .b4 { background: linear-gradient(135deg, #8e44ad, #9b59b6); }
 .b5 { background: linear-gradient(135deg, #c0392b, #e74c3c); }
 .b6 { background: linear-gradient(135deg, #16a085, #1abc9c); }
-.wide { grid-column: 1 / -1; flex-direction: row !important; padding: 18px !important; }
-.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 15px; }
-label { display: block; font-weight: bold; color: #34495e; margin-bottom: 4px; font-size: 13px; }
-input, select, textarea { width: 100%; padding: 9px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; transition: border 0.3s, background-color 0.3s; font-family: inherit; }
-.buttons { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
-.btn-save { background: #27ae60; color: #fff; border: none; padding: 11px 24px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold; }
-.btn-search-modal { background: #2980b9; color: #fff; border: none; padding: 11px 24px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold; }
-.btn-edit { background: #f39c12; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; margin-left: 5px; font-weight: bold; }
-.btn-del { background: #e74c3c; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; }
-.btn-wa { background: #25D366; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; margin-left: 5px; font-weight: bold; }
-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-th, td { border: 1px solid #e1e5eb; padding: 8px; text-align: center; }
+
+/* الفورم */
+.form-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 15px; }
+label { display: block; font-weight: bold; color: #34495e; margin-bottom: 6px; font-size: 14px; }
+input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; transition: border 0.3s, background-color 0.3s; font-family: inherit; }
+.buttons { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
+.btn-save { background: #27ae60; color: #fff; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; width: 100%; }
+.btn-search-modal { background: #2980b9; color: #fff; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; width: 100%; }
+.btn-edit { background: #f39c12; color: #fff; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; }
+.btn-del { background: #e74c3c; color: #fff; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; }
+.btn-wa { background: #25D366; color: #fff; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; }
+
+/* الجداول - تصميم متجاوب للجوال */
+.table-container { width: 100%; overflow-x: auto; margin-top: 15px; border-radius: 8px; border: 1px solid #e1e5eb; }
+table { width: 100%; min-width: 600px; border-collapse: collapse; font-size: 14px; }
+th, td { border: 1px solid #e1e5eb; padding: 12px 8px; text-align: center; }
 th { background: #34495e; color: #fff; }
 tr:nth-child(even) { background: #f9fafc; }
-.msg { margin: 10px 0; padding: 10px; border-radius: 6px; text-align: center; font-weight: bold; display: none; }
+
+.msg { margin: 10px 0; padding: 12px; border-radius: 6px; text-align: center; font-weight: bold; display: none; }
 .msg.ok { background: #d5f5e3; color: #186a3b; display: block; }
 .msg.err { background: #fadbd8; color: #922b21; display: block; }
-.search-bar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-.search-bar input { flex: 2; min-width: 200px; padding: 11px; }
-.search-bar select { flex: 1; min-width: 140px; padding: 11px; }
+.search-bar { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.search-bar input, .search-bar select { width: 100%; padding: 12px; font-size: 16px; }
 .empty { text-align: center; color: #95a5a6; padding: 25px; font-style: italic; }
-.results h3 { color: #2c3e50; margin: 18px 0 10px; border-bottom: 2px solid #ecf0f1; padding-bottom: 6px; }
+.results h3 { color: #2c3e50; margin: 18px 0 10px; border-bottom: 2px solid #ecf0f1; padding-bottom: 6px; font-size: 16px; }
 .badge { background: #3498db; color: #fff; padding: 2px 10px; border-radius: 10px; font-size: 12px; }
-.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
-.modal-content { background: #fff; padding: 20px; border-radius: 10px; width: 90%; max-width: 700px; max-height: 80vh; display: flex; flex-direction: column; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+
+/* النوافذ المنبثقة */
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: flex-end; }
+.modal-content { background: #fff; padding: 20px; border-radius: 20px 20px 0 0; width: 100%; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 -5px 15px rgba(0,0,0,0.3); overflow-y: auto; }
 .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ecf0f1; padding-bottom: 10px; margin-bottom: 15px; }
-.modal-header h3 { color: #2c3e50; margin: 0; }
-.close-btn { background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-.modal-search { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; }
+.modal-header h3 { color: #2c3e50; margin: 0; font-size: 18px; }
+.close-btn { background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 14px; }
+.modal-search { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; }
 .modal-table-container { overflow-y: auto; flex-grow: 1; }
-.modal-table-container table { width: 100%; border-collapse: collapse; }
-.modal-table-container th, .modal-table-container td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+.modal-table-container table { width: 100%; min-width: 500px; border-collapse: collapse; }
+.modal-table-container th, .modal-table-container td { border: 1px solid #ddd; padding: 10px; text-align: center; }
 .modal-table-container th { background: #34495e; color: white; position: sticky; top: 0; }
 .modal-table-container tbody tr { cursor: pointer; transition: background 0.2s; }
 .modal-table-container tbody tr:hover { background: #d5f5e3; }
 .required-error { border: 2px solid #e74c3c !important; background-color: #fadbd8 !important; }
-@media (max-width: 700px) { .home-buttons { grid-template-columns: repeat(2, 1fr); } }
 </style>
 </head>
 <body>
 
 <!-- ======= الرئيسية ======= -->
 <div class="screen view active" id="v-home">
-  <div class="header"><div class="logo">🏢</div><h1>مكتب تواصل عقاري</h1><p class="subtitle">نظام إدارة العقارات والعملاء والصفقات (السحابي)</p></div>
+  <div class="header"><div class="logo">🏢</div><h1>مكتب تواصل عقاري</h1><p class="subtitle">نظام إدارة العقارات والعملاء والصفقات</p></div>
   <div class="home-buttons">
     <button class="home-btn b1" onclick="go('clients')"><span class="icon">👥</span><span>إدخال العملاء</span></button>
     <button class="home-btn b2" onclick="go('properties')"><span class="icon">🏠</span><span>إدخال العقارات</span></button>
     <button class="home-btn b3" onclick="go('requests')"><span class="icon">📋</span><span>إدخال الطلبات</span></button>
     <button class="home-btn b4" onclick="go('deals')"><span class="icon">💰</span><span>إدخال الصفقات</span></button>
-    <button class="home-btn b5 wide" onclick="go('search')"><span class="icon">🔍</span><span>البحث والاستعلام</span></button>
-    <button class="home-btn b6 wide" onclick="exportExcel()"><span class="icon">📦</span><span>تصدير كل البيانات إلى Excel</span></button>
+    <button class="home-btn b5" onclick="go('search')"><span class="icon">🔍</span><span>البحث والاستعلام</span></button>
+    <button class="home-btn b6" onclick="exportExcel()"><span class="icon">📦</span><span>تصدير كل البيانات إلى Excel</span></button>
   </div>
 </div>
 
@@ -93,10 +101,12 @@ tr:nth-child(even) { background: #f9fafc; }
   <div class="buttons">
     <button class="btn-save" onclick="saveClient()" id="btn-save-client">💾 حفظ</button>
     <button class="btn-search-modal" onclick="openModal('clients')">🔍 بحث وتعديل عميل</button>
-    <button class="btn-edit" onclick="cancelEdit('clients')" id="btn-cancel-client" style="display:none; background:#95a5a6;">❌ إلغاء التعديل</button>
+    <button class="btn-edit" onclick="cancelEdit('clients')" id="btn-cancel-client" style="display:none; background:#95a5a6; width:100%; padding:15px; font-size:16px;">❌ إلغاء التعديل</button>
   </div>
   <div class="msg" id="m-clients"></div>
-  <table><thead><tr><th>#</th><th>الرقم</th><th>الاسم</th><th>الجوال</th><th>المدينة</th><th>إجراء</th></tr></thead><tbody id="t-clients"></tbody></table>
+  <div class="table-container">
+    <table><thead><tr><th>#</th><th>الرقم</th><th>الاسم</th><th>الجوال</th><th>المدينة</th><th>إجراء</th></tr></thead><tbody id="t-clients"></tbody></table>
+  </div>
 </div>
 
 <!-- ======= العقارات ======= -->
@@ -109,15 +119,17 @@ tr:nth-child(even) { background: #f9fafc; }
     <div><label>المساحة (م²) <span style="color:red">*</span></label><input type="number" id="p_area" min="1"></div>
     <div><label>السعر <span style="color:red">*</span></label><input type="number" id="p_price" min="0"></div>
     <div><label>الحالة <span style="color:red">*</span></label><select id="p_status"><option>متاح</option><option>مؤجر</option><option>مباع</option></select></div>
-    <div style="grid-column: 1 / -1;"><label>صورة العقار (اختياري)</label><input type="file" id="p_media" accept="image/*"></div>
+    <div><label>صورة العقار (اختياري)</label><input type="file" id="p_media" accept="image/*"></div>
   </div>
   <div class="buttons">
     <button class="btn-save" onclick="saveProperty()" id="btn-save-property">💾 حفظ</button>
     <button class="btn-search-modal" onclick="openModal('properties')">🔍 بحث وتعديل عقار</button>
-    <button class="btn-edit" onclick="cancelEdit('properties')" id="btn-cancel-property" style="display:none; background:#95a5a6;">❌ إلغاء التعديل</button>
+    <button class="btn-edit" onclick="cancelEdit('properties')" id="btn-cancel-property" style="display:none; background:#95a5a6; width:100%; padding:15px; font-size:16px;">❌ إلغاء التعديل</button>
   </div>
   <div class="msg" id="m-properties"></div>
-  <table><thead><tr><th>#</th><th>الرقم</th><th>النوع</th><th>المدينة</th><th>العنوان</th><th>المساحة</th><th>السعر</th><th>الحالة</th><th>الصورة</th><th>إجراء</th></tr></thead><tbody id="t-properties"></tbody></table>
+  <div class="table-container">
+    <table><thead><tr><th>#</th><th>الرقم</th><th>النوع</th><th>المدينة</th><th>العنوان</th><th>المساحة</th><th>السعر</th><th>الحالة</th><th>الصورة</th><th>إجراء</th></tr></thead><tbody id="t-properties"></tbody></table>
+  </div>
 </div>
 
 <!-- ======= الطلبات ======= -->
@@ -132,10 +144,12 @@ tr:nth-child(even) { background: #f9fafc; }
   <div class="buttons">
     <button class="btn-save" onclick="saveRequest()" id="btn-save-request">💾 حفظ</button>
     <button class="btn-search-modal" onclick="openModal('requests')">🔍 بحث وتعديل طلب</button>
-    <button class="btn-edit" onclick="cancelEdit('requests')" id="btn-cancel-request" style="display:none; background:#95a5a6;">❌ إلغاء التعديل</button>
+    <button class="btn-edit" onclick="cancelEdit('requests')" id="btn-cancel-request" style="display:none; background:#95a5a6; width:100%; padding:15px; font-size:16px;">❌ إلغاء التعديل</button>
   </div>
   <div class="msg" id="m-requests"></div>
-  <table><thead><tr><th>#</th><th>الرقم</th><th>العميل</th><th>العقار</th><th>النوع</th><th>التاريخ</th><th>الحالة</th><th>إجراء</th></tr></thead><tbody id="t-requests"></tbody></table>
+  <div class="table-container">
+    <table><thead><tr><th>#</th><th>الرقم</th><th>العميل</th><th>العقار</th><th>النوع</th><th>التاريخ</th><th>الحالة</th><th>إجراء</th></tr></thead><tbody id="t-requests"></tbody></table>
+  </div>
 </div>
 
 <!-- ======= الصفقات ======= -->
@@ -152,24 +166,26 @@ tr:nth-child(even) { background: #f9fafc; }
   <div class="buttons">
     <button class="btn-save" onclick="saveDeal()" id="btn-save-deal">💾 حفظ</button>
     <button class="btn-search-modal" onclick="openModal('deals')">🔍 بحث وتعديل صفقة</button>
-    <button class="btn-edit" onclick="cancelEdit('deals')" id="btn-cancel-deal" style="display:none; background:#95a5a6;">❌ إلغاء التعديل</button>
+    <button class="btn-edit" onclick="cancelEdit('deals')" id="btn-cancel-deal" style="display:none; background:#95a5a6; width:100%; padding:15px; font-size:16px;">❌ إلغاء التعديل</button>
   </div>
   <div class="msg" id="m-deals"></div>
-  <table><thead><tr><th>#</th><th>الرقم</th><th>العميل</th><th>العقار</th><th>النوع</th><th>المبلغ</th><th>العمولة</th><th>التاريخ</th><th>إجراء</th></tr></thead><tbody id="t-deals"></tbody></table>
+  <div class="table-container">
+    <table><thead><tr><th>#</th><th>الرقم</th><th>العميل</th><th>العقار</th><th>النوع</th><th>المبلغ</th><th>العمولة</th><th>التاريخ</th><th>إجراء</th></tr></thead><tbody id="t-deals"></tbody></table>
+  </div>
 </div>
 
 <!-- ======= البحث ======= -->
 <div class="screen view" id="v-search">
-  <div class="view-header"><h2>🔍 البحث والاستعلام (تقرير)</h2><button class="back-btn" onclick="go('home')">← الرئيسية</button></div>
+  <div class="view-header"><h2>🔍 البحث</h2><button class="back-btn" onclick="go('home')">← الرئيسية</button></div>
   <div class="search-bar">
-    <input type="text" id="searchInput" placeholder="ابحث بالاسم، الجوال، المدينة، العنوان، أو المبلغ..." onkeydown="if(event.key==='Enter') doSearch()">
+    <input type="text" id="searchInput" placeholder="ابحث بالاسم، الجوال..." onkeydown="if(event.key==='Enter') doSearch()">
     <select id="searchScope"><option value="all">الكل</option><option value="clients">العملاء</option><option value="properties">العقارات</option><option value="requests">الطلبات</option><option value="deals">الصفقات</option></select>
     <button class="btn-save" onclick="doSearch()">🔎 بحث</button>
   </div>
   <div id="searchResults" class="results"><div class="empty">اكتب كلمة للبحث...</div></div>
 </div>
 
-<!-- ======= النافذة المنبثقة للبحث ======= -->
+<!-- ======= نافذة البحث والتعديل ======= -->
 <div id="searchModal" class="modal">
   <div class="modal-content">
     <div class="modal-header"><h3 id="modalTitle">اختر السجل</h3><button class="close-btn" onclick="closeModal()">إغلاق ✖</button></div>
@@ -178,25 +194,28 @@ tr:nth-child(even) { background: #f9fafc; }
   </div>
 </div>
 
-<!-- ======= نافذة إرسال الواتساب ======= -->
+<!-- ======= نافذة الواتساب ======= -->
 <div id="whatsappModal" class="modal">
-  <div class="modal-content" style="max-width: 500px;">
+  <div class="modal-content">
     <div class="modal-header">
-      <h3>إرسال رسالة واتساب للعميل</h3>
+      <h3>إرسال رسالة واتساب</h3>
       <button class="close-btn" onclick="closeWaModal()">إغلاق ✖</button>
     </div>
-    <div style="margin-bottom: 10px;">
-      <label>اسم العميل: <span id="waClientName" style="color: #2980b9;"></span></label>
-      <label>رقم الجوال: <span id="waClientPhone" style="color: #2980b9;"></span></label>
+    <div style="margin-bottom: 15px;">
+      <label>العميل: <span id="waClientName" style="color: #2980b9; font-size: 16px;"></span></label><br>
+      <label>الجوال: <span id="waClientPhone" style="color: #2980b9; font-size: 16px;"></span></label>
     </div>
     <label>نص الرسالة:</label>
-    <textarea id="waMessage" rows="4" placeholder="اكتب رسالتك هنا..."></textarea>
-    <div style="margin-top: 10px; font-size: 12px; color: #7f8c8d; text-align: center;">
-      💡 سيتم فتح تطبيق واتساب، وبعد إرسال الرسالة يمكنك العودة للنظام من خلال زر الرجوع في المتصفح.
+    <textarea id="waMessage" rows="4" placeholder="اكتب رسالتك هنا..." style="margin-bottom: 15px;"></textarea>
+    
+    <div id="waSuccessMessage" style="display:none; background: #e8f8f5; border: 1px solid #25D366; color: #186a3b; padding: 15px; border-radius: 8px; margin-bottom: 15px; text-align: center; font-weight: bold;">
+      ✅ تم فتح الواتساب! <br> 
+      أرسل الرسالة هناك، ثم ارجع هنا واضغط "العودة للنظام".
     </div>
-    <div class="buttons" style="margin-top: 15px; flex-direction: column;">
-      <button class="btn-wa" onclick="sendWaMessage()" style="padding: 11px 24px; font-size: 14px; width: 100%; margin-bottom: 5px;">🚀 إرسال عبر واتساب</button>
-      <button class="btn-edit" onclick="closeWaModal()" style="background:#7f8c8d; padding: 11px 24px; font-size: 14px; width: 100%;">📱 العودة للنظام</button>
+
+    <div class="buttons">
+      <button class="btn-wa" onclick="sendWaMessage()" style="padding: 15px; font-size: 16px; width: 100%; border-radius: 8px;">🚀 إرسال عبر واتساب</button>
+      <button class="btn-edit" onclick="closeWaModal()" style="background:#7f8c8d; padding: 15px; font-size: 16px; width: 100%; border-radius: 8px;">📱 العودة للنظام</button>
     </div>
   </div>
 </div>
@@ -263,7 +282,7 @@ function renderAll() {
       <td>${c.phone}</td>
       <td>${c.city}</td>
       <td>
-        <button class="btn-edit" onclick="editClient('${c.id}')">تعديل سريع</button>
+        <button class="btn-edit" onclick="editClient('${c.id}')">تعديل</button>
         <button class="btn-del" onclick="delClient('${c.id}')">حذف</button>
         <button class="btn-wa" onclick="openWaModal('${c.name}', '${c.phone}')">واتساب</button>
       </td>
@@ -272,15 +291,15 @@ function renderAll() {
   document.getElementById('t-properties').innerHTML = DB.properties.map((p, i) => `
     <tr><td>${i+1}</td><td>${p.id}</td><td>${p.type}</td><td>${p.city}</td><td>${p.address}</td><td>${p.area}</td><td>${p.price}</td><td>${p.status}</td>
     <td>${p.media_url ? `<a href="${p.media_url}" target="_blank" style="color:#2980b9;font-weight:bold;">عرض</a>` : '—'}</td>
-    <td><button class="btn-edit" onclick="editProperty('${p.id}')">تعديل سريع</button> <button class="btn-del" onclick="delProperty('${p.id}')">حذف</button></td></tr>`).join('');
+    <td><button class="btn-edit" onclick="editProperty('${p.id}')">تعديل</button> <button class="btn-del" onclick="delProperty('${p.id}')">حذف</button></td></tr>`).join('');
   
   document.getElementById('t-requests').innerHTML = DB.requests.map((r, i) => `
     <tr><td>${i+1}</td><td>${r.id}</td><td>${getClientName(r.client_id)}</td><td>${getPropDesc(r.property_id)}</td><td>${r.type}</td><td>${r.date}</td><td>${r.status}</td>
-    <td><button class="btn-edit" onclick="editRequest('${r.id}')">تعديل سريع</button> <button class="btn-del" onclick="delRequest('${r.id}')">حذف</button></td></tr>`).join('');
+    <td><button class="btn-edit" onclick="editRequest('${r.id}')">تعديل</button> <button class="btn-del" onclick="delRequest('${r.id}')">حذف</button></td></tr>`).join('');
   
   document.getElementById('t-deals').innerHTML = DB.deals.map((d, i) => `
     <tr><td>${i+1}</td><td>${d.id}</td><td>${getClientName(d.client_id)}</td><td>${getPropDesc(d.property_id)}</td><td>${d.type}</td><td>${d.amount}</td><td>${d.commission}</td><td>${d.date}</td>
-    <td><button class="btn-edit" onclick="editDeal('${d.id}')">تعديل سريع</button> <button class="btn-del" onclick="delDeal('${d.id}')">حذف</button></td></tr>`).join('');
+    <td><button class="btn-edit" onclick="editDeal('${d.id}')">تعديل</button> <button class="btn-del" onclick="delDeal('${d.id}')">حذف</button></td></tr>`).join('');
 }
 
 function refreshSelects() {
@@ -343,14 +362,12 @@ function cancelEdit(type) {
   }
 }
 
-// ==========================================
-// نافذة الواتساب
-// ==========================================
 function openWaModal(name, phone) {
   currentWaPhone = phone;
   document.getElementById('waClientName').textContent = name;
   document.getElementById('waClientPhone').textContent = phone;
-  document.getElementById('waMessage').value = `مرحباً ${name}،\n`; // رسالة افتراضية
+  document.getElementById('waMessage').value = `مرحباً ${name}،\n`; 
+  document.getElementById('waSuccessMessage').style.display = 'none'; // إخفاء رسالة النجاح عند الفتح
   document.getElementById('whatsappModal').style.display = 'flex';
 }
 
@@ -362,7 +379,6 @@ function sendWaMessage() {
   const message = document.getElementById('waMessage').value;
   if (!message) return alert('اكتب رسالتك أولاً');
   
-  // تنسيق رقم الجوال للسعودية (استبدال الصفر بـ 966)
   let formattedPhone = currentWaPhone;
   if (formattedPhone.startsWith('0')) {
     formattedPhone = '966' + formattedPhone.substring(1);
@@ -370,7 +386,9 @@ function sendWaMessage() {
   
   const url = `https://wa.me/${formattedPhone}?text=${encodeURIComponent(message)}`;
   window.open(url, '_blank');
-  // لا نغلق النافذة هنا، نخلي المستخدم يغلقها بنفسه عشان يرجع بسهولة
+  
+  // إظهار رسالة النجاح بعد الفتح
+  document.getElementById('waSuccessMessage').style.display = 'block';
 }
 
 function openModal(type) {
@@ -485,7 +503,7 @@ function doSearch() {
   const q = document.getElementById('searchInput').value.trim().toLowerCase(); const scope = document.getElementById('searchScope').value; const box = document.getElementById('searchResults');
   if (!q) { box.innerHTML = '<div class="empty">اكتب كلمة للبحث</div>'; return; }
   let total = 0, html = '';
-  function section(title, rows, keys, heads) { if (!rows.length) return ''; total += rows.length; let s = `<h3>${title} <span class="badge">${rows.length}</span></h3><table><thead><tr>`; heads.forEach(h => s += `<th>${h}</th>`); s += '</tr></thead><tbody>'; rows.forEach(r => { s += '<tr>'; keys.forEach(k => s += `<td>${r[k] ?? ''}</td>`); s += '</tr>'; }); return s + '</tbody></table>'; }
+  function section(title, rows, keys, heads) { if (!rows.length) return ''; total += rows.length; let s = `<h3>${title} <span class="badge">${rows.length}</span></h3><div class="table-container"><table><thead><tr>`; heads.forEach(h => s += `<th>${h}</th>`); s += '</tr></thead><tbody>'; rows.forEach(r => { s += '<tr>'; keys.forEach(k => s += `<td>${r[k] ?? ''}</td>`); s += '</tr>'; }); return s + '</tbody></table></div>'; }
   if (scope === 'all' || scope === 'clients') { const rows = DB.clients.filter(c => c.name.toLowerCase().includes(q) || c.phone.includes(q) || c.city.toLowerCase().includes(q)); html += section('👥 العملاء', rows, ['id','name','phone','city'], ['الرقم','الاسم','الجوال','المدينة']); }
   if (scope === 'all' || scope === 'properties') { const rows = DB.properties.filter(p => p.type.toLowerCase().includes(q) || p.city.toLowerCase().includes(q) || p.address.toLowerCase().includes(q) || String(p.price).includes(q) || p.status.toLowerCase().includes(q)); html += section('🏠 العقارات', rows, ['id','type','city','address','price','status'], ['الرقم','النوع','المدينة','العنوان','السعر','الحالة']); }
   if (scope === 'all' || scope === 'requests') { const rows = DB.requests.filter(r => getClientName(r.client_id).toLowerCase().includes(q) || getPropDesc(r.property_id).toLowerCase().includes(q) || r.type.toLowerCase().includes(q) || r.date.includes(q) || r.status.toLowerCase().includes(q)).map(r => ({...r, client: getClientName(r.client_id), property: getPropDesc(r.property_id)})); html += section('📋 الطلبات', rows, ['id','client','property','type','date','status'], ['الرقم','العميل','العقار','النوع','التاريخ','الحالة']); }
