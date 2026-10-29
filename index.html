@@ -191,8 +191,12 @@ tr:nth-child(even) { background: #f9fafc; }
     </div>
     <label>نص الرسالة:</label>
     <textarea id="waMessage" rows="4" placeholder="اكتب رسالتك هنا..."></textarea>
-    <div class="buttons" style="margin-top: 15px;">
-      <button class="btn-wa" onclick="sendWaMessage()" style="padding: 11px 24px; font-size: 14px;">🚀 إرسال عبر واتساب</button>
+    <div style="margin-top: 10px; font-size: 12px; color: #7f8c8d; text-align: center;">
+      💡 سيتم فتح تطبيق واتساب، وبعد إرسال الرسالة يمكنك العودة للنظام من خلال زر الرجوع في المتصفح.
+    </div>
+    <div class="buttons" style="margin-top: 15px; flex-direction: column;">
+      <button class="btn-wa" onclick="sendWaMessage()" style="padding: 11px 24px; font-size: 14px; width: 100%; margin-bottom: 5px;">🚀 إرسال عبر واتساب</button>
+      <button class="btn-edit" onclick="closeWaModal()" style="background:#7f8c8d; padding: 11px 24px; font-size: 14px; width: 100%;">📱 العودة للنظام</button>
     </div>
   </div>
 </div>
@@ -366,7 +370,7 @@ function sendWaMessage() {
   
   const url = `https://wa.me/${formattedPhone}?text=${encodeURIComponent(message)}`;
   window.open(url, '_blank');
-  closeWaModal();
+  // لا نغلق النافذة هنا، نخلي المستخدم يغلقها بنفسه عشان يرجع بسهولة
 }
 
 function openModal(type) {
