@@ -70,7 +70,6 @@ tr:nth-child(even) { background: #f9fafc; }
 .modal-table-container th { background: #34495e; color: white; position: sticky; top: 0; }
 .modal-table-container tbody tr { cursor: pointer; transition: background 0.2s; }
 .modal-table-container tbody tr:hover { background: #d5f5e3; }
-.required-error { border: 2px solid #e74c3c !important; background-color: #fadbd8 !important; }
 </style>
 </head>
 <body>
@@ -252,21 +251,29 @@ function getClientName(id) { const c = DB.clients.find(c => String(c.id) === Str
 function getPropDesc(id) { const p = DB.properties.find(p => String(p.id) === String(id)); return p ? p.type + ' - ' + p.address : '⚠️ غير موجود'; }
 function formatPhone(phone) { return phone.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/\s/g, ''); }
 
-// دالة تمييز الحقل باللون الأحمر
+// الدالة الجديدة والمضمونة لتمييز الحقل باللون الأحمر
 function highlightField(id, isError) {
   const el = document.getElementById(id);
-  if (isError) el.classList.add('required-error');
-  else el.classList.remove('required-error');
+  if (isError) {
+    el.style.border = '2px solid #e74c3c';
+    el.style.backgroundColor = '#fadbd8';
+  } else {
+    el.style.border = '1px solid #ccc';
+    el.style.backgroundColor = '#fff';
+  }
 }
 
 // دالة مسح الألوان الحمراء من كل الحقول
 function clearAllErrors() {
-  document.querySelectorAll('.required-error').forEach(el => el.classList.remove('required-error'));
+  document.querySelectorAll('input, select, textarea').forEach(el => {
+    el.style.border = '1px solid #ccc';
+    el.style.backgroundColor = '#fff';
+  });
 }
 
 document.querySelectorAll('input, select').forEach(el => {
-  el.addEventListener('input', () => el.classList.remove('required-error'));
-  el.addEventListener('change', () => el.classList.remove('required-error'));
+  el.addEventListener('input', () => { el.style.border = '1px solid #ccc'; el.style.backgroundColor = '#fff'; });
+  el.addEventListener('change', () => { el.style.border = '1px solid #ccc'; el.style.backgroundColor = '#fff'; });
 });
 
 async function loadData() {
