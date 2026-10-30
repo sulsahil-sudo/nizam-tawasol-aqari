@@ -5,379 +5,145 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>مكتب وجه التواصل للعقار</title>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-body { font-family: Tahoma, sans-serif; min-height: 100vh; background: linear-gradient(135deg, #1e3c72, #2a5298, #6a3093); padding: 15px; }
-.screen { background: #fff; max-width: 1100px; margin: 0 auto; border-radius: 16px; padding: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
-.header { text-align: center; margin-bottom: 20px; }
-.logo { width: 60px; height: 60px; margin: 0 auto 10px; background: linear-gradient(135deg, #1e3c72, #6a3093); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; }
-h1 { color: #1e3c72; font-size: 22px; }
-.subtitle { color: #7f8c8d; font-size: 13px; margin-top: 6px; }
-.view { display: none; }
-.view.active { display: block; }
-.view-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ecf0f1; padding-bottom: 12px; margin-bottom: 20px; }
-.view-header h2 { color: #2c3e50; font-size: 18px; }
-.back-btn { background: #7f8c8d; color: #fff; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; }
-.home-buttons { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 20px; }
-.home-btn { display: flex; align-items: center; justify-content: flex-start; gap: 15px; padding: 20px; border: none; border-radius: 12px; cursor: pointer; font-size: 16px; font-weight: bold; color: #fff; transition: transform 0.2s; width: 100%; }
-.home-btn:active { transform: scale(0.98); }
-.home-btn .icon { font-size: 28px; }
-.b1 { background: linear-gradient(135deg, #2980b9, #3498db); }
-.b2 { background: linear-gradient(135deg, #27ae60, #2ecc71); }
-.b3 { background: linear-gradient(135deg, #e67e22, #f39c12); }
-.b4 { background: linear-gradient(135deg, #8e44ad, #9b59b6); }
-.b5 { background: linear-gradient(135deg, #c0392b, #e74c3c); }
-.b6 { background: linear-gradient(135deg, #16a085, #1abc9c); }
-.form-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 15px; }
-label { display: block; font-weight: bold; color: #34495e; margin-bottom: 6px; font-size: 14px; }
-input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; font-family: inherit; }
-.buttons { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
-.btn-save { background: #27ae60; color: #fff; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; width: 100%; }
-.btn-save:disabled { background: #bdc3c7; cursor: not-allowed; opacity: 0.7; }
-.btn-search-modal { background: #2980b9; color: #fff; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; width: 100%; }
-.btn-edit { background: #f39c12; color: #fff; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; }
-.btn-del { background: #e74c3c; color: #fff; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; }
-.btn-wa { background: #25D366; color: #fff; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; }
-.table-container { width: 100%; overflow-x: auto; margin-top: 15px; border-radius: 8px; border: 1px solid #e1e5eb; }
-table { width: 100%; min-width: 600px; border-collapse: collapse; font-size: 14px; }
-th, td { border: 1px solid #e1e5eb; padding: 12px 8px; text-align: center; }
-th { background: #34495e; color: #fff; }
-tr:nth-child(even) { background: #f9fafc; }
-.msg { margin: 10px 0; padding: 12px; border-radius: 6px; text-align: center; font-weight: bold; display: none; }
-.msg.ok { background: #d5f5e3; color: #186a3b; display: block; }
-.msg.err { background: #fadbd8; color: #922b21; display: block; }
-.search-bar { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-.search-bar input, .search-bar select { width: 100%; padding: 12px; font-size: 16px; }
-.empty { text-align: center; color: #95a5a6; padding: 25px; font-style: italic; }
-.results h3 { color: #2c3e50; margin: 18px 0 10px; border-bottom: 2px solid #ecf0f1; padding-bottom: 6px; font-size: 16px; }
-.badge { background: #3498db; color: #fff; padding: 2px 10px; border-radius: 10px; font-size: 12px; }
-.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: flex-end; }
-.modal-content { background: #fff; padding: 20px; border-radius: 20px 20px 0 0; width: 100%; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 -5px 15px rgba(0,0,0,0.3); overflow-y: auto; }
-.modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ecf0f1; padding-bottom: 10px; margin-bottom: 15px; }
-.modal-header h3 { color: #2c3e50; margin: 0; font-size: 18px; }
-.close-btn { background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 14px; }
-.modal-search { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; }
-.modal-table-container { overflow-y: auto; flex-grow: 1; }
-.modal-table-container table { width: 100%; min-width: 500px; border-collapse: collapse; }
-.modal-table-container th, .modal-table-container td { border: 1px solid #ddd; padding: 10px; text-align: center; }
-.modal-table-container th { background: #34495e; color: white; position: sticky; top: 0; }
-.modal-table-container tbody tr { cursor: pointer; transition: background 0.2s; }
-.modal-table-container tbody tr:hover { background: #d5f5e3; }
-
-/* تنسيق زر إضافة المدينة */
-.city-input-group { display: flex; gap: 8px; }
-.city-input-group select { flex: 1; }
-.btn-add-city { background: #2980b9; color: #fff; border: none; padding: 0 15px; border-radius: 8px; cursor: pointer; font-size: 20px; font-weight: bold; }
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}body{font-family:Tahoma,sans-serif;min-height:100vh;background:linear-gradient(135deg,#1e3c72,#2a5298,#6a3093);padding:15px}.screen{background:#fff;max-width:1100px;margin:0 auto;border-radius:16px;padding:20px;box-shadow:0 15px 40px rgba(0,0,0,.3)}.header{text-align:center;margin-bottom:20px}.logo{width:60px;height:60px;margin:0 auto 10px;background:linear-gradient(135deg,#1e3c72,#6a3093);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px}h1{color:#1e3c72;font-size:22px}.subtitle{color:#7f8c8d;font-size:13px;margin-top:6px}.view{display:none}.view.active{display:block}.view-header{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #ecf0f1;padding-bottom:12px;margin-bottom:20px}.view-header h2{color:#2c3e50;font-size:18px}.back-btn{background:#7f8c8d;color:#fff;border:none;padding:10px 15px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:14px}.home-buttons{display:grid;grid-template-columns:1fr;gap:12px;margin-top:20px}.home-btn{display:flex;align-items:center;justify-content:flex-start;gap:15px;padding:20px;border:none;border-radius:12px;cursor:pointer;font-size:16px;font-weight:bold;color:#fff;transition:transform .2s;width:100%}.home-btn:active{transform:scale(.98)}.home-btn .icon{font-size:28px}.b1{background:linear-gradient(135deg,#2980b9,#3498db)}.b2{background:linear-gradient(135deg,#27ae60,#2ecc71)}.b3{background:linear-gradient(135deg,#e67e22,#f39c12)}.b4{background:linear-gradient(135deg,#8e44ad,#9b59b6)}.b5{background:linear-gradient(135deg,#c0392b,#e74c3c)}.b6{background:linear-gradient(135deg,#16a085,#1abc9c)}.form-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:15px}label{display:block;font-weight:bold;color:#34495e;margin-bottom:6px;font-size:14px}input,select,textarea{width:100%;padding:12px;border:1px solid #ccc;border-radius:8px;font-size:16px;font-family:inherit}.buttons{display:flex;flex-direction:column;gap:10px;margin-bottom:15px}.btn-save{background:#27ae60;color:#fff;border:none;padding:15px;border-radius:8px;cursor:pointer;font-size:16px;font-weight:bold;width:100%}.btn-save:disabled{background:#bdc3c7;cursor:not-allowed;opacity:.7}.btn-search-modal{background:#2980b9;color:#fff;border:none;padding:15px;border-radius:8px;cursor:pointer;font-size:16px;font-weight:bold;width:100%}.btn-edit{background:#f39c12;color:#fff;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:bold}.btn-del{background:#e74c3c;color:#fff;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:13px}.btn-wa{background:#25D366;color:#fff;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:bold}.btn-view{background:#34495e;color:#fff;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:bold}.table-container{width:100%;overflow-x:auto;margin-top:15px;border-radius:8px;border:1px solid #e1e5eb}table{width:100%;min-width:600px;border-collapse:collapse;font-size:14px}th,td{border:1px solid #e1e5eb;padding:12px 8px;text-align:center}th{background:#34495e;color:#fff}tr:nth-child(even){background:#f9fafc}.msg{margin:10px 0;padding:12px;border-radius:6px;text-align:center;font-weight:bold;display:none}.msg.ok{background:#d5f5e3;color:#186a3b;display:block}.msg.err{background:#fadbd8;color:#922b21;display:block}.search-bar{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}.search-bar input,.search-bar select{width:100%;padding:12px;font-size:16px}.empty{text-align:center;color:#95a5a6;padding:25px;font-style:italic}.results h3{color:#2c3e50;margin:18px 0 10px;border-bottom:2px solid #ecf0f1;padding-bottom:6px;font-size:16px}.badge{background:#3498db;color:#fff;padding:2px 10px;border-radius:10px;font-size:12px}.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);z-index:1000;justify-content:center;align-items:flex-end}.modal-content{background:#fff;padding:20px;border-radius:20px 20px 0 0;width:100%;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 -5px 15px rgba(0,0,0,.3);overflow-y:auto}.modal-header{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #ecf0f1;padding-bottom:10px;margin-bottom:15px}.modal-header h3{color:#2c3e50;margin:0;font-size:18px}.close-btn{background:#e74c3c;color:white;border:none;padding:8px 12px;border-radius:5px;cursor:pointer;font-weight:bold;font-size:14px}.modal-search{width:100%;padding:12px;margin-bottom:15px;border:1px solid #ccc;border-radius:8px;font-size:16px}.modal-table-container{overflow-y:auto;flex-grow:1}.modal-table-container table{width:100%;min-width:500px;border-collapse:collapse}.modal-table-container th,.modal-table-container td{border:1px solid #ddd;padding:10px;text-align:center}.modal-table-container th{background:#34495e;color:white;position:sticky;top:0}.modal-table-container tbody tr{cursor:pointer;transition:background .2s}.modal-table-container tbody tr:hover{background:#d5f5e3}.city-input-group{display:flex;gap:8px}.city-input-group select{flex:1}.btn-add-city{background:#2980b9;color:#fff;border:none;padding:0 15px;border-radius:8px;cursor:pointer;font-size:20px;font-weight:bold}
 </style>
 </head>
 <body>
-
-<!-- ======= الرئيسية ======= -->
 <div class="screen view active" id="v-home">
-  <div class="header"><div class="logo">🏢</div><h1>مكتب وجه التواصل للعقار</h1><p class="subtitle">نظام إدارة العقارات والعملاء والصفقات</p></div>
-  <div class="home-buttons">
-    <button class="home-btn b1" onclick="go('clients')"><span class="icon">👥</span><span>إدخال العملاء</span></button>
-    <button class="home-btn b2" onclick="go('properties')"><span class="icon">🏠</span><span>إدخال العقارات</span></button>
-    <button class="home-btn b3" onclick="go('requests')"><span class="icon">📋</span><span>إدخال الطلبات</span></button>
-    <button class="home-btn b4" onclick="go('deals')"><span class="icon">💰</span><span>إدخال الصفقات</span></button>
-    <button class="home-btn b5" onclick="go('search')"><span class="icon">🔍</span><span>البحث والاستعلام</span></button>
-    <button class="home-btn b6" onclick="exportExcel()"><span class="icon">📦</span><span>تصدير كل البيانات إلى Excel</span></button>
-  </div>
-</div>
-
-<!-- ======= العملاء ======= -->
+<div class="header"><div class="logo">🏢</div><h1>مكتب وجه التواصل للعقار</h1><p class="subtitle">نظام إدارة العقارات والعملاء والصفقات</p></div>
+<div class="home-buttons">
+<button class="home-btn b1" onclick="go('clients')"><span class="icon">👥</span><span>إدخال العملاء</span></button>
+<button class="home-btn b2" onclick="go('properties')"><span class="icon">🏠</span><span>إدخال العقارات</span></button>
+<button class="home-btn b3" onclick="go('requests')"><span class="icon">📋</span><span>إدخال الطلبات</span></button>
+<button class="home-btn b4" onclick="go('deals')"><span class="icon">💰</span><span>إدخال الصفقات</span></button>
+<button class="home-btn b5" onclick="go('search')"><span class="icon">🔍</span><span>البحث والاستعلام</span></button>
+<button class="home-btn b6" onclick="exportExcel()"><span class="icon">📦</span><span>تصدير كل البيانات إلى Excel</span></button>
+</div></div>
 <div class="screen view" id="v-clients">
-  <div class="view-header"><h2>👥 العملاء</h2><button class="back-btn" onclick="go('home')">← الرئيسية</button></div>
-  <div class="form-grid">
-    <div><label>الاسم <span style="color:red">*</span></label><input type="text" id="c_name" oninput="checkClientForm()"></div>
-    <div><label>الجوال (10 أرقام تبدأ بـ 05) <span style="color:red">*</span></label><input type="text" id="c_phone" maxlength="10" oninput="checkClientForm()"></div>
-    <div>
-      <label>المدينة <span style="color:red">*</span></label>
-      <div class="city-input-group">
-        <select id="c_city" onchange="checkClientForm()"><option value="">اختر المدينة</option></select>
-        <button class="btn-add-city" onclick="openAddCityModal()" title="إضافة مدينة جديدة">+</button>
-      </div>
-    </div>
-  </div>
-  <div class="buttons">
-    <button class="btn-save" onclick="saveClient()" id="btn-save-client" disabled>💾 حفظ</button>
-    <button class="btn-search-modal" onclick="openModal('clients')">🔍 بحث وتعديل عميل</button>
-    <button class="btn-edit" onclick="cancelEdit('clients')" id="btn-cancel-client" style="display:none; background:#95a5a6; width:100%; padding:15px; font-size:16px;">❌ إلغاء التعديل</button>
-  </div>
-  <div class="msg" id="m-clients"></div>
-  <div class="table-container">
-    <table><thead><tr><th>#</th><th>الرقم</th><th>الاسم</th><th>الجوال</th><th>المدينة</th><th>إجراء</th></tr></thead><tbody id="t-clients"></tbody></table>
-  </div>
+<div class="view-header"><h2>👥 العملاء</h2><button class="back-btn" onclick="go('home')">← الرئيسية</button></div>
+<div class="form-grid">
+<div><label>الاسم <span style="color:red">*</span></label><input type="text" id="c_name" oninput="checkClientForm()"></div>
+<div><label>الجوال <span style="color:red">*</span></label><input type="text" id="c_phone" maxlength="10" oninput="checkClientForm()"></div>
+<div><label>المدينة <span style="color:red">*</span></label><div class="city-input-group"><select id="c_city" onchange="checkClientForm()"><option value="">اختر المدينة</option></select><button class="btn-add-city" onclick="openAddCityModal()">+</button></div></div>
 </div>
-
-<!-- ======= العقارات ======= -->
+<div class="buttons"><button class="btn-save" onclick="saveClient()" id="btn-save-client" disabled>💾 حفظ</button><button class="btn-search-modal" onclick="openModal('clients')">🔍 بحث وتعديل عميل</button><button class="btn-edit" onclick="cancelEdit('clients')" id="btn-cancel-client" style="display:none;background:#95a5a6;width:100%;padding:15px;font-size:16px;">❌ إلغاء التعديل</button></div>
+<div class="msg" id="m-clients"></div>
+<div class="table-container"><table><thead><tr><th>#</th><th>الرقم</th><th>الاسم</th><th>الجوال</th><th>المدينة</th><th>إجراءات</th></tr></thead><tbody id="t-clients"></tbody></table></div>
+</div>
 <div class="screen view" id="v-properties">
-  <div class="view-header"><h2>🏠 العقارات</h2><button class="back-btn" onclick="go('home')">← الرئيسية</button></div>
-  <div class="form-grid">
-    <div><label>النوع <span style="color:red">*</span></label><select id="p_type" onchange="checkPropertyForm()"><option value="">اختر</option><option>شقة</option><option>فيلا</option><option>أرض</option><option>محل تجاري</option><option>مكتب</option></select></div>
-    <div>
-      <label>المدينة <span style="color:red">*</span></label>
-      <div class="city-input-group">
-        <select id="p_city" onchange="checkPropertyForm()"><option value="">اختر المدينة</option></select>
-        <button class="btn-add-city" onclick="openAddCityModal()" title="إضافة مدينة جديدة">+</button>
-      </div>
-    </div>
-    <div><label>العنوان <span style="color:red">*</span></label><input type="text" id="p_address" oninput="checkPropertyForm()"></div>
-    <div><label>المساحة (م²) <span style="color:red">*</span></label><input type="number" id="p_area" min="1" oninput="checkPropertyForm()"></div>
-    <div><label>السعر <span style="color:red">*</span></label><input type="number" id="p_price" min="0" oninput="checkPropertyForm()"></div>
-    <div><label>الحالة <span style="color:red">*</span></label><select id="p_status" onchange="checkPropertyForm()"><option>متاح</option><option>مؤجر</option><option>مباع</option></select></div>
-    <div><label>صورة العقار (اختياري)</label><input type="file" id="p_media" accept="image/*"></div>
-  </div>
-  <div class="buttons">
-    <button class="btn-save" onclick="saveProperty()" id="btn-save-property" disabled>💾 حفظ</button>
-    <button class="btn-search-modal" onclick="openModal('properties')">🔍 بحث وتعديل عقار</button>
-    <button class="btn-edit" onclick="cancelEdit('properties')" id="btn-cancel-property" style="display:none; background:#95a5a6; width:100%; padding:15px; font-size:16px;">❌ إلغاء التعديل</button>
-  </div>
-  <div class="msg" id="m-properties"></div>
-  <div class="table-container">
-    <table><thead><tr><th>#</th><th>الرقم</th><th>النوع</th><th>المدينة</th><th>العنوان</th><th>المساحة</th><th>السعر</th><th>الحالة</th><th>الصورة</th><th>إجراء</th></tr></thead><tbody id="t-properties"></tbody></table>
-  </div>
+<div class="view-header"><h2>🏠 العقارات</h2><button class="back-btn" onclick="go('home')">← الرئيسية</button></div>
+<div class="form-grid">
+<div><label>النوع <span style="color:red">*</span></label><select id="p_type" onchange="checkPropertyForm()"><option value="">اختر</option><option>شقة</option><option>فيلا</option><option>أرض</option><option>محل تجاري</option><option>مكتب</option></select></div>
+<div><label>المدينة <span style="color:red">*</span></label><div class="city-input-group"><select id="p_city" onchange="checkPropertyForm()"><option value="">اختر المدينة</option></select><button class="btn-add-city" onclick="openAddCityModal()">+</button></div></div>
+<div><label>العنوان <span style="color:red">*</span></label><input type="text" id="p_address" oninput="checkPropertyForm()"></div>
+<div><label>المساحة <span style="color:red">*</span></label><input type="number" id="p_area" min="1" oninput="checkPropertyForm()"></div>
+<div><label>السعر <span style="color:red">*</span></label><input type="number" id="p_price" min="0" oninput="checkPropertyForm()"></div>
+<div><label>الحالة <span style="color:red">*</span></label><select id="p_status" onchange="checkPropertyForm()"><option>متاح</option><option>مؤجر</option><option>مباع</option></select></div>
+<div><label>المالك (اختياري)</label><select id="p_owner"><option value="">اختر المالك</option></select></div>
+<div><label>صورة العقار (اختياري)</label><input type="file" id="p_media" accept="image/*"></div>
 </div>
-
-<!-- ======= الطلبات ======= -->
+<div class="buttons"><button class="btn-save" onclick="saveProperty()" id="btn-save-property" disabled>💾 حفظ</button><button class="btn-search-modal" onclick="openModal('properties')">🔍 بحث وتعديل عقار</button><button class="btn-edit" onclick="cancelEdit('properties')" id="btn-cancel-property" style="display:none;background:#95a5a6;width:100%;padding:15px;font-size:16px;">❌ إلغاء التعديل</button></div>
+<div class="msg" id="m-properties"></div>
+<div class="table-container"><table><thead><tr><th>#</th><th>الرقم</th><th>النوع</th><th>المدينة</th><th>العنوان</th><th>المساحة</th><th>السعر</th><th>الحالة</th><th>المالك</th><th>الصورة</th><th>إجراءات</th></tr></thead><tbody id="t-properties"></tbody></table></div>
+</div>
 <div class="screen view" id="v-requests">
-  <div class="view-header"><h2>📋 الطلبات</h2><button class="back-btn" onclick="go('home')">← الرئيسية</button></div>
-  <div class="form-grid">
-    <div><label>العميل <span style="color:red">*</span></label><select id="r_client" onchange="checkRequestForm()"><option value="">اختر</option></select></div>
-    <div><label>العقار <span style="color:red">*</span></label><select id="r_property" onchange="checkRequestForm()"><option value="">اختر</option></select></div>
-    <div><label>النوع <span style="color:red">*</span></label><select id="r_type" onchange="checkRequestForm()"><option>شراء</option><option>إيجار</option><option>معاينة</option></select></div>
-    <div><label>الحالة <span style="color:red">*</span></label><select id="r_status" onchange="checkRequestForm()"><option>جديد</option><option>قيد المعالجة</option><option>مكتمل</option><option>ملغي</option></select></div>
-  </div>
-  <div class="buttons">
-    <button class="btn-save" onclick="saveRequest()" id="btn-save-request" disabled>💾 حفظ</button>
-    <button class="btn-search-modal" onclick="openModal('requests')">🔍 بحث وتعديل طلب</button>
-    <button class="btn-edit" onclick="cancelEdit('requests')" id="btn-cancel-request" style="display:none; background:#95a5a6; width:100%; padding:15px; font-size:16px;">❌ إلغاء التعديل</button>
-  </div>
-  <div class="msg" id="m-requests"></div>
-  <div class="table-container">
-    <table><thead><tr><th>#</th><th>الرقم</th><th>العميل</th><th>العقار</th><th>النوع</th><th>التاريخ</th><th>الحالة</th><th>إجراء</th></tr></thead><tbody id="t-requests"></tbody></table>
-  </div>
+<div class="view-header"><h2>📋 الطلبات</h2><button class="back-btn" onclick="go('home')">← الرئيسية</button></div>
+<div class="form-grid">
+<div><label>العميل <span style="color:red">*</span></label><select id="r_client" onchange="checkRequestForm()"><option value="">اختر</option></select></div>
+<div><label>العقار <span style="color:red">*</span></label><select id="r_property" onchange="checkRequestForm()"><option value="">اختر</option></select></div>
+<div><label>النوع <span style="color:red">*</span></label><select id="r_type" onchange="checkRequestForm()"><option>شراء</option><option>إيجار</option><option>معاينة</option></select></div>
+<div><label>الحالة <span style="color:red">*</span></label><select id="r_status" onchange="checkRequestForm()"><option>جديد</option><option>قيد المعالجة</option><option>مكتمل</option><option>ملغي</option></select></div>
 </div>
-
-<!-- ======= الصفقات ======= -->
+<div class="buttons"><button class="btn-save" onclick="saveRequest()" id="btn-save-request" disabled>💾 حفظ</button><button class="btn-search-modal" onclick="openModal('requests')">🔍 بحث وتعديل طلب</button><button class="btn-edit" onclick="cancelEdit('requests')" id="btn-cancel-request" style="display:none;background:#95a5a6;width:100%;padding:15px;font-size:16px;">❌ إلغاء التعديل</button></div>
+<div class="msg" id="m-requests"></div>
+<div class="table-container"><table><thead><tr><th>#</th><th>الرقم</th><th>العميل</th><th>العقار</th><th>النوع</th><th>التاريخ</th><th>الحالة</th><th>إجراء</th></tr></thead><tbody id="t-requests"></tbody></table></div>
+</div>
 <div class="screen view" id="v-deals">
-  <div class="view-header"><h2>💰 الصفقات</h2><button class="back-btn" onclick="go('home')">← الرئيسية</button></div>
-  <div class="form-grid">
-    <div><label>الطلب <span style="color:red">*</span></label><select id="d_request" onchange="checkDealForm()"><option value="">اختر</option></select></div>
-    <div><label>العميل <span style="color:red">*</span></label><select id="d_client" onchange="checkDealForm()"><option value="">اختر</option></select></div>
-    <div><label>العقار <span style="color:red">*</span></label><select id="d_property" onchange="checkDealForm()"><option value="">اختر</option></select></div>
-    <div><label>النوع <span style="color:red">*</span></label><select id="d_type" onchange="checkDealForm()"><option>بيع</option><option>إيجار</option></select></div>
-    <div><label>المبلغ <span style="color:red">*</span></label><input type="number" id="d_amount" min="0" oninput="checkDealForm()"></div>
-    <div><label>العمولة (اختياري)</label><input type="number" id="d_commission" min="0"></div>
-  </div>
-  <div class="buttons">
-    <button class="btn-save" onclick="saveDeal()" id="btn-save-deal" disabled>💾 حفظ</button>
-    <button class="btn-search-modal" onclick="openModal('deals')">🔍 بحث وتعديل صفقة</button>
-    <button class="btn-edit" onclick="cancelEdit('deals')" id="btn-cancel-deal" style="display:none; background:#95a5a6; width:100%; padding:15px; font-size:16px;">❌ إلغاء التعديل</button>
-  </div>
-  <div class="msg" id="m-deals"></div>
-  <div class="table-container">
-    <table><thead><tr><th>#</th><th>الرقم</th><th>العميل</th><th>العقار</th><th>النوع</th><th>المبلغ</th><th>العمولة</th><th>التاريخ</th><th>إجراء</th></tr></thead><tbody id="t-deals"></tbody></table>
-  </div>
+<div class="view-header"><h2>💰 الصفقات</h2><button class="back-btn" onclick="go('home')">← الرئيسية</button></div>
+<div class="form-grid">
+<div><label>الطلب <span style="color:red">*</span></label><select id="d_request" onchange="checkDealForm()"><option value="">اختر</option></select></div>
+<div><label>العميل <span style="color:red">*</span></label><select id="d_client" onchange="checkDealForm()"><option value="">اختر</option></select></div>
+<div><label>العقار <span style="color:red">*</span></label><select id="d_property" onchange="checkDealForm()"><option value="">اختر</option></select></div>
+<div><label>النوع <span style="color:red">*</span></label><select id="d_type" onchange="checkDealForm()"><option>بيع</option><option>إيجار</option></select></div>
+<div><label>المبلغ <span style="color:red">*</span></label><input type="number" id="d_amount" min="0" oninput="checkDealForm()"></div>
+<div><label>العمولة (اختياري)</label><input type="number" id="d_commission" min="0"></div>
 </div>
-
-<!-- ======= البحث ======= -->
+<div class="buttons"><button class="btn-save" onclick="saveDeal()" id="btn-save-deal" disabled>💾 حفظ</button><button class="btn-search-modal" onclick="openModal('deals')">🔍 بحث وتعديل صفقة</button><button class="btn-edit" onclick="cancelEdit('deals')" id="btn-cancel-deal" style="display:none;background:#95a5a6;width:100%;padding:15px;font-size:16px;">❌ إلغاء التعديل</button></div>
+<div class="msg" id="m-deals"></div>
+<div class="table-container"><table><thead><tr><th>#</th><th>الرقم</th><th>العميل</th><th>العقار</th><th>النوع</th><th>المبلغ</th><th>العمولة</th><th>التاريخ</th><th>إجراء</th></tr></thead><tbody id="t-deals"></tbody></table></div>
+</div>
 <div class="screen view" id="v-search">
-  <div class="view-header"><h2>🔍 البحث</h2><button class="back-btn" onclick="go('home')">← الرئيسية</button></div>
-  <div class="search-bar">
-    <input type="text" id="searchInput" placeholder="ابحث بالاسم، الجوال..." onkeydown="if(event.key==='Enter') doSearch()">
-    <select id="searchScope"><option value="all">الكل</option><option value="clients">العملاء</option><option value="properties">العقارات</option><option value="requests">الطلبات</option><option value="deals">الصفقات</option></select>
-    <button class="btn-save" onclick="doSearch()">🔎 بحث</button>
-  </div>
-  <div id="searchResults" class="results"><div class="empty">اكتب كلمة للبحث...</div></div>
+<div class="view-header"><h2>🔍 البحث الشامل</h2><button class="back-btn" onclick="go('home')">← الرئيسية</button></div>
+<div class="search-bar"><input type="text" id="searchInput" placeholder="ابحث..." onkeydown="if(event.key==='Enter') doSearch()"><select id="searchScope"><option value="all">الكل</option><option value="clients">العملاء</option><option value="properties">العقارات</option><option value="requests">الطلبات</option><option value="deals">الصفقات</option></select><button class="btn-save" onclick="doSearch()">🔎 بحث</button></div>
+<div id="searchResults" class="results"><div class="empty">اكتب كلمة للبحث...</div></div>
 </div>
-
-<!-- ======= نافذة البحث والتعديل ======= -->
-<div id="searchModal" class="modal">
-  <div class="modal-content">
-    <div class="modal-header"><h3 id="modalTitle">اختر السجل</h3><button class="close-btn" onclick="closeModal()">إغلاق ✖</button></div>
-    <input type="text" id="modalSearchInput" class="modal-search" placeholder="ابحث..." onkeyup="filterModalData()">
-    <div class="modal-table-container"><table id="modalTable"><thead id="modalTableHead"></thead><tbody id="modalTableBody"></tbody></table></div>
-  </div>
-</div>
-
-<!-- ======= نافذة الواتساب ======= -->
-<div id="whatsappModal" class="modal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3>إرسال رسالة واتساب</h3>
-      <button class="close-btn" onclick="closeWaModal()">إغلاق ✖</button>
-    </div>
-    <div style="margin-bottom: 15px;">
-      <label>العميل: <span id="waClientName" style="color: #2980b9; font-size: 16px;"></span></label><br>
-      <label>الجوال: <span id="waClientPhone" style="color: #2980b9; font-size: 16px;"></span></label>
-    </div>
-    <label>نص الرسالة:</label>
-    <textarea id="waMessage" rows="4" placeholder="اكتب رسالتك هنا..." style="margin-bottom: 15px;"></textarea>
-    <div id="waSuccessMessage" style="display:none; background: #e8f8f5; border: 1px solid #25D366; color: #186a3b; padding: 15px; border-radius: 8px; margin-bottom: 15px; text-align: center; font-weight: bold;">
-      ✅ تم فتح الواتساب! <br> أرسل الرسالة هناك، ثم ارجع هنا واضغط "العودة للنظام".
-    </div>
-    <div class="buttons">
-      <button class="btn-wa" onclick="sendWaMessage()" style="padding: 15px; font-size: 16px; width: 100%; border-radius: 8px;">🚀 إرسال عبر واتساب</button>
-      <button class="btn-edit" onclick="closeWaModal()" style="background:#7f8c8d; padding: 15px; font-size: 16px; width: 100%; border-radius: 8px;">📱 العودة للنظام</button>
-    </div>
-  </div>
-</div>
-
-<!-- ======= نافذة إضافة مدينة جديدة ======= -->
-<div id="addCityModal" class="modal">
-  <div class="modal-content" style="max-width: 400px;">
-    <div class="modal-header">
-      <h3>إضافة مدينة جديدة</h3>
-      <button class="close-btn" onclick="closeAddCityModal()">إغلاق ✖</button>
-    </div>
-    <label>اسم المدينة:</label>
-    <input type="text" id="newCityName" placeholder="اكتب اسم المدينة..." style="margin-bottom: 15px;">
-    <div class="buttons">
-      <button class="btn-save" onclick="saveNewCity()" style="background: #2980b9;">➕ إضافة المدينة</button>
-    </div>
-  </div>
-</div>
-
+<div id="searchModal" class="modal"><div class="modal-content"><div class="modal-header"><h3 id="modalTitle">اختر السجل</h3><button class="close-btn" onclick="closeModal()">إغلاق ✖</button></div><input type="text" id="modalSearchInput" class="modal-search" placeholder="ابحث..." onkeyup="filterModalData()"><div class="modal-table-container"><table id="modalTable"><thead id="modalTableHead"></thead><tbody id="modalTableBody"></tbody></table></div></div></div>
+<div id="clientProfileModal" class="modal"><div class="modal-content"><div class="modal-header"><h3 id="profileTitle">ملف العميل</h3><button class="close-btn" onclick="document.getElementById('clientProfileModal').style.display='none'">إغلاق ✖</button></div><div id="profileContent" style="padding-bottom:20px;"></div></div></div>
+<div id="whatsappModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>إرسال رسالة واتساب</h3><button class="close-btn" onclick="closeWaModal()">إغلاق ✖</button></div><div style="margin-bottom:15px;"><label>العميل: <span id="waClientName" style="color:#2980b9;font-size:16px;"></span></label><br><label>الجوال: <span id="waClientPhone" style="color:#2980b9;font-size:16px;"></span></label></div><label>نص الرسالة:</label><textarea id="waMessage" rows="4" style="margin-bottom:15px;"></textarea><div id="waSuccessMessage" style="display:none;background:#e8f8f5;border:1px solid #25D366;color:#186a3b;padding:15px;border-radius:8px;margin-bottom:15px;text-align:center;font-weight:bold;">✅ تم فتح الواتساب! أرسل الرسالة ثم ارجع.</div><div class="buttons"><button class="btn-wa" onclick="sendWaMessage()" style="padding:15px;font-size:16px;width:100%;border-radius:8px;">🚀 إرسال عبر واتساب</button><button class="btn-edit" onclick="closeWaModal()" style="background:#7f8c8d;padding:15px;font-size:16px;width:100%;border-radius:8px;">📱 العودة للنظام</button></div></div></div>
+<div id="addCityModal" class="modal"><div class="modal-content" style="max-width:400px;"><div class="modal-header"><h3>إضافة مدينة جديدة</h3><button class="close-btn" onclick="closeAddCityModal()">إغلاق ✖</button></div><label>اسم المدينة:</label><input type="text" id="newCityName" style="margin-bottom:15px;"><div class="buttons"><button class="btn-save" onclick="saveNewCity()" style="background:#2980b9;">➕ إضافة المدينة</button></div></div></div>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const SUPABASE_URL = 'https://hxgienqrffuqqiyomzoz.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_oSj-7xYUogxnSHLD0c46lg_PEN-W6bV';
-const dbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const SUPABASE_URL='https://hxgienqrffuqqiyomzoz.supabase.co';const SUPABASE_KEY='sb_publishable_oSj-7xYUogxnSHLD0c46lg_PEN-W6bV';const dbClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);let DB={clients:[],properties:[],requests:[],deals:[],cities:[]};let editingId={clients:null,properties:null,requests:null,deals:null};let currentModalType=null;let currentWaPhone='';const todayStr=new Date().toISOString().split('T')[0];
+async function loadCities(){const{data,error}=await dbClient.from('cities').select('*').order('name');if(!error)DB.cities=data||[];refreshCitySelects();}
+function refreshCitySelects(){const options='<option value="">اختر المدينة</option>'+DB.cities.map(c=>`<option value="${c.name}">${c.name}</option>`).join('');document.getElementById('c_city').innerHTML=options;document.getElementById('p_city').innerHTML=options;}
+function openAddCityModal(){document.getElementById('addCityModal').style.display='flex';document.getElementById('newCityName').value='';}
+function closeAddCityModal(){document.getElementById('addCityModal').style.display='none';}
+async function saveNewCity(){const name=document.getElementById('newCityName').value.trim();if(!name)return alert('اكتب اسم المدينة');const{error}=await dbClient.from('cities').insert([{name}]);if(error)return alert('❌ خطأ: '+error.message);await loadCities();closeAddCityModal();alert('✅ تمت إضافة المدينة بنجاح');}
+function checkClientForm(){const name=document.getElementById('c_name').value.trim(),phone=document.getElementById('c_phone').value.trim(),city=document.getElementById('c_city').value;const validPhone=(phone.length===10&&(phone.startsWith('05')||phone.startsWith('06')));document.getElementById('btn-save-client').disabled=!(name&&validPhone&&city);}
+function checkPropertyForm(){const type=document.getElementById('p_type').value,city=document.getElementById('p_city').value,address=document.getElementById('p_address').value.trim(),area=document.getElementById('p_area').value,price=document.getElementById('p_price').value;document.getElementById('btn-save-property').disabled=!(type&&city&&address&&area&&price);}
+function checkRequestForm(){document.getElementById('btn-save-request').disabled=!(document.getElementById('r_client').value&&document.getElementById('r_property').value);}
+function checkDealForm(){document.getElementById('btn-save-deal').disabled=!(document.getElementById('d_request').value&&document.getElementById('d_client').value&&document.getElementById('d_property').value&&document.getElementById('d_amount').value);}
+function go(name){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById('v-'+name).classList.add('active');if(name==='search')document.getElementById('searchResults').innerHTML='<div class="empty">اكتب كلمة للبحث...</div>';}
+function v(id){return document.getElementById(id).value.trim();}
+function n(id){return Math.abs(Number(document.getElementById(id).value));}
+function msg(key,text,ok=true){const el=document.getElementById('m-'+key);el.textContent=text;el.className='msg '+(ok?'ok':'err');setTimeout(()=>el.className='msg',3000);}
+function getClientName(id){const c=DB.clients.find(c=>String(c.id)===String(id));return c?c.name:'⚠️ غير موجود';}
+function getPropDesc(id){const p=DB.properties.find(p=>String(p.id)===String(id));return p?p.type+' - '+p.address:'⚠️ غير موجود';}
+function formatPhone(phone){return phone.replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/\s/g,'');}
+async function loadData(){const{data:c}=await dbClient.from('clients').select('*').order('id');const{data:p}=await dbClient.from('properties').select('*').order('id');const{data:r}=await dbClient.from('requests').select('*').order('id');const{data:d}=await dbClient.from('deals').select('*').order('id');DB.clients=c||[];DB.properties=p||[];DB.requests=r||[];DB.deals=d||[];renderAll();refreshSelects();await loadCities();}
+function renderAll(){document.getElementById('t-clients').innerHTML=DB.clients.map((c,i)=>`<tr><td>${i+1}</td><td>${c.id}</td><td>${c.name}</td><td>${c.phone}</td><td>${c.city}</td><td><button class="btn-view" onclick="viewClientProfile('${c.id}')">ملف العميل</button> <button class="btn-edit" onclick="editClient('${c.id}')">تعديل</button> <button class="btn-del" onclick="delClient('${c.id}')">حذف</button> <button class="btn-wa" onclick="openWaModal('${c.name}', '${c.phone}')">واتساب</button></td></tr>`).join('');document.getElementById('t-properties').innerHTML=DB.properties.map((p,i)=>`<tr><td>${i+1}</td><td>${p.id}</td><td>${p.type}</td><td>${p.city}</td><td>${p.address}</td><td>${p.area}</td><td>${p.price}</td><td>${p.status}</td><td>${p.owner_id?getClientName(p.owner_id):'—'}</td><td>${p.media_url?`<a href="${p.media_url}" target="_blank" style="color:#2980b9;font-weight:bold;">عرض</a>`:'—'}</td><td><button class="btn-edit" onclick="editProperty('${p.id}')">تعديل</button> <button class="btn-del" onclick="delProperty('${p.id}')">حذف</button></td></tr>`).join('');document.getElementById('t-requests').innerHTML=DB.requests.map((r,i)=>`<tr><td>${i+1}</td><td>${r.id}</td><td>${getClientName(r.client_id)}</td><td>${getPropDesc(r.property_id)}</td><td>${r.type}</td><td>${r.date}</td><td>${r.status}</td><td><button class="btn-edit" onclick="editRequest('${r.id}')">تعديل</button> <button class="btn-del" onclick="delRequest('${r.id}')">حذف</button></td></tr>`).join('');document.getElementById('t-deals').innerHTML=DB.deals.map((d,i)=>`<tr><td>${i+1}</td><td>${d.id}</td><td>${getClientName(d.client_id)}</td><td>${getPropDesc(d.property_id)}</td><td>${d.type}</td><td>${d.amount}</td><td>${d.commission}</td><td>${d.date}</td><td><button class="btn-edit" onclick="editDeal('${d.id}')">تعديل</button> <button class="btn-del" onclick="delDeal('${d.id}')">حذف</button></td></tr>`).join('');}
+function refreshSelects(){const clients='<option value="">اختر عميلًا</option>'+DB.clients.map(c=>`<option value="${c.id}">${c.name} (${c.id})</option>`).join('');document.getElementById('r_client').innerHTML=clients;document.getElementById('d_client').innerHTML=clients;document.getElementById('p_owner').innerHTML=clients;const props='<option value="">اختر عقارًا</option>'+DB.properties.map(p=>`<option value="${p.id}">${p.type} - ${p.address} (${p.id})</option>`).join('');document.getElementById('r_property').innerHTML=props;document.getElementById('d_property').innerHTML=props;document.getElementById('d_request').innerHTML='<option value="">اختر طلبًا</option>'+DB.requests.map(r=>`<option value="${r.id}">طلب ${r.id} — ${getClientName(r.client_id)}</option>`).join('');}
+function editClient(id){const c=DB.clients.find(x=>String(x.id)===String(id));if(!c)return;document.getElementById('c_name').value=c.name;document.getElementById('c_phone').value=c.phone;document.getElementById('c_city').value=c.city;editingId.clients=id;document.getElementById('btn-save-client').innerHTML='💾 تحديث';document.getElementById('btn-cancel-client').style.display='inline-block';window.scrollTo(0,0);checkClientForm();}
+function editProperty(id){const p=DB.properties.find(x=>String(x.id)===String(id));if(!p)return;document.getElementById('p_type').value=p.type;document.getElementById('p_city').value=p.city;document.getElementById('p_address').value=p.address;document.getElementById('p_area').value=p.area;document.getElementById('p_price').value=p.price;document.getElementById('p_status').value=p.status;document.getElementById('p_owner').value=p.owner_id||'';editingId.properties=id;document.getElementById('btn-save-property').innerHTML='💾 تحديث';document.getElementById('btn-cancel-property').style.display='inline-block';window.scrollTo(0,0);checkPropertyForm();}
+function editRequest(id){const r=DB.requests.find(x=>String(x.id)===String(id));if(!r)return;document.getElementById('r_client').value=r.client_id;document.getElementById('r_property').value=r.property_id;document.getElementById('r_type').value=r.type;document.getElementById('r_status').value=r.status;editingId.requests=id;document.getElementById('btn-save-request').innerHTML='💾 تحديث';document.getElementById('btn-cancel-request').style.display='inline-block';window.scrollTo(0,0);checkRequestForm();}
+function editDeal(id){const d=DB.deals.find(x=>String(x.id)===String(id));if(!d)return;document.getElementById('d_request').value=d.request_id;document.getElementById('d_client').value=d.client_id;document.getElementById('d_property').value=d.property_id;document.getElementById('d_type').value=d.type;document.getElementById('d_amount').value=d.amount;document.getElementById('d_commission').value=d.commission;editingId.deals=id;document.getElementById('btn-save-deal').innerHTML='💾 تحديث';document.getElementById('btn-cancel-deal').style.display='inline-block';window.scrollTo(0,0);checkDealForm();}
+function cancelEdit(type){editingId[type]=null;if(type==='clients'){document.getElementById('c_name').value='';document.getElementById('c_phone').value='';document.getElementById('c_city').value='';document.getElementById('btn-save-client').innerHTML='💾 حفظ';document.getElementById('btn-cancel-client').style.display='none';document.getElementById('btn-save-client').disabled=true;}
+else if(type==='properties'){document.getElementById('p_type').value='';document.getElementById('p_city').value='';document.getElementById('p_address').value='';document.getElementById('p_area').value='';document.getElementById('p_price').value='';document.getElementById('p_media').value='';document.getElementById('p_owner').value='';document.getElementById('btn-save-property').innerHTML='💾 حفظ';document.getElementById('btn-cancel-property').style.display='none';document.getElementById('btn-save-property').disabled=true;}
+else if(type==='requests'){document.getElementById('r_client').value='';document.getElementById('r_property').value='';document.getElementById('btn-save-request').innerHTML='💾 حفظ';document.getElementById('btn-cancel-request').style.display='none';document.getElementById('btn-save-request').disabled=true;}
+else if(type==='deals'){document.getElementById('d_request').value='';document.getElementById('d_client').value='';document.getElementById('d_property').value='';document.getElementById('d_amount').value='';document.getElementById('d_commission').value='';document.getElementById('btn-save-deal').innerHTML='💾 حفظ';document.getElementById('btn-cancel-deal').style.display='none';document.getElementById('btn-save-deal').disabled=true;}}
 
-let DB = { clients: [], properties: [], requests: [], deals: [], cities: [] };
-let editingId = { clients: null, properties: null, requests: null, deals: null };
-let currentModalType = null;
-let currentWaPhone = '';
-const todayStr = new Date().toISOString().split('T')[0];
+function openWaModal(name,phone){currentWaPhone=phone;document.getElementById('waClientName').textContent=name;document.getElementById('waClientPhone').textContent=phone;document.getElementById('waMessage').value=`مرحباً ${name}،\n`;document.getElementById('waSuccessMessage').style.display='none';document.getElementById('whatsappModal').style.display='flex';}
+function closeWaModal(){document.getElementById('whatsappModal').style.display='none';}
+function sendWaMessage(){const message=document.getElementById('waMessage').value;if(!message)return alert('اكتب رسالتك أولاً');let formattedPhone=currentWaPhone;if(formattedPhone.startsWith('0')){formattedPhone='966'+formattedPhone.substring(1);}const url=`https://wa.me/${formattedPhone}?text=${encodeURIComponent(message)}`;window.open(url,'_blank');document.getElementById('waSuccessMessage').style.display='block';}
 
-// ======== دوال إدارة المدن ========
-async function loadCities() {
-  const { data, error } = await dbClient.from('cities').select('*').order('name');
-  if (!error) DB.cities = data || [];
-  refreshCitySelects();
-}
+function openModal(type){currentModalType=type;document.getElementById('searchModal').style.display='flex';document.getElementById('modalSearchInput').value='';let title='',head='';if(type==='clients'){title='اختر عميلاً للتعديل';head='<tr><th>الرقم</th><th>الاسم</th><th>الجوال</th><th>المدينة</th></tr>';}else if(type==='properties'){title='اختر عقاراً للتعديل';head='<tr><th>الرقم</th><th>النوع</th><th>العنوان</th><th>السعر</th></tr>';}else if(type==='requests'){title='اختر طلباً للتعديل';head='<tr><th>الرقم</th><th>العميل</th><th>العقار</th><th>النوع</th></tr>';}else if(type==='deals'){title='اختر صفقة للتعديل';head='<tr><th>الرقم</th><th>العميل</th><th>المبلغ</th><th>التاريخ</th></tr>';}document.getElementById('modalTitle').textContent=title;document.getElementById('modalTableHead').innerHTML=head;filterModalData();}
+function closeModal(){document.getElementById('searchModal').style.display='none';currentModalType=null;}
 
-function refreshCitySelects() {
-  const options = '<option value="">اختر المدينة</option>' + DB.cities.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
-  document.getElementById('c_city').innerHTML = options;
-  document.getElementById('p_city').innerHTML = options;
-}
+function filterModalData(){const q=document.getElementById('modalSearchInput').value.toLowerCase();let rowsHtml='';if(currentModalType==='clients'){const filtered=DB.clients.filter(c=>c.name.toLowerCase().includes(q)||c.phone.includes(q)||c.city.toLowerCase().includes(q));rowsHtml=filtered.map(c=>`<tr onclick="selectFromModal('clients', '${c.id}')"><td>${c.id}</td><td>${c.name}</td><td>${c.phone}</td><td>${c.city}</td></tr>`).join('');}else if(currentModalType==='properties'){const filtered=DB.properties.filter(p=>p.type.toLowerCase().includes(q)||p.address.toLowerCase().includes(q)||p.city.toLowerCase().includes(q)||String(p.price).includes(q));rowsHtml=filtered.map(p=>`<tr onclick="selectFromModal('properties', '${p.id}')"><td>${p.id}</td><td>${p.type}</td><td>${p.address}</td><td>${p.price}</td></tr>`).join('');}else if(currentModalType==='requests'){const filtered=DB.requests.filter(r=>getClientName(r.client_id).toLowerCase().includes(q)||getPropDesc(r.property_id).toLowerCase().includes(q)||r.type.toLowerCase().includes(q));rowsHtml=filtered.map(r=>`<tr onclick="selectFromModal('requests', '${r.id}')"><td>${r.id}</td><td>${getClientName(r.client_id)}</td><td>${getPropDesc(r.property_id)}</td><td>${r.type}</td></tr>`).join('');}else if(currentModalType==='deals'){const filtered=DB.deals.filter(d=>getClientName(d.client_id).toLowerCase().includes(q)||getPropDesc(d.property_id).toLowerCase().includes(q)||String(d.amount).includes(q));rowsHtml=filtered.map(d=>`<tr onclick="selectFromModal('deals', '${d.id}')"><td>${d.id}</td><td>${getClientName(d.client_id)}</td><td>${d.amount}</td><td>${d.date}</td></tr>`).join('');}if(!rowsHtml)rowsHtml='<tr><td colspan="4" style="text-align:center;padding:20px;">لا توجد نتائج مطابقة</td></tr>';document.getElementById('modalTableBody').innerHTML=rowsHtml;}
 
-function openAddCityModal() {
-  document.getElementById('addCityModal').style.display = 'flex';
-  document.getElementById('newCityName').value = '';
-}
+function selectFromModal(type,id){closeModal();if(type==='clients')editClient(id);else if(type==='properties')editProperty(id);else if(type==='requests')editRequest(id);else if(type==='deals')editDeal(id);}
 
-function closeAddCityModal() {
-  document.getElementById('addCityModal').style.display = 'none';
-}
+async function saveClient(){const name=v('c_name'),city=v('c_city');let phone=formatPhone(v('c_phone'));let hasError=false;if(!name){hasError=true;}if(!city){hasError=true;}if(phone.length!==10||(!phone.startsWith('05')&&!phone.startsWith('06'))){hasError=true;}if(hasError)return msg('clients','⚠️ عبّي الحقول الإجبارية',false);const isDuplicate=DB.clients.some(c=>c.name===name&&c.phone===phone&&String(c.id)!==String(editingId.clients));if(isDuplicate)return msg('clients','⚠️ هذا العميل مسجل مسبقاً',false);let error;if(editingId.clients){const res=await dbClient.from('clients').update({name,phone,city}).eq('id',editingId.clients);error=res.error;}else{const res=await dbClient.from('clients').insert([{name,phone,city}]);error=res.error;}if(error)return msg('clients','❌ خطأ: '+error.message,false);await loadData();cancelEdit('clients');msg('clients',editingId.clients?'✅ تم التحديث':'✅ تم الحفظ');}
 
-async function saveNewCity() {
-  const name = document.getElementById('newCityName').value.trim();
-  if (!name) return alert('اكتب اسم المدينة');
-  
-  const { error } = await dbClient.from('cities').insert([{ name }]);
-  if (error) return alert('❌ خطأ: ' + error.message);
-  
-  await loadCities();
-  closeAddCityModal();
-  alert('✅ تمت إضافة المدينة بنجاح');
-}
+async function saveProperty(){const type=v('p_type'),city=v('p_city'),address=v('p_address'),area=n('p_area'),price=n('p_price');const fileInput=document.getElementById('p_media');const owner_id=v('p_owner');if(!type||!city||!address||!area||!price)return msg('properties','⚠️ عبّي الحقول الإجبارية',false);let mediaUrl=null;const file=fileInput.files[0];if(file){msg('properties','⏳ جاري رفع الصورة...',true);const fileName=`${Date.now()}_${file.name.replace(/\s/g,'_')}`;const{error:uploadError}=await dbClient.storage.from('property-media').upload(fileName,file);if(uploadError)return msg('properties','❌ فشل الرفع: '+uploadError.message,false);const{data:urlData}=dbClient.storage.from('property-media').getPublicUrl(fileName);mediaUrl=urlData.publicUrl;}let error;const payload={type,city,address,area,price,status:v('p_status'),owner_id:owner_id||null};if(mediaUrl)payload.media_url=mediaUrl;if(editingId.properties){const res=await dbClient.from('properties').update(payload).eq('id',editingId.properties);error=res.error;}else{const res=await dbClient.from('properties').insert([payload]);error=res.error;}if(error)return msg('properties','❌ خطأ: '+error.message,false);await loadData();cancelEdit('properties');msg('properties',editingId.properties?'✅ تم التحديث':'✅ تم الحفظ');}
 
-// ======== دوال التحقق ========
-function checkClientForm() {
-  const name = document.getElementById('c_name').value.trim();
-  const phone = document.getElementById('c_phone').value.trim();
-  const city = document.getElementById('c_city').value;
-  const validPhone = (phone.length === 10 && (phone.startsWith('05') || phone.startsWith('06')));
-  document.getElementById('btn-save-client').disabled = !(name && validPhone && city);
-}
+async function saveRequest(){const client_id=v('r_client'),property_id=v('r_property'),date=todayStr;if(!client_id||!property_id)return msg('requests','⚠️ عبّي الحقول الإجبارية',false);const payload={client_id,property_id,type:v('r_type'),date,status:v('r_status')};let error;if(editingId.requests){const res=await dbClient.from('requests').update(payload).eq('id',editingId.requests);error=res.error;}else{const res=await dbClient.from('requests').insert([payload]);error=res.error;}if(error)return msg('requests','❌ خطأ: '+error.message,false);await loadData();cancelEdit('requests');msg('requests',editingId.requests?'✅ تم التحديث':'✅ تم الحفظ');}
 
-function checkPropertyForm() {
-  const type = document.getElementById('p_type').value;
-  const city = document.getElementById('p_city').value;
-  const address = document.getElementById('p_address').value.trim();
-  const area = document.getElementById('p_area').value;
-  const price = document.getElementById('p_price').value;
-  document.getElementById('btn-save-property').disabled = !(type && city && address && area && price);
-}
+async function saveDeal(){const req_id=v('d_request'),client_id=v('d_client'),property_id=v('d_property'),date=todayStr,amount=n('d_amount');if(!req_id||!client_id||!property_id||!amount)return msg('deals','⚠️ عبّي الحقول الإجبارية',false);const payload={request_id:req_id,client_id,property_id,type:v('d_type'),amount,commission:n('d_commission'),date};let error;if(editingId.deals){const res=await dbClient.from('deals').update(payload).eq('id',editingId.deals);error=res.error;}else{const res=await dbClient.from('deals').insert([payload]);error=res.error;}if(error)return msg('deals','❌ خطأ: '+error.message,false);await loadData();cancelEdit('deals');msg('deals',editingId.deals?'✅ تم التحديث':'✅ تم الحفظ');}
 
-function checkRequestForm() {
-  const client = document.getElementById('r_client').value;
-  const property = document.getElementById('r_property').value;
-  document.getElementById('btn-save-request').disabled = !(client && property);
-}
+async function delClient(id){if(DB.requests.some(r=>String(r.client_id)===String(id)))return alert('❌ يوجد طلبات مرتبطة');if(!confirm('حذف؟'))return;await dbClient.from('clients').delete().eq('id',id);await loadData();}
+async function delProperty(id){if(DB.requests.some(r=>String(r.property_id)===String(id)))return alert('❌ يوجد طلبات مرتبطة');if(!confirm('حذف؟'))return;await dbClient.from('properties').delete().eq('id',id);await loadData();}
+async function delRequest(id){if(DB.deals.some(d=>String(d.request_id)===String(id)))return alert('❌ يوجد صفقة مرتبطة');if(!confirm('حذف؟'))return;await dbClient.from('requests').delete().eq('id',id);await loadData();}
+async function delDeal(id){if(!confirm('حذف؟'))return;await dbClient.from('deals').delete().eq('id',id);await loadData();}
 
-function checkDealForm() {
-  const req = document.getElementById('d_request').value;
-  const client = document.getElementById('d_client').value;
-  const property = document.getElementById('d_property').value;
-  const amount = document.getElementById('d_amount').value;
-  document.getElementById('btn-save-deal').disabled = !(req && client && property && amount);
-}
+function doSearch(){const q=document.getElementById('searchInput').value.trim().toLowerCase();const scope=document.getElementById('searchScope').value;const box=document.getElementById('searchResults');if(!q){box.innerHTML='<div class="empty">اكتب كلمة للبحث</div>';return;}let total=0,html='';function section(title,rows,keys,heads){if(!rows.length)return '';total+=rows.length;let s=`<h3>${title} <span class="badge">${rows.length}</span></h3><div class="table-container"><table><thead><tr>`;heads.forEach(h=>s+=`<th>${h}</th>`);s+='</tr></thead><tbody>';rows.forEach(r=>{s+='<tr>';keys.forEach(k=>s+=`<td>${r[k]??''}</td>`);s+='</tr>';});return s+'</tbody></table></div>';}if(scope==='all'||scope==='clients'){const rows=DB.clients.filter(c=>c.name.toLowerCase().includes(q)||c.phone.includes(q)||c.city.toLowerCase().includes(q));html+=section('👥 العملاء',rows,['id','name','phone','city'],['الرقم','الاسم','الجوال','المدينة']);}if(scope==='all'||scope==='properties'){const rows=DB.properties.filter(p=>p.type.toLowerCase().includes(q)||p.city.toLowerCase().includes(q)||p.address.toLowerCase().includes(q)||String(p.price).includes(q)||p.status.toLowerCase().includes(q));html+=section('🏠 العقارات',rows,['id','type','city','address','price','status'],['الرقم','النوع','المدينة','العنوان','السعر','الحالة']);}if(scope==='all'||scope==='requests'){const rows=DB.requests.filter(r=>getClientName(r.client_id).toLowerCase().includes(q)||getPropDesc(r.property_id).toLowerCase().includes(q)||r.type.toLowerCase().includes(q)||r.date.includes(q)||r.status.toLowerCase().includes(q)).map(r=>({...r,client:getClientName(r.client_id),property:getPropDesc(r.property_id)}));html+=section('📋 الطلبات',rows,['id','client','property','type','date','status'],['الرقم','العميل','العقار','النوع','التاريخ','الحالة']);}if(scope==='all'||scope==='deals'){const rows=DB.deals.filter(d=>getClientName(d.client_id).toLowerCase().includes(q)||getPropDesc(d.property_id).toLowerCase().includes(q)||String(d.amount).includes(q)||String(d.commission).includes(q)||d.date.includes(q)||d.type.toLowerCase().includes(q)).map(d=>({...d,client:getClientName(d.client_id),property:getPropDesc(d.property_id)}));html+=section('💰 الصفقات',rows,['id','client','property','type','amount','commission','date'],['الرقم','العميل','العقار','النوع','المبلغ','العمولة','التاريخ']);}box.innerHTML=total===0?'<div class="empty">لا توجد نتائج</div>':`<div style="color:#27ae60;font-weight:bold;margin-bottom:10px">✅ ${total} نتيجة</div>`+html;}
 
-// ======== التنقل ========
-function go(name) {
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.getElementById('v-' + name).classList.add('active');
-  if (name === 'search') document.getElementById('searchResults').innerHTML = '<div class="empty">اكتب كلمة للبحث...</div>';
-}
+function viewClientProfile(id){const client=DB.clients.find(c=>String(c.id)===String(id));if(!client)return;const props=DB.properties.filter(p=>String(p.owner_id)===String(id));const reqs=DB.requests.filter(r=>String(r.client_id)===String(id));const cls=DB.deals.filter(d=>String(d.client_id)===String(id));let roles=[];if(props.length>0)roles.push('بائع/مؤجر');if(reqs.length>0)roles.push('مشتري/مستأجر');if(cls.length>0)roles.push('مستثمر/بائع');let html=`<div style="margin-bottom:15px;padding:15px;background:#f4f6f9;border-radius:8px;"><h4 style="color:#2c3e50;margin-bottom:8px;">بيانات العميل:</h4><p><strong>الاسم:</strong> ${client.name}</p><p><strong>الجوال:</strong> ${client.phone}</p><p><strong>المدينة:</strong> ${client.city}</p><p><strong>الأدوار:</strong> <span style="color:#2980b9;">${roles.length?roles.join(' | '):'لا يوجد نشاط'}</span></p></div>`;if(props.length)html+=`<h4 style="color:#27ae60;border-bottom:2px solid #27ae60;padding-bottom:5px;margin-bottom:10px;">🏠 عروضه (عقارات مسجلة باسمه):</h4><ul style="padding-right:20px;margin-bottom:20px;">${props.map(p=>`<li>${p.type} - ${p.address} (${p.price} ريال)</li>`).join('')}</ul>`;if(reqs.length)html+=`<h4 style="color:#e67e22;border-bottom:2px solid #e67e22;padding-bottom:5px;margin-bottom:10px;">📋 طلباته (مشتري/مستأجر):</h4><ul style="padding-right:20px;margin-bottom:20px;">${reqs.map(r=>`<li>${r.type} - ${getPropDesc(r.property_id)} (${r.status})</li>`).join('')}</ul>`;if(cls.length)html+=`<h4 style="color:#8e44ad;border-bottom:2px solid #8e44ad;padding-bottom:5px;margin-bottom:10px;">💰 صفقاته:</h4><ul style="padding-right:20px;margin-bottom:20px;">${cls.map(d=>`<li>${d.type} - ${getPropDesc(d.property_id)} (${d.amount} ريال)</li>`).join('')}</ul>`;document.getElementById('profileTitle').textContent='ملف العميل: '+client.name;document.getElementById('profileContent').innerHTML=html;document.getElementById('clientProfileModal').style.display='flex';}
 
-function v(id) { return document.getElementById(id).value.trim(); }
-function n(id) { return Math.abs(Number(document.getElementById(id).value)); }
-function msg(key, text, ok = true) {
-  const el = document.getElementById('m-' + key);
-  el.textContent = text;
-  el.className = 'msg ' + (ok ? 'ok' : 'err');
-  setTimeout(() => el.className = 'msg', 3000);
-}
-function getClientName(id) { const c = DB.clients.find(c => String(c.id) === String(id)); return c ? c.name : '⚠️ غير موجود'; }
-function getPropDesc(id) { const p = DB.properties.find(p => String(p.id) === String(id)); return p ? p.type + ' - ' + p.address : '⚠️ غير موجود'; }
-function formatPhone(phone) { return phone.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/\s/g, ''); }
+function exportExcel(){if(DB.clients.length+DB.properties.length+DB.requests.length+DB.deals.length===0)return alert('⚠️ لا توجد بيانات');const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(DB.clients.map(c=>({'رقم العميل':c.id,'الاسم':c.name,'الجوال':c.phone,'المدينة':c.city}))),'العملاء');XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(DB.properties.map(p=>({'رقم العقار':p.id,'النوع':p.type,'المدينة':p.city,'العنوان':p.address,'المساحة':p.area,'السعر':p.price,'الحالة':p.status,'المالك':getClientName(p.owner_id),'الصورة':p.media_url||'لا يوجد'}))),'العقارات');XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(DB.requests.map(r=>({'رقم الطلب':r.id,'اسم العميل':getClientName(r.client_id),'وصف العقار':getPropDesc(r.property_id),'النوع':r.type,'التاريخ':r.date,'الحالة':r.status}))),'الطلبات');XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(DB.deals.map(d=>({'رقم الصفقة':d.id,'اسم العميل':getClientName(d.client_id),'وصف العقار':getPropDesc(d.property_id),'النوع':d.type,'المبلغ':d.amount,'العمولة':d.commission,'التاريخ':d.date}))),'الصفقات');const date=new Date().toISOString().slice(0,10);XLSX.writeFile(wb,`مكتب_وجه_التواصل_${date}.xlsx`);alert('✅ تم تصدير الملف بنجاح!');}
 
-function clearAllErrors() {
-  document.querySelectorAll('input, select, textarea').forEach(el => {
-    el.style.border = '1px solid #ccc';
-    el.style.backgroundColor = '#fff';
-  });
-}
-
-async function loadData() {
-  const { data: c } = await dbClient.from('clients').select('*').order('id');
-  const { data: p } = await dbClient.from('properties').select('*').order('id');
-  const { data: r } = await dbClient.from('requests').select('*').order('id');
-  const { data: d } = await dbClient.from('deals').select('*').order('id');
-  DB.clients = c || []; DB.properties = p || []; DB.requests = r || []; DB.deals = d || [];
-  renderAll();
-  refreshSelects();
-  await loadCities();
-}
-
-function renderAll() {
-  document.getElementById('t-clients').innerHTML = DB.clients.map((c, i) => `
-    <tr>
-      <td>${i+1}</td><td>${c.id}</td><td>${c.name}</td><td>${c.phone}</td><td>${c.city}</td>
-      <td>
-        <button class="btn-edit" onclick="editClient('${c.id}')">تعديل</button>
-        <button class="btn-del" onclick="delClient('${c.id}')">حذف</button>
-        <button class="btn-wa" onclick="openWaModal('${c.name}', '${c.phone}')">واتساب</button>
-      </td>
-    </tr>`).join('');
-  
-  document.getElementById('t-properties').innerHTML = DB.properties.map((p, i) => `
-    <tr><td>${i+1}</td><td>${p.id}</td><td>${p.type}</td><td>${p.city}</td><td>${p.address}</td><td>${p.area}</td><td>${p.price}</td><td>${p.status}</td>
-    <td>${p.media_url ? `<a href="${p.media_url}" target="_blank" style="color:#2980b9;font-weight:bold;">عرض</a>` : '—'}</td>
-    <td><button class="btn-edit" onclick="editProperty('${p.id}')">تعديل</button> <button class="btn-del" onclick="delProperty('${p.id}')">حذف</button></td></tr>`).join('');
-  
-  document.getElementById('t-requests').innerHTML = DB.requests.map((r, i) => `
-    <tr><td>${i+1}</td><td>${r.id}</td><td>${getClientName(r.client_id)}</td><td>${getPropDesc(r.property_id)}</td><td>${r.type}</td><td>${r.date}</td><td>${r.status}</td>
-    <td><button class="btn-edit" onclick="editRequest('${r.id}')">تعديل</button> <button class="btn-del" onclick="delRequest('${r.id}')">حذف</button></td></tr>`).join('');
-  
-  document.getElementById('t-deals').innerHTML = DB.deals.map((d, i) => `
-    <tr><td>${i+1}</td><td>${d.id}</td><td>${getClientName(d.client_id)}</td><td>${getPropDesc(d.property_id)}</td><td>${d.type}</td><td>${d.amount}</td><td>${d.commission}</td><td>${d.date}</td>
-    <td><button class="btn-edit" onclick="editDeal('${d.id}')">تعديل</button> <button class="btn-del" onclick="delDeal('${d.id}')">حذف</button></td></tr>`).join('');
-}
-
-function refreshSelects() {
-  const clients = '<option value="">اختر عميلًا</option>' + DB.clients.map(c => `<option value="${c.id}">${c.name} (${c.id})</option>`).join
+loadData();
+</script>
+</body>
+</html>
