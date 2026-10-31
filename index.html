@@ -1,422 +1,158 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام سليمان العقاري - إدارة العروض والطلبات</title>
-    <style>
-        body { font-family: Tahoma, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; direction: rtl; }
-        .container { max-width: 950px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        h2, h3 { color: #2c3e50; text-align: center; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; color: #34495e; }
-        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        button { background-color: #27ae60; color: white; border: none; padding: 12px 20px; cursor: pointer; border-radius: 5px; font-size: 16px; width: 100%; }
-        button:hover { background-color: #219653; }
-        .section { margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: center; font-size: 14px; }
-        th { background-color: #f8f9fa; }
-        .row { display: flex; gap: 15px; }
-        .col { flex: 1; }
-        .card { background: #fff; padding: 20px; border-radius: 8px; border: 2px solid #27ae60; margin-bottom: 25px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .new-client-box { background: #f9f9f9; padding: 15px; border: 1px dashed #2980b9; border-radius: 5px; margin-top: 10px; display: none; }
-        .toggle-btn { background: none; color: #2980b9; border: none; padding: 0; cursor: pointer; font-size: 14px; text-decoration: underline; width: auto; margin-top: 5px; }
-        .toggle-btn:hover { color: #1abc9c; background: none; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مكتب وجه التواصل للعقار</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Tahoma,sans-serif}
+body{background:linear-gradient(135deg,#1e3c72,#2a5298,#6a3093);min-height:100vh;padding:15px}
+.screen{background:#fff;max-width:1000px;margin:0 auto;border-radius:16px;padding:25px;box-shadow:0 15px 40px rgba(0,0,0,.3)}
+.header{text-align:center;margin-bottom:20px}
+h1{color:#1e3c72;font-size:22px}
+.subtitle{color:#7f8c8d;font-size:13px;margin-top:6px}
+.view{display:none}.view.active{display:block}
+.view-header{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #ecf0f1;padding-bottom:12px;margin-bottom:20px}
+.view-header h2{color:#2c3e50;font-size:18px}
+.back-btn{background:#7f8c8d;color:#fff;border:none;padding:10px 15px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:14px}
+.home-buttons{display:grid;grid-template-columns:1fr;gap:12px;margin-top:20px}
+.home-btn{display:flex;align-items:center;justify-content:flex-start;gap:15px;padding:20px;border:none;border-radius:12px;cursor:pointer;font-size:16px;font-weight:bold;color:#fff;transition:transform .2s;width:100%}
+.home-btn:active{transform:scale(.98)}.home-btn .icon{font-size:28px}
+.b1{background:linear-gradient(135deg,#2980b9,#3498db)}.b2{background:linear-gradient(135deg,#27ae60,#2ecc71)}.b3{background:linear-gradient(135deg,#e67e22,#f39c12)}.b4{background:linear-gradient(135deg,#8e44ad,#9b59b6)}.b5{background:linear-gradient(135deg,#c0392b,#e74c3c)}.b6{background:linear-gradient(135deg,#16a085,#1abc9c)}
+.form-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:15px}
+label{display:block;font-weight:bold;color:#34495e;margin-bottom:6px;font-size:14px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #ccc;border-radius:8px;font-size:16px;font-family:inherit}
+.buttons{display:flex;flex-direction:column;gap:10px;margin-bottom:15px}
+.btn-save{background:#27ae60;color:#fff;border:none;padding:15px;border-radius:8px;cursor:pointer;font-size:16px;font-weight:bold;width:100%}
+.btn-save:disabled{background:#bdc3c7;cursor:not-allowed}
+.btn-search-modal{background:#2980b9;color:#fff;border:none;padding:15px;border-radius:8px;cursor:pointer;font-size:16px;font-weight:bold;width:100%}
+.btn-edit{background:#f39c12;color:#fff;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:bold}
+.btn-del{background:#e74c3c;color:#fff;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:13px}
+.table-container{width:100%;overflow-x:auto;margin-top:15px;border-radius:8px;border:1px solid #e1e5eb}
+table{width:100%;min-width:600px;border-collapse:collapse;font-size:14px}
+th,td{border:1px solid #e1e5eb;padding:12px 8px;text-align:center}
+th{background:#34495e;color:#fff}
+tr:nth-child(even){background:#f9fafc}
+.msg{margin:10px 0;padding:12px;border-radius:6px;text-align:center;font-weight:bold;display:none}
+.msg.ok{background:#d5f5e3;color:#186a3b;display:block}.msg.err{background:#fadbd8;color:#922b21;display:block}
+.search-bar{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.search-bar input,.search-bar select{width:100%;padding:12px;font-size:16px}
+.empty{text-align:center;color:#95a5a6;padding:25px;font-style:italic}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);z-index:1000;justify-content:center;align-items:flex-end}
+.modal-content{background:#fff;padding:20px;border-radius:20px 20px 0 0;width:100%;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 -5px 15px rgba(0,0,0,.3);overflow-y:auto}
+.modal-header{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #ecf0f1;padding-bottom:10px;margin-bottom:15px}
+.modal-header h3{color:#2c3e50;margin:0;font-size:18px}
+.close-btn{background:#e74c3c;color:white;border:none;padding:8px 12px;border-radius:5px;cursor:pointer;font-weight:bold;font-size:14px}
+.modal-search{width:100%;padding:12px;margin-bottom:15px;border:1px solid #ccc;border-radius:8px;font-size:16px}
+.modal-table-container{overflow-y:auto;flex-grow:1}
+.modal-table-container table{width:100%;min-width:500px;border-collapse:collapse}
+.modal-table-container th,.modal-table-container td{border:1px solid #ddd;padding:10px;text-align:center}
+.modal-table-container th{background:#34495e;color:white;position:sticky;top:0}
+.modal-table-container tbody tr{cursor:pointer;transition:background .2s}
+.modal-table-container tbody tr:hover{background:#d5f5e3}
+</style>
 </head>
 <body>
-
-<div class="container">
-    <h2>نظام إدارة العقارات (عروض وطلبات)</h2>
-    
-    <!-- نموذج إدخال العروض والطلبات والعميل معا -->
-    <div class="card">
-        <h3 style="color: #27ae60; margin-top: 0;">إدخال عرض أو طلب عقاري جديد</h3>
-        <form id="realEstateForm">
-            
-            <div class="form-group">
-                <label>العميل:</label>
-                <select id="selected_client_id" required>
-                    <option value="">اختر العميل المسجل...</option>
-                </select>
-                <!-- زر فتح حقول إضافة عميل جديد -->
-                <button type="button" class="toggle-btn" onclick="toggleNewClientBox()">+ إضافة عميل جديد لربطه مباشرة</button>
-            </div>
-
-            <!-- صندوق إضافة عميل جديد (مخفي حتى يتم الضغط على الزر) -->
-            <div class="new-client-box" id="newClientBox">
-                <h4 style="margin-top: 0; color: #2980b9;">إضافة بيانات عميل جديد</h4>
-                <div class="row">
-                    <div class="col form-group">
-                        <label>اسم العميل:</label>
-                        <input type="text" id="new_client_name" placeholder="اسم العميل الكامل">
-                    </div>
-                    <div class="col form-group">
-                        <label>رقم الجوال:</label>
-                        <input type="text" id="new_client_phone" placeholder="05xxxxxxxx">
-                    </div>
-                </div>
-                <button type="button" style="background-color: #2980b9; width: auto; padding: 8px 15px; font-size: 14px;" onclick="addNewClientInline()">حفظ وإضافة العميل للقائمة</button>
-            </div>
-
-            <div class="form-group" style="margin-top: 15px;">
-                <label>نوع السجل:</label>
-                <select id="type" onchange="togglePriceFields()" required>
-                    <option value="offer">عرض عقار</option>
-                    <option value="request">طلب عقار</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>نوع العقار:</label>
-                <select id="property_type" required>
-                    <option value="دوبلكس">دوبلكس</option>
-                    <option value="أرض">أرض</option>
-                    <option value="شقة">شقة</option>
-                    <option value="عمارة">عمارة</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>المدينة:</label>
-                <select id="city" onchange="updateDistricts()" required>
-                    <option value="">اختر المدينة</option>
-                    <option value="عنيزة">عنيزة</option>
-                    <option value="الرياض">الرياض</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>الحي:</label>
-                <select id="district" required>
-                    <option value="">اختر المدينة أولاً</option>
-                </select>
-            </div>
-
-            <!-- حقل السعر (يظهر في حالة العرض) -->
-            <div class="form-group" id="offerPriceGroup">
-                <label>السعر المطلوب:</label>
-                <input type="number" id="price" placeholder="أدخل سعر العرض">
-            </div>
-
-            <!-- حقول الميزانية (تظهر في حالة الطلب من ... إلى ...) -->
-            <div class="row" id="requestBudgetGroup" style="display: none;">
-                <div class="col form-group">
-                    <label>الحد الأدنى للميزانية (من):</label>
-                    <input type="number" id="budget_min" placeholder="أقل سعر">
-                </div>
-                <div class="col form-group">
-                    <label>الحد الأقصى للميزانية (إلى):</label>
-                    <input type="number" id="budget_max" placeholder="أعلى سعر">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>تفضيل عرض التاريخ:</label>
-                <select id="date_preference">
-                    <option value="ميلادي">ميلادي</option>
-                    <option value="هجري">هجري</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>وضع المطابقة:</label>
-                <select id="matching_mode">
-                    <option value="instant">فوري</option>
-                    <option value="manual">يدوي</option>
-                </select>
-            </div>
-
-            <button type="submit">حفظ السجل وإجراء المطابقة</button>
-        </form>
-    </div>
-
-    <!-- جدول العملاء المسجلين -->
-    <div class="section">
-        <h3>قائمة العملاء المسجلين</h3>
-        <table id="clientsTable">
-            <thead>
-                <tr>
-                    <th>معرف العميل</th>
-                    <th>اسم العميل</th>
-                    <th>رقم الجوال</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td colspan="3">لا توجد عملاء مسجلين حتى الآن</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- جدول العروض والطلبات المدخلة -->
-    <div class="section">
-        <h3>العروض والطلبات المدخلة حديثاً</h3>
-        <table id="entriesTable">
-            <thead>
-                <tr>
-                    <th>رقم السجل</th>
-                    <th>اسم العميل</th>
-                    <th>النوع</th>
-                    <th>نوع العقار</th>
-                    <th>المدينة والحي</th>
-                    <th>السعر / نطاق الميزانية</th>
-                    <th>التاريخ والتفضيل</th>
-                    <th>المطابقة</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td colspan="8">لا توجد سجلات مدخلة في الجلسة الحالية</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- جدول نتائج المطابقة الفورية -->
-    <div class="section">
-        <h3>نتائج المطابقة الفورية</h3>
-        <table id="resultsTable">
-            <thead>
-                <tr>
-                    <th>رقم السجل المطابق</th>
-                    <th>اسم العميل صاحب العرض</th>
-                    <th>نوع العقار</th>
-                    <th>المدينة والحي</th>
-                    <th>السعر</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td colspan="5">لا توجد نتائج مطابقة لهذا الطلب حالياً</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+<div class="screen view active" id="v-home">
+  <div class="header"><div class="logo" style="font-size:50px; text-align:center;">🏢</div><h1>مكتب وجه التواصل للعقار</h1><p class="subtitle">نظام إدارة العقارات والعملاء والصفقات</p></div>
+  <div class="home-buttons">
+    <button class="home-btn b1" onclick="go('clients')"><span class="icon">👥</span><span>إدخال العملاء</span></button>
+    <button class="home-btn b2" onclick="go('properties')"><span class="icon">🏠</span><span>إدخال العقارات</span></button>
+    <button class="home-btn b3" onclick="go('requests')"><span class="icon">📋</span><span>إدخال الطلبات</span></button>
+    <button class="home-btn b4" onclick="go('deals')"><span class="icon">💰</span><span>إدخال الصفقات</span></button>
+    <button class="home-btn b5" onclick="go('search')"><span class="icon">🔍</span><span>البحث والاستعلام</span></button>
+    <button class="home-btn b6" onclick="exportExcel()"><span class="icon">📦</span><span>تصدير كل البيانات إلى Excel</span></button>
+  </div>
 </div>
-
+<div class="screen view" id="v-clients">
+  <div class="view-header"><h2>👥 العملاء</h2><button class="back-btn" onclick="go('home')">← الرئيسية</button></div>
+  <div class="form-grid">
+    <div><label>الاسم <span style="color:red">*</span></label><input type="text" id="c_name" oninput="checkClientForm()"></div>
+    <div><label>الجوال <span style="color:red">*</span></label><input type="text" id="c_phone" maxlength="10" oninput="checkClientForm()"></div>
+    <div><label>المدينة <span style="color:red">*</span></label><input type="text" id="c_city" oninput="checkClientForm()"></div>
+  </div>
+  <div class="buttons"><button class="btn-save" onclick="saveClient()" id="btn-save-client" disabled>💾 حفظ</button><button class="btn-search-modal" onclick="openModal('clients')">🔍 بحث وتعديل</button></div>
+  <div class="msg" id="m-clients"></div>
+  <div class="table-container"><table><thead><tr><th>#</th><th>الرقم</th><th>الاسم</th><th>الجوال</th><th>المدينة</th><th>إجراءات</th></tr></thead><tbody id="t-clients"></tbody></table></div>
+</div>
+<div class="screen view" id="v-properties">
+  <div class="view-header"><h2>🏠 العقارات</h2><button class="back-btn" onclick="go('home')">← الرئيسية</button></div>
+  <div class="form-grid">
+    <div><label>النوع <span style="color:red">*</span></label><select id="p_type" onchange="checkPropertyForm()"><option value="">اختر</option><option>شقة</option><option>فيلا</option><option>أرض</option></select></div>
+    <div><label>المدينة <span style="color:red">*</span></label><input type="text" id="p_city" oninput="checkPropertyForm()"></div>
+    <div><label>العنوان <span style="color:red">*</span></label><input type="text" id="p_address" oninput="checkPropertyForm()"></div>
+    <div><label>المساحة <span style="color:red">*</span></label><input type="number" id="p_area" min="1" oninput="checkPropertyForm()"></div>
+    <div><label>السعر <span style="color:red">*</span></label><input type="number" id="p_price" min="0" oninput="checkPropertyForm()"></div>
+    <div><label>الحالة <span style="color:red">*</span></label><select id="p_status" onchange="checkPropertyForm()"><option>متاح</option><option>مؤجر</option><option>مباع</option></select></div>
+    <div><label>المالك</label><select id="p_owner"><option value="">اختر المالك</option></select></div>
+  </div>
+  <div class="buttons"><button class="btn-save" onclick="saveProperty()" id="btn-save-property" disabled>💾 حفظ</button><button class="btn-search-modal" onclick="openModal('properties')">🔍 بحث وتعديل</button></div>
+  <div class="msg" id="m-properties"></div>
+  <div class="table-container"><table><thead><tr><th>#</th><th>الرقم</th><th>النوع</th><th>المدينة</th><th>العنوان</th><th>المساحة</th><th>السعر</th><th>الحالة</th><th>المالك</th><th>إجراءات</th></tr></thead><tbody id="t-properties"></tbody></table></div>
+</div>
+<div class="screen view" id="v-requests">
+  <div class="view-header"><h2>📋 الطلبات</h2><button class="back-btn" onclick="go('home')">← الرئيسية</button></div>
+  <div class="form-grid">
+    <div><label>العميل <span style="color:red">*</span></label><select id="r_client" onchange="checkRequestForm()"><option value="">اختر</option></select></div>
+    <div><label>العقار <span style="color:red">*</span></label><select id="r_property" onchange="checkRequestForm()"><option value="">اختر</option></select></div>
+    <div><label>النوع <span style="color:red">*</span></label><select id="r_type" onchange="checkRequestForm()"><option>شراء</option><option>إيجار</option><option>معاينة</option></select></div>
+    <div><label>الحالة <span style="color:red">*</span></label><select id="r_status" onchange="checkRequestForm()"><option>جديد</option><option>قيد المعالجة</option><option>مكتمل</option><option>ملغي</option></select></div>
+  </div>
+  <div class="buttons"><button class="btn-save" onclick="saveRequest()" id="btn-save-request" disabled>💾 حفظ</button><button class="btn-search-modal" onclick="openModal('requests')">🔍 بحث وتعديل</button></div>
+  <div class="msg" id="m-requests"></div>
+  <div class="table-container"><table><thead><tr><th>#</th><th>الرقم</th><th>العميل</th><th>العقار</th><th>النوع</th><th>التاريخ</th><th>الحالة</th><th>إجراء</th></tr></thead><tbody id="t-requests"></tbody></table></div>
+</div>
+<div class="screen view" id="v-deals">
+  <div class="view-header"><h2>💰 الصفقات</h2><button class="back-btn" onclick="go('home')">← الرئيسية</button></div>
+  <div class="form-grid">
+    <div><label>الطلب <span style="color:red">*</span></label><select id="d_request" onchange="checkDealForm()"><option value="">اختر</option></select></div>
+    <div><label>العميل <span style="color:red">*</span></label><select id="d_client" onchange="checkDealForm()"><option value="">اختر</option></select></div>
+    <div><label>العقار <span style="color:red">*</span></label><select id="d_property" onchange="checkDealForm()"><option value="">اختر</option></select></div>
+    <div><label>النوع <span style="color:red">*</span></label><select id="d_type" onchange="checkDealForm()"><option>بيع</option><option>إيجار</option></select></div>
+    <div><label>المبلغ <span style="color:red">*</span></label><input type="number" id="d_amount" min="0" oninput="checkDealForm()"></div>
+    <div><label>العمولة</label><input type="number" id="d_commission" min="0"></div>
+  </div>
+  <div class="buttons"><button class="btn-save" onclick="saveDeal()" id="btn-save-deal" disabled>💾 حفظ</button><button class="btn-search-modal" onclick="openModal('deals')">🔍 بحث وتعديل</button></div>
+  <div class="msg" id="m-deals"></div>
+  <div class="table-container"><table><thead><tr><th>#</th><th>الرقم</th><th>العميل</th><th>العقار</th><th>النوع</th><th>المبلغ</th><th>العمولة</th><th>التاريخ</th><th>إجراء</th></tr></thead><tbody id="t-deals"></tbody></table></div>
+</div>
+<div class="screen view" id="v-search">
+  <div class="view-header"><h2>🔍 البحث الشامل</h2><button class="back-btn" onclick="go('home')">← الرئيسية</button></div>
+  <div class="search-bar"><input type="text" id="searchInput" placeholder="ابحث..." onkeydown="if(event.key==='Enter') doSearch()"><select id="searchScope"><option value="all">الكل</option><option value="clients">العملاء</option><option value="properties">العقارات</option><option value="requests">الطلبات</option><option value="deals">الصفقات</option></select><button class="btn-save" onclick="doSearch()">🔎 بحث</button></div>
+  <div id="searchResults" class="results"><div class="empty">اكتب كلمة للبحث...</div></div>
+</div>
+<div id="searchModal" class="modal"><div class="modal-content"><div class="modal-header"><h3 id="modalTitle">اختر السجل</h3><button class="close-btn" onclick="closeModal()">إغلاق ✖</button></div><input type="text" id="modalSearchInput" class="modal-search" placeholder="ابحث..." onkeyup="filterModalData()"><div class="modal-table-container"><table id="modalTable"><thead id="modalTableHead"></thead><tbody id="modalTableBody"></tbody></table></div></div></div>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <script>
-    let clientsList = [];
-    let allRecords = [];
-    let clientCounter = 1;
-    let recordCounter = 1;
-
-    const districtsData = {
-        "عنيزة": ["حي الوفاء", "حي الفاخرية"],
-        "الرياض": ["حي المونسية", "حي النرجس", "حي الحمراء", "حي الرمال"]
-    };
-
-    function updateDistricts() {
-        const citySelect = document.getElementById("city");
-        const districtSelect = document.getElementById("district");
-        const selectedCity = citySelect.value;
-
-        districtSelect.innerHTML = '<option value="">اختر الحي</option>';
-
-        if (selectedCity && districtsData[selectedCity]) {
-            districtsData[selectedCity].forEach(district => {
-                let option = document.createElement("option");
-                option.value = district;
-                option.textContent = district;
-                districtSelect.appendChild(option);
-            });
-        }
-    }
-
-    function togglePriceFields() {
-        const type = document.getElementById("type").value;
-        const offerGroup = document.getElementById("offerPriceGroup");
-        const requestGroup = document.getElementById("requestBudgetGroup");
-
-        if (type === "offer") {
-            offerGroup.style.display = "block";
-            requestGroup.style.display = "none";
-        } else {
-            offerGroup.style.display = "none";
-            requestGroup.style.display = "flex";
-        }
-    }
-
-    // إظهار/إخفاء صندوق إضافة عميل جديد داخل نفس النموذج
-    function toggleNewClientBox() {
-        const box = document.getElementById("newClientBox");
-        box.style.display = box.style.display === "block" ? "none" : "block";
-    }
-
-    // إضافة العميل مباشرة من داخل النموذج واختياره تلقائياً
-    function addNewClientInline() {
-        const name = document.getElementById("new_client_name").value.trim();
-        const phone = document.getElementById("new_client_phone").value.trim();
-
-        if (!name || !phone) {
-            alert("الرجاء إدخال اسم العميل ورقم الجوال أولاً.");
-            return;
-        }
-
-        const client = {
-            id: clientCounter++,
-            name: name,
-            phone: phone
-        };
-
-        clientsList.push(client);
-        updateClientsTable();
-        updateClientDropdown();
-
-        // تحديد العميل المضاف حديثاً في القائمة المنسدلة تلقائياً
-        document.getElementById("selected_client_id").value = client.id;
-
-        // تفريغ وإخفاء الصندوق
-        document.getElementById("new_client_name").value = "";
-        document.getElementById("new_client_phone").value = "";
-        document.getElementById("newClientBox").style.display = "none";
-
-        alert(`تم إضافة العميل (${name}) وربطه بالطلب/العرض بنجاح!`);
-    }
-
-    function updateClientsTable() {
-        const tableBody = document.getElementById("clientsTable").querySelector("tbody");
-        tableBody.innerHTML = "";
-
-        clientsList.forEach(c => {
-            const row = tableBody.insertRow();
-            row.innerHTML = `
-                <td>#${c.id}</td>
-                <td>${c.name}</td>
-                <td>${c.phone}</td>
-            `;
-        });
-    }
-
-    function updateClientDropdown() {
-        const dropdown = document.getElementById("selected_client_id");
-        dropdown.innerHTML = '<option value="">اختر العميل المسجل...</option>';
-
-        clientsList.forEach(c => {
-            let option = document.createElement("option");
-            option.value = c.id;
-            option.textContent = `${c.name} (${c.phone})`;
-            dropdown.appendChild(option);
-        });
-    }
-
-    // تسجيل عرض أو طلب
-    document.getElementById("realEstateForm").addEventListener("submit", function(e) {
-        e.preventDefault();
-
-        const clientId = parseInt(document.getElementById("selected_client_id").value);
-        const selectedClient = clientsList.find(c => c.id === clientId);
-
-        if (!selectedClient) {
-            alert("الرجاء اختيار العميل أو الضغط على '+ إضافة عميل جديد' لربطه بالسجل.");
-            return;
-        }
-
-        const typeVal = document.getElementById("type").value;
-        const property_type = document.getElementById("property_type").value;
-        const city = document.getElementById("city").value;
-        const district = document.getElementById("district").value;
-        const date_preference = document.getElementById("date_preference").value;
-        const matching_mode_val = document.getElementById("matching_mode").value;
-        const matching_mode_text = matching_mode_val === "instant" ? "فوري" : "يدوي";
-        
-        const currentDate = new Date().toLocaleDateString();
-
-        let record = {
-            id: recordCounter++,
-            clientName: selectedClient.name,
-            type: typeVal,
-            property_type: property_type,
-            city: city,
-            district: district,
-            date_pref: `${currentDate} (${date_preference})`,
-            matching_mode: matching_mode_text
-        };
-
-        if (typeVal === "offer") {
-            record.price = parseFloat(document.getElementById("price").value) || 0;
-            record.priceText = record.price + " ريال";
-        } else {
-            record.budget_min = parseFloat(document.getElementById("budget_min").value) || 0;
-            record.budget_max = parseFloat(document.getElementById("budget_max").value) || 999999999;
-            record.priceText = `من ${record.budget_min} إلى ${record.budget_max === 999999999 ? 'مفتوح' : record.budget_max} ريال`;
-        }
-
-        allRecords.push(record);
-        updateEntriesTable();
-
-        if (typeVal === "request" && matching_mode_val === "instant") {
-            runMatching(record);
-        } else {
-            clearResults("لا توجد مطابقة (لأن السجل ليس طلباً فورياً)");
-        }
-
-        // الحفاظ على العميل المحدد أو إعادة تعيين النموذج جزئياً
-        document.getElementById("property_type").selectedIndex = 0;
-        document.getElementById("city").selectedIndex = 0;
-        document.getElementById("district").innerHTML = '<option value="">اختر المدينة أولاً</option>';
-        document.getElementById("price").value = "";
-        document.getElementById("budget_min").value = "";
-        document.getElementById("budget_max").value = "";
-        togglePriceFields();
-    });
-
-    function updateEntriesTable() {
-        const entriesTable = document.getElementById("entriesTable").querySelector("tbody");
-        entriesTable.innerHTML = "";
-
-        allRecords.forEach(rec => {
-            const row = entriesTable.insertRow();
-            row.innerHTML = `
-                <td>#${rec.id}</td>
-                <td>${rec.clientName}</td>
-                <td>${rec.type === 'offer' ? 'عرض' : 'طلب'}</td>
-                <td>${rec.property_type}</td>
-                <td>${rec.city} - ${rec.district}</td>
-                <td>${rec.priceText}</td>
-                <td>${rec.date_pref}</td>
-                <td>${rec.matching_mode}</td>
-            `;
-        });
-    }
-
-    function runMatching(requestRec) {
-        const resultsTable = document.getElementById("resultsTable").querySelector("tbody");
-        resultsTable.innerHTML = "";
-
-        const matches = allRecords.filter(rec => {
-            return rec.type === 'offer' &&
-                   rec.property_type === requestRec.property_type &&
-                   rec.city === requestRec.city &&
-                   rec.district === requestRec.district &&
-                   rec.price >= requestRec.budget_min &&
-                   rec.price <= requestRec.budget_max;
-        });
-
-        if (matches.length === 0) {
-            resultsTable.innerHTML = `<tr><td colspan="5">لا توجد عقارات مطابقة لهذا الطلب حالياً</td></tr>`;
-            return;
-        }
-
-        matches.forEach(match => {
-            const row = resultsTable.insertRow();
-            row.innerHTML = `
-                <td>#${match.id}</td>
-                <td>${match.clientName}</td>
-                <td>${match.property_type}</td>
-                <td>${match.city} - ${match.district}</td>
-                <td>${match.priceText}</td>
-            `;
-        });
-    }
-
-    function clearResults(msg) {
-        const resultsTable = document.getElementById("resultsTable").querySelector("tbody");
-        resultsTable.innerHTML = `<tr><td colspan="5">${msg}</td></tr>`;
-    }
+let DB = JSON.parse(localStorage.getItem('aqariDBLocal') || '{"clients":[],"properties":[],"requests":[],"deals":[]}');
+function saveDB() { localStorage.setItem('aqariDBLocal', JSON.stringify(DB)); }
+let nextId = { clients: 1, properties: 1, requests: 1, deals: 1 };
+for (let k in DB) { if (DB[k].length) nextId[k] = Math.max(...DB[k].map(x => x.id)) + 1; }
+function getNextId(table) { return nextId[table]++; }
+function go(name) { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.getElementById('v-' + name).classList.add('active'); if (name === 'search') document.getElementById('searchResults').innerHTML = '<div class="empty">اكتب كلمة للبحث...</div>'; }
+function v(id) { return document.getElementById(id).value.trim(); }
+function n(id) { return Math.abs(Number(document.getElementById(id).value)); }
+function msg(key, text, ok = true) { const el = document.getElementById('m-' + key); el.textContent = text; el.className = 'msg ' + (ok ? 'ok' : 'err'); setTimeout(() => el.className = 'msg', 3000); }
+function getClientName(id) { const c = DB.clients.find(c => String(c.id) === String(id)); return c ? c.name : '⚠️'; }
+function getPropDesc(id) { const p = DB.properties.find(p => String(p.id) === String(id)); return p ? p.type + ' - ' + p.address : '⚠️'; }
+function checkClientForm() { const name = v('c_name'), phone = v('c_phone'), city = v('c_city'); const validPhone = (phone.length === 10 && (phone.startsWith('05') || phone.startsWith('06'))); document.getElementById('btn-save-client').disabled = !(name && validPhone && city); }
+function checkPropertyForm() { document.getElementById('btn-save-property').disabled = !(v('p_type') && v('p_city') && v('p_address') && n('p_area') && n('p_price')); }
+function checkRequestForm() { document.getElementById('btn-save-request').disabled = !(v('r_client') && v('r_property')); }
+function checkDealForm() { document.getElementById('btn-save-deal').disabled = !(v('d_request') && v('d_client') && v('d_property') && n('d_amount')); }
+function saveClient() { const row = { id: getNextId('clients'), name: v('c_name'), phone: v('c_phone'), city: v('c_city') }; DB.clients.push(row); saveDB(); renderAll(); refreshSelects(); ['c_name','c_phone','c_city'].forEach(f => document.getElementById(f).value = ''); msg('clients', '✅ تم الحفظ'); }
+function saveProperty() { const row = { id: getNextId('properties'), type: v('p_type'), city: v('p_city'), address: v('p_address'), area: n('p_area'), price: n('p_price'), status: v('p_status'), owner_id: v('p_owner') || null }; DB.properties.push(row); saveDB(); renderAll(); refreshSelects(); ['p_city','p_address','p_area','p_price'].forEach(f => document.getElementById(f).value = ''); msg('properties', '✅ تم الحفظ'); }
+function saveRequest() { const row = { id: getNextId('requests'), client_id: v('r_client'), property_id: v('r_property'), type: v('r_type'), date: new Date().toISOString().slice(0,10), status: v('r_status') }; DB.requests.push(row); saveDB(); renderAll(); refreshSelects(); document.getElementById('r_client').value = ''; document.getElementById('r_property').value = ''; msg('requests', '✅ تم الحفظ'); }
+function saveDeal() { const row = { id: getNextId('deals'), request_id: v('d_request'), client_id: v('d_client'), property_id: v('d_property'), type: v('d_type'), amount: n('d_amount'), commission: n('d_commission'), date: new Date().toISOString().slice(0,10) }; DB.deals.push(row); saveDB(); renderAll(); ['d_amount','d_commission'].forEach(f => document.getElementById(f).value = ''); msg('deals', '✅ تم الحفظ'); }
+function renderAll() { document.getElementById('t-clients').innerHTML = DB.clients.map((c, i) => `<tr><td>${i+1}</td><td>${c.id}</td><td>${c.name}</td><td>${c.phone}</td><td>${c.city}</td><td><button class="btn-del" onclick="delClient('${c.id}')">حذف</button></td></tr>`).join(''); document.getElementById('t-properties').innerHTML = DB.properties.map((p, i) => `<tr><td>${i+1}</td><td>${p.id}</td><td>${p.type}</td><td>${p.city}</td><td>${p.address}</td><td>${p.area}</td><td>${p.price}</td><td>${p.status}</td><td>${p.owner_id ? getClientName(p.owner_id) : '—'}</td><td><button class="btn-del" onclick="delProperty('${p.id}')">حذف</button></td></tr>`).join(''); document.getElementById('t-requests').innerHTML = DB.requests.map((r, i) => `<tr><td>${i+1}</td><td>${r.id}</td><td>${getClientName(r.client_id)}</td><td>${getPropDesc(r.property_id)}</td><td>${r.type}</td><td>${r.date}</td><td>${r.status}</td><td><button class="btn-del" onclick="delRequest('${r.id}')">حذف</button></td></tr>`).join(''); document.getElementById('t-deals').innerHTML = DB.deals.map((d, i) => `<tr><td>${i+1}</td><td>${d.id}</td><td>${getClientName(d.client_id)}</td><td>${getPropDesc(d.property_id)}</td><td>${d.type}</td><td>${d.amount}</td><td>${d.commission}</td><td>${d.date}</td><td><button class="btn-del" onclick="delDeal('${d.id}')">حذف</button></td></tr>`).join(''); }
+function refreshSelects() { const clients = '<option value="">اختر عميلًا</option>' + DB.clients.map(c => `<option value="${c.id}">${c.name}</option>`).join(''); document.getElementById('r_client').innerHTML = clients; document.getElementById('d_client').innerHTML = clients; document.getElementById('p_owner').innerHTML = clients; const props = '<option value="">اختر عقارًا</option>' + DB.properties.map(p => `<option value="${p.id}">${p.type} - ${p.address}</option>`).join(''); document.getElementById('r_property').innerHTML = props; document.getElementById('d_property').innerHTML = props; document.getElementById('d_request').innerHTML = '<option value="">اختر طلبًا</option>' + DB.requests.map(r => `<option value="${r.id}">طلب ${r.id}</option>`).join(''); }
+function delClient(id) { if (!confirm('حذف؟')) return; DB.clients = DB.clients.filter(c => String(c.id) !== String(id)); saveDB(); renderAll(); refreshSelects(); }
+function delProperty(id) { if (!confirm('حذف؟')) return; DB.properties = DB.properties.filter(p => String(p.id) !== String(id)); saveDB(); renderAll(); refreshSelects(); }
+function delRequest(id) { if (!confirm('حذف؟')) return; DB.requests = DB.requests.filter(r => String(r.id) !== String(id)); saveDB(); renderAll(); refreshSelects(); }
+function delDeal(id) { if (!confirm('حذف؟')) return; DB.deals = DB.deals.filter(d => String(d.id) !== String(id)); saveDB(); renderAll(); }
+function doSearch() { const q = v('searchInput').toLowerCase(), scope = document.getElementById('searchScope').value, box = document.getElementById('searchResults'); if (!q) { box.innerHTML = '<div class="empty">اكتب كلمة للبحث</div>'; return; } let total = 0, html = ''; function section(title, rows, keys, heads) { if (!rows.length) return ''; total += rows.length; let s = `<h3>${title} <span class="badge">${rows.length}</span></h3><div class="table-container"><table><thead><tr>`; heads.forEach(h => s += `<th>${h}</th>`); s += '</tr></thead><tbody>'; rows.forEach(r => { s += '<tr>'; keys.forEach(k => s += `<td>${r[k] ?? ''}</td>`); s += '</tr>'; }); return s + '</tbody></table></div>'; } if (scope === 'all' || scope === 'clients') { const rows = DB.clients.filter(c => Object.values(c).some(v => String(v).toLowerCase().includes(q))); html += section('👥 العملاء', rows, ['id','name','phone','city'], ['الرقم','الاسم','الجوال','المدينة']); } if (scope === 'all' || scope === 'properties') { const rows = DB.properties.filter(p => Object.values(p).some(v => String(v).toLowerCase().includes(q))); html += section('🏠 العقارات', rows, ['id','type','city','address','price','status'], ['الرقم','النوع','المدينة','العنوان','السعر','الحالة']); } if (scope === 'all' || scope === 'requests') { const rows = DB.requests.filter(r => Object.values(r).some(v => String(v).toLowerCase().includes(q))); html += section('📋 الطلبات', rows, ['id','client_id','property_id','type','date','status'], ['الرقم','العميل','العقار','النوع','التاريخ','الحالة']); } if (scope === 'all' || scope === 'deals') { const rows = DB.deals.filter(d => Object.values(d).some(v => String(v).toLowerCase().includes(q))); html += section('💰 الصفقات', rows, ['id','client_id','property_id','type','amount','commission','date'], ['الرقم','العميل','العقار','النوع','المبلغ','العمولة','التاريخ']); } box.innerHTML = total === 0 ? '<div class="empty">لا توجد نتائج</div>' : `<div style="color:#27ae60;font-weight:bold;margin-bottom:10px">✅ ${total} نتيجة</div>` + html; }
+function exportExcel() { const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(DB.clients), 'العملاء'); XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(DB.properties), 'العقارات'); XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(DB.requests), 'الطلبات'); XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(DB.deals), 'الصفقات'); XLSX.writeFile(wb, 'النظام_العقاري.xlsx'); }
+renderAll();
+refreshSelects();
 </script>
-
 </body>
 </html>
