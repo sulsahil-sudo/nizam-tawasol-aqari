@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام سليمان العقاري - إدارة العملاء والعروض والطلبات</title>
+    <title>نظام سليمان العقاري - إدارة العروض والطلبات</title>
     <style>
         body { font-family: Tahoma, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; direction: rtl; }
         .container { max-width: 950px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
@@ -19,64 +19,48 @@
         th { background-color: #f8f9fa; }
         .row { display: flex; gap: 15px; }
         .col { flex: 1; }
-        .card { background: #fff; padding: 20px; border-radius: 8px; border: 2px solid #3498db; margin-bottom: 25px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .card-real { border-color: #27ae60; }
+        .card { background: #fff; padding: 20px; border-radius: 8px; border: 2px solid #27ae60; margin-bottom: 25px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .new-client-box { background: #f9f9f9; padding: 15px; border: 1px dashed #2980b9; border-radius: 5px; margin-top: 10px; display: none; }
+        .toggle-btn { background: none; color: #2980b9; border: none; padding: 0; cursor: pointer; font-size: 14px; text-decoration: underline; width: auto; margin-top: 5px; }
+        .toggle-btn:hover { color: #1abc9c; background: none; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>نظام إدارة العقارات (العملاء والعروض والطلبات)</h2>
+    <h2>نظام إدارة العقارات (عروض وطلبات)</h2>
     
-    <!-- 1. نموذج تسجيل العملاء (الظاهر ببروز في الأعلى) -->
+    <!-- نموذج إدخال العروض والطلبات والعميل معا -->
     <div class="card">
-        <h3 style="color: #2980b9; margin-top: 0;">تسجيل عميل جديد</h3>
-        <form id="clientForm">
-            <div class="row">
-                <div class="col form-group">
-                    <label>اسم العميل:</label>
-                    <input type="text" id="client_name" placeholder="أدخل اسم العميل الكامل" required>
-                </div>
-                <div class="col form-group">
-                    <label>رقم الجوال:</label>
-                    <input type="text" id="client_phone" placeholder="05xxxxxxxx" required>
-                </div>
-            </div>
-            <button type="submit" style="background-color: #2980b9;">حفظ العميل</button>
-        </form>
-    </div>
-
-    <!-- 2. جدول العملاء المسجلين -->
-    <div class="section">
-        <h3>قائمة العملاء المسجلين</h3>
-        <table id="clientsTable">
-            <thead>
-                <tr>
-                    <th>معرف العميل</th>
-                    <th>اسم العميل</th>
-                    <th>رقم الجوال</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td colspan="3">لا توجد عملاء مسجلين حتى الآن</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- 3. نموذج إدخال العروض والطلبات -->
-    <div class="card card-real" style="margin-top: 30px;">
-        <h3 style="color: #27ae60; margin-top: 0;">إدخال عرض أو طلب عقاري</h3>
+        <h3 style="color: #27ae60; margin-top: 0;">إدخال عرض أو طلب عقاري جديد</h3>
         <form id="realEstateForm">
+            
             <div class="form-group">
-                <label>اختر العميل:</label>
+                <label>العميل:</label>
                 <select id="selected_client_id" required>
-                    <option value="">اختر العميل المسجل من القائمة أولاً</option>
+                    <option value="">اختر العميل المسجل...</option>
                 </select>
+                <!-- زر فتح حقول إضافة عميل جديد -->
+                <button type="button" class="toggle-btn" onclick="toggleNewClientBox()">+ إضافة عميل جديد لربطه مباشرة</button>
             </div>
 
-            <div class="form-group">
+            <!-- صندوق إضافة عميل جديد (مخفي حتى يتم الضغط على الزر) -->
+            <div class="new-client-box" id="newClientBox">
+                <h4 style="margin-top: 0; color: #2980b9;">إضافة بيانات عميل جديد</h4>
+                <div class="row">
+                    <div class="col form-group">
+                        <label>اسم العميل:</label>
+                        <input type="text" id="new_client_name" placeholder="اسم العميل الكامل">
+                    </div>
+                    <div class="col form-group">
+                        <label>رقم الجوال:</label>
+                        <input type="text" id="new_client_phone" placeholder="05xxxxxxxx">
+                    </div>
+                </div>
+                <button type="button" style="background-color: #2980b9; width: auto; padding: 8px 15px; font-size: 14px;" onclick="addNewClientInline()">حفظ وإضافة العميل للقائمة</button>
+            </div>
+
+            <div class="form-group" style="margin-top: 15px;">
                 <label>نوع السجل:</label>
                 <select id="type" onchange="togglePriceFields()" required>
                     <option value="offer">عرض عقار</option>
@@ -148,7 +132,26 @@
         </form>
     </div>
 
-    <!-- 4. جدول العروض والطلبات المدخلة -->
+    <!-- جدول العملاء المسجلين -->
+    <div class="section">
+        <h3>قائمة العملاء المسجلين</h3>
+        <table id="clientsTable">
+            <thead>
+                <tr>
+                    <th>معرف العميل</th>
+                    <th>اسم العميل</th>
+                    <th>رقم الجوال</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="3">لا توجد عملاء مسجلين حتى الآن</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- جدول العروض والطلبات المدخلة -->
     <div class="section">
         <h3>العروض والطلبات المدخلة حديثاً</h3>
         <table id="entriesTable">
@@ -172,7 +175,7 @@
         </table>
     </div>
 
-    <!-- 5. جدول نتائج المطابقة الفورية -->
+    <!-- جدول نتائج المطابقة الفورية -->
     <div class="section">
         <h3>نتائج المطابقة الفورية</h3>
         <table id="resultsTable">
@@ -236,11 +239,21 @@
         }
     }
 
-    // تسجيل عميل جديد
-    document.getElementById("clientForm").addEventListener("submit", function(e) {
-        e.preventDefault();
-        const name = document.getElementById("client_name").value;
-        const phone = document.getElementById("client_phone").value;
+    // إظهار/إخفاء صندوق إضافة عميل جديد داخل نفس النموذج
+    function toggleNewClientBox() {
+        const box = document.getElementById("newClientBox");
+        box.style.display = box.style.display === "block" ? "none" : "block";
+    }
+
+    // إضافة العميل مباشرة من داخل النموذج واختياره تلقائياً
+    function addNewClientInline() {
+        const name = document.getElementById("new_client_name").value.trim();
+        const phone = document.getElementById("new_client_phone").value.trim();
+
+        if (!name || !phone) {
+            alert("الرجاء إدخال اسم العميل ورقم الجوال أولاً.");
+            return;
+        }
 
         const client = {
             id: clientCounter++,
@@ -252,9 +265,16 @@
         updateClientsTable();
         updateClientDropdown();
 
-        alert(`تم تسجيل العميل (${name}) بنجاح!`);
-        this.reset();
-    });
+        // تحديد العميل المضاف حديثاً في القائمة المنسدلة تلقائياً
+        document.getElementById("selected_client_id").value = client.id;
+
+        // تفريغ وإخفاء الصندوق
+        document.getElementById("new_client_name").value = "";
+        document.getElementById("new_client_phone").value = "";
+        document.getElementById("newClientBox").style.display = "none";
+
+        alert(`تم إضافة العميل (${name}) وربطه بالطلب/العرض بنجاح!`);
+    }
 
     function updateClientsTable() {
         const tableBody = document.getElementById("clientsTable").querySelector("tbody");
@@ -272,7 +292,7 @@
 
     function updateClientDropdown() {
         const dropdown = document.getElementById("selected_client_id");
-        dropdown.innerHTML = '<option value="">اختر العميل المسجل من القائمة</option>';
+        dropdown.innerHTML = '<option value="">اختر العميل المسجل...</option>';
 
         clientsList.forEach(c => {
             let option = document.createElement("option");
@@ -290,12 +310,11 @@
         const selectedClient = clientsList.find(c => c.id === clientId);
 
         if (!selectedClient) {
-            alert("الرجاء تسجيل العميل في الأعلى واختياره من قائمة العملاء أولاً.");
+            alert("الرجاء اختيار العميل أو الضغط على '+ إضافة عميل جديد' لربطه بالسجل.");
             return;
         }
 
         const typeVal = document.getElementById("type").value;
-        const typeText = typeVal === "offer" ? "عرض" : "طلب";
         const property_type = document.getElementById("property_type").value;
         const city = document.getElementById("city").value;
         const district = document.getElementById("district").value;
@@ -334,7 +353,13 @@
             clearResults("لا توجد مطابقة (لأن السجل ليس طلباً فورياً)");
         }
 
-        this.reset();
+        // الحفاظ على العميل المحدد أو إعادة تعيين النموذج جزئياً
+        document.getElementById("property_type").selectedIndex = 0;
+        document.getElementById("city").selectedIndex = 0;
+        document.getElementById("district").innerHTML = '<option value="">اختر المدينة أولاً</option>';
+        document.getElementById("price").value = "";
+        document.getElementById("budget_min").value = "";
+        document.getElementById("budget_max").value = "";
         togglePriceFields();
     });
 
