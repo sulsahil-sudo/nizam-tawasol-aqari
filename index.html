@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام سليمان العقاري - إدارة العروض والطلبات</title>
+    <title>نظام سليمان العقاري - إدارة العملاء والعروض والطلبات</title>
     <style>
         body { font-family: Tahoma, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; direction: rtl; }
         .container { max-width: 950px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
@@ -19,92 +19,142 @@
         th { background-color: #f8f9fa; }
         .row { display: flex; gap: 15px; }
         .col { flex: 1; }
+        .card { background: #fafafa; padding: 15px; border-radius: 8px; border: 1px solid #e1e1e1; margin-bottom: 20px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>نظام إدارة العقارات (عروض وطلبات)</h2>
+    <h2>نظام إدارة العقارات (العملاء والعروض والطلبات)</h2>
     
-    <form id="realEstateForm">
-        <div class="form-group">
-            <label>نوع السجل:</label>
-            <select id="type" onchange="togglePriceFields()" required>
-                <option value="offer">عرض عقار</option>
-                <option value="request">طلب عقار</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>نوع العقار:</label>
-            <select id="property_type" required>
-                <option value="دوبلكس">دوبلكس</option>
-                <option value="أرض">أرض</option>
-                <option value="شقة">شقة</option>
-                <option value="عمارة">عمارة</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>المدينة:</label>
-            <select id="city" onchange="updateDistricts()" required>
-                <option value="">اختر المدينة</option>
-                <option value="عنيزة">عنيزة</option>
-                <option value="الرياض">الرياض</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>الحي:</label>
-            <select id="district" required>
-                <option value="">اختر المدينة أولاً</option>
-            </select>
-        </div>
-
-        <!-- حقل السعر (يظهر في حالة العرض) -->
-        <div class="form-group" id="offerPriceGroup">
-            <label>السعر المطلوب:</label>
-            <input type="number" id="price" placeholder="أدخل سعر العرض">
-        </div>
-
-        <!-- حقول الميزانية (تظهر في حالة الطلب من ... إلى ...) -->
-        <div class="row" id="requestBudgetGroup" style="display: none;">
-            <div class="col form-group">
-                <label>الحد الأدنى للميزانية (من):</label>
-                <input type="number" id="budget_min" placeholder="أقل سعر">
+    <!-- قسم تسجيل العملاء -->
+    <div class="card">
+        <h3>تسجيل عميل جديد</h3>
+        <form id="clientForm">
+            <div class="row">
+                <div class="col form-group">
+                    <label>اسم العميل:</label>
+                    <input type="text" id="client_name" placeholder="أدخل اسم العميل الكامل" required>
+                </div>
+                <div class="col form-group">
+                    <label>رقم الجوال:</label>
+                    <input type="text" id="client_phone" placeholder="05xxxxxxxx" required>
+                </div>
             </div>
-            <div class="col form-group">
-                <label>الحد الأقصى للميزانية (إلى):</label>
-                <input type="number" id="budget_max" placeholder="أعلى سعر">
+            <button type="submit" style="background-color: #2980b9;">حفظ العميل</button>
+        </form>
+    </div>
+
+    <!-- قسم إدخال العروض والطلبات -->
+    <div class="card">
+        <h3>إدخال عرض أو طلب عقاري</h3>
+        <form id="realEstateForm">
+            <div class="form-group">
+                <label>اختر العميل:</label>
+                <select id="selected_client_id" required>
+                    <option value="">اختر العميل المسجل أولاً</option>
+                </select>
             </div>
-        </div>
 
-        <div class="form-group">
-            <label>تفضيل عرض التاريخ:</label>
-            <select id="date_preference">
-                <option value="ميلادي">ميلادي</option>
-                <option value="هجري">هجري</option>
-            </select>
-        </div>
+            <div class="form-group">
+                <label>نوع السجل:</label>
+                <select id="type" onchange="togglePriceFields()" required>
+                    <option value="offer">عرض عقار</option>
+                    <option value="request">طلب عقار</option>
+                </select>
+            </div>
 
-        <div class="form-group">
-            <label>وضع المطابقة:</label>
-            <select id="matching_mode">
-                <option value="instant">فوري</option>
-                <option value="manual">يدوي</option>
-            </select>
-        </div>
+            <div class="form-group">
+                <label>نوع العقار:</label>
+                <select id="property_type" required>
+                    <option value="دوبلكس">دوبلكس</option>
+                    <option value="أرض">أرض</option>
+                    <option value="شقة">شقة</option>
+                    <option value="عمارة">عمارة</option>
+                </select>
+            </div>
 
-        <button type="submit">حفظ وإجراء المطابقة</button>
-    </form>
+            <div class="form-group">
+                <label>المدينة:</label>
+                <select id="city" onchange="updateDistricts()" required>
+                    <option value="">اختر المدينة</option>
+                    <option value="عنيزة">عنيزة</option>
+                    <option value="الرياض">الرياض</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>الحي:</label>
+                <select id="district" required>
+                    <option value="">اختر المدينة أولاً</option>
+                </select>
+            </div>
+
+            <!-- حقل السعر (يظهر في حالة العرض) -->
+            <div class="form-group" id="offerPriceGroup">
+                <label>السعر المطلوب:</label>
+                <input type="number" id="price" placeholder="أدخل سعر العرض">
+            </div>
+
+            <!-- حقول الميزانية (تظهر في حالة الطلب من ... إلى ...) -->
+            <div class="row" id="requestBudgetGroup" style="display: none;">
+                <div class="col form-group">
+                    <label>الحد الأدنى للميزانية (من):</label>
+                    <input type="number" id="budget_min" placeholder="أقل سعر">
+                </div>
+                <div class="col form-group">
+                    <label>الحد الأقصى للميزانية (إلى):</label>
+                    <input type="number" id="budget_max" placeholder="أعلى سعر">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>تفضيل عرض التاريخ:</label>
+                <select id="date_preference">
+                    <option value="ميلادي">ميلادي</option>
+                    <option value="هجري">هجري</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>وضع المطابقة:</label>
+                <select id="matching_mode">
+                    <option value="instant">فوري</option>
+                    <option value="manual">يدوي</option>
+                </select>
+            </div>
+
+            <button type="submit">حفظ السجل وإجراء المطابقة</button>
+        </form>
+    </div>
+
+    <!-- جدول العملاء المسجلين -->
+    <div class="section">
+        <h3>قائمة العملاء المسجلين</h3>
+        <table id="clientsTable">
+            <thead>
+                <tr>
+                    <th>معرف العميل</th>
+                    <th>اسم العميل</th>
+                    <th>رقم الجوال</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="3">لا توجد عملاء مسجلين حتى الآن</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
     <!-- جدول السجلات المدخلة -->
     <div class="section">
-        <h3>السجلات المدخلة حديثاً</h3>
+        <h3>العروض والطلبات المدخلة حديثاً</h3>
         <table id="entriesTable">
             <thead>
                 <tr>
                     <th>رقم السجل</th>
+                    <th>اسم العميل</th>
                     <th>النوع</th>
                     <th>نوع العقار</th>
                     <th>المدينة والحي</th>
@@ -115,7 +165,7 @@
             </thead>
             <tbody>
                 <tr>
-                    <td colspan="7">لا توجد سجلات مدخلة في الجلسة الحالية</td>
+                    <td colspan="8">لا توجد سجلات مدخلة في الجلسة الحالية</td>
                 </tr>
             </tbody>
         </table>
@@ -128,10 +178,10 @@
             <thead>
                 <tr>
                     <th>رقم السجل المطابق</th>
-                    <th>النوع</th>
+                    <th>اسم العميل صاحب العرض</th>
                     <th>نوع العقار</th>
                     <th>المدينة والحي</th>
-                    <th>السعر / الميزانية</th>
+                    <th>السعر</th>
                 </tr>
             </thead>
             <tbody>
@@ -144,8 +194,9 @@
 </div>
 
 <script>
-    // مصفوفة لتخزين السجلات محلياً في الجلسة لتفعيل محرك المطابقة الفورية
+    let clientsList = [];
     let allRecords = [];
+    let clientCounter = 1;
     let recordCounter = 1;
 
     const districtsData = {
@@ -184,8 +235,63 @@
         }
     }
 
+    // تسجيل عميل جديد
+    document.getElementById("clientForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const name = document.getElementById("client_name").value;
+        const phone = document.getElementById("client_phone").value;
+
+        const client = {
+            id: clientCounter++,
+            name: name,
+            phone: phone
+        };
+
+        clientsList.push(client);
+        updateClientsTable();
+        updateClientDropdown();
+
+        alert(`تم تسجيل العميل (${name}) بنجاح!`);
+        this.reset();
+    });
+
+    function updateClientsTable() {
+        const tableBody = document.getElementById("clientsTable").querySelector("tbody");
+        tableBody.innerHTML = "";
+
+        clientsList.forEach(c => {
+            const row = tableBody.insertRow();
+            row.innerHTML = `
+                <td>#${c.id}</td>
+                <td>${c.name}</td>
+                <td>${c.phone}</td>
+            `;
+        });
+    }
+
+    function updateClientDropdown() {
+        const dropdown = document.getElementById("selected_client_id");
+        dropdown.innerHTML = '<option value="">اختر العميل</option>';
+
+        clientsList.forEach(c => {
+            let option = document.createElement("option");
+            option.value = c.id;
+            option.textContent = `${c.name} (${c.phone})`;
+            dropdown.appendChild(option);
+        });
+    }
+
+    // تسجیل عرض أو طلب
     document.getElementById("realEstateForm").addEventListener("submit", function(e) {
         e.preventDefault();
+
+        const clientId = parseInt(document.getElementById("selected_client_id").value);
+        const selectedClient = clientsList.find(c => c.id === clientId);
+
+        if (!selectedClient) {
+            alert("الرجاء اختيار العميل أولاً أو تسجيل عميل جديد.");
+            return;
+        }
 
         const typeVal = document.getElementById("type").value;
         const typeText = typeVal === "offer" ? "عرض" : "طلب";
@@ -200,6 +306,7 @@
 
         let record = {
             id: recordCounter++,
+            clientName: selectedClient.name,
             type: typeVal,
             property_type: property_type,
             city: city,
@@ -217,13 +324,9 @@
             record.priceText = `من ${record.budget_min} إلى ${record.budget_max === 999999999 ? 'مفتوح' : record.budget_max} ريال`;
         }
 
-        // إضافة السجل للقائمة
         allRecords.push(record);
-
-        // تحديث جدول السجلات المدخلة
         updateEntriesTable();
 
-        // تشغيل محرك المطابقة إذا كان السجل الجديد "طلب" ووضع المطابقة "فوري"
         if (typeVal === "request" && matching_mode_val === "instant") {
             runMatching(record);
         } else {
@@ -242,6 +345,7 @@
             const row = entriesTable.insertRow();
             row.innerHTML = `
                 <td>#${rec.id}</td>
+                <td>${rec.clientName}</td>
                 <td>${rec.type === 'offer' ? 'عرض' : 'طلب'}</td>
                 <td>${rec.property_type}</td>
                 <td>${rec.city} - ${rec.district}</td>
@@ -256,7 +360,6 @@
         const resultsTable = document.getElementById("resultsTable").querySelector("tbody");
         resultsTable.innerHTML = "";
 
-        // البحث في العروض المسجلة مسبقاً والتي تطابق الشروط
         const matches = allRecords.filter(rec => {
             return rec.type === 'offer' &&
                    rec.property_type === requestRec.property_type &&
@@ -275,7 +378,7 @@
             const row = resultsTable.insertRow();
             row.innerHTML = `
                 <td>#${match.id}</td>
-                <td>عرض</td>
+                <td>${match.clientName}</td>
                 <td>${match.property_type}</td>
                 <td>${match.city} - ${match.district}</td>
                 <td>${match.priceText}</td>
