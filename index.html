@@ -117,9 +117,9 @@ tr:nth-child(even){background:#f9fafc}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// الرابط والمفتاح الخاص بمشروعك الأول (القديم)
-https://nqbqvuplbawdhlwikkpf.supabase.co
- sb_publishable_XuJkNWlXFHBIsD9u9cj9pg_Ps6Bc1r0
+// الرابط والمفتاح الخاص بمشروعك الجديد
+const SUPABASE_URL = 'https://nqbqvuplbawdhlwikkpf.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_XuJkNWlXFHBIsD9u9cj9pg_Ps6Bc1r0';
 
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -128,18 +128,21 @@ let DB = { clients: [], property_types: [], cities_districts: [] };
 // تحميل القوائم
 async function loadData() {
   // 1. العملاء
-  const { data: clients } = await supabase.from('clients').select('*').order('name');
+  const { data: clients, error: err1 } = await supabase.from('clients').select('*').order('name');
+  if (err1) console.error('خطأ العملاء:', err1);
   DB.clients = clients || [];
   refreshClientsSelect();
 
   // 2. أنواع العقارات
-  const { data: types } = await supabase.from('property_types').select('*');
+  const { data: types, error: err2 } = await supabase.from('property_types').select('*');
+  if (err2) console.error('خطأ العقارات:', err2);
   DB.property_types = types || [];
   document.getElementById('property_type').innerHTML = '<option value="">-- اختر --</option>' +
     DB.property_types.map(t => `<option value="${t.name}">${t.name}</option>`).join('');
 
   // 3. المدن والأحياء
-  const { data: cd } = await supabase.from('cities_districts').select('*');
+  const { data: cd, error: err3 } = await supabase.from('cities_districts').select('*');
+  if (err3) console.error('خطأ المدن:', err3);
   DB.cities_districts = cd || [];
   const uniqueCities = [...new Set(DB.cities_districts.map(c => c.city_name))];
   document.getElementById('city').innerHTML = '<option value="">-- اختر --</option>' +
@@ -179,7 +182,7 @@ function closeClientModal() { document.getElementById('clientModal').style.displ
 
 async function saveNewClient() {
   const name = document.getElementById('new_c_name').value.trim();
-  if (!name) return showMsg('اكتب الاسم', false);
+  if (!name) return alert('اكتب الاسم');
   
   const { data, error } = await supabase.from('clients').insert([{
     name: name,
