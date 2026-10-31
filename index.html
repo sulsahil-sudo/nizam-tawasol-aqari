@@ -19,7 +19,8 @@
         th { background-color: #f8f9fa; }
         .row { display: flex; gap: 15px; }
         .col { flex: 1; }
-        .card { background: #fafafa; padding: 15px; border-radius: 8px; border: 1px solid #e1e1e1; margin-bottom: 20px; }
+        .card { background: #fff; padding: 20px; border-radius: 8px; border: 2px solid #3498db; margin-bottom: 25px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .card-real { border-color: #27ae60; }
     </style>
 </head>
 <body>
@@ -27,9 +28,9 @@
 <div class="container">
     <h2>نظام إدارة العقارات (العملاء والعروض والطلبات)</h2>
     
-    <!-- قسم تسجيل العملاء -->
+    <!-- نموذج تسجيل العملاء (الظاهر ببروز واضح) -->
     <div class="card">
-        <h3>تسجيل عميل جديد</h3>
+        <h3 style="color: #2980b9; margin-top: 0;">1. نموذج تسجيل عميل جديد</h3>
         <form id="clientForm">
             <div class="row">
                 <div class="col form-group">
@@ -45,14 +46,14 @@
         </form>
     </div>
 
-    <!-- قسم إدخال العروض والطلبات -->
-    <div class="card">
-        <h3>إدخال عرض أو طلب عقاري</h3>
+    <!-- نموذج إدخال العروض والطلبات -->
+    <div class="card card-real">
+        <h3 style="color: #27ae60; margin-top: 0;">2. نموذج إدخال عرض أو طلب عقاري</h3>
         <form id="realEstateForm">
             <div class="form-group">
                 <label>اختر العميل:</label>
                 <select id="selected_client_id" required>
-                    <option value="">اختر العميل المسجل أولاً</option>
+                    <option value="">اختر العميل المسجل أولاً من القائمة</option>
                 </select>
             </div>
 
@@ -251,7 +252,7 @@
         updateClientsTable();
         updateClientDropdown();
 
-        alert(`تم تسجيل العميل (${name}) بنجاح!`);
+        alert(`تم تسجيل العميل (${name}) بنجاح وأصبح متاحاً في القائمة!`);
         this.reset();
     });
 
@@ -271,7 +272,7 @@
 
     function updateClientDropdown() {
         const dropdown = document.getElementById("selected_client_id");
-        dropdown.innerHTML = '<option value="">اختر العميل</option>';
+        dropdown.innerHTML = '<option value="">اختر العميل المسجل</option>';
 
         clientsList.forEach(c => {
             let option = document.createElement("option");
@@ -281,7 +282,7 @@
         });
     }
 
-    // تسجیل عرض أو طلب
+    // تسجيل عرض أو طلب
     document.getElementById("realEstateForm").addEventListener("submit", function(e) {
         e.preventDefault();
 
@@ -289,7 +290,7 @@
         const selectedClient = clientsList.find(c => c.id === clientId);
 
         if (!selectedClient) {
-            alert("الرجاء اختيار العميل أولاً أو تسجيل عميل جديد.");
+            alert("الرجاء تسجيل العميل أولاً واختياره من قائمة العملاء المسجلين.");
             return;
         }
 
