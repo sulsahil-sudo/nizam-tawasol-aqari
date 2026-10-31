@@ -28,9 +28,9 @@
 <div class="container">
     <h2>نظام إدارة العقارات (العملاء والعروض والطلبات)</h2>
     
-    <!-- نموذج تسجيل العملاء (الظاهر ببروز واضح) -->
+    <!-- 1. نموذج تسجيل العملاء (الظاهر ببروز في الأعلى) -->
     <div class="card">
-        <h3 style="color: #2980b9; margin-top: 0;">1. نموذج تسجيل عميل جديد</h3>
+        <h3 style="color: #2980b9; margin-top: 0;">تسجيل عميل جديد</h3>
         <form id="clientForm">
             <div class="row">
                 <div class="col form-group">
@@ -46,14 +46,33 @@
         </form>
     </div>
 
-    <!-- نموذج إدخال العروض والطلبات -->
-    <div class="card card-real">
-        <h3 style="color: #27ae60; margin-top: 0;">2. نموذج إدخال عرض أو طلب عقاري</h3>
+    <!-- 2. جدول العملاء المسجلين -->
+    <div class="section">
+        <h3>قائمة العملاء المسجلين</h3>
+        <table id="clientsTable">
+            <thead>
+                <tr>
+                    <th>معرف العميل</th>
+                    <th>اسم العميل</th>
+                    <th>رقم الجوال</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="3">لا توجد عملاء مسجلين حتى الآن</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 3. نموذج إدخال العروض والطلبات -->
+    <div class="card card-real" style="margin-top: 30px;">
+        <h3 style="color: #27ae60; margin-top: 0;">إدخال عرض أو طلب عقاري</h3>
         <form id="realEstateForm">
             <div class="form-group">
                 <label>اختر العميل:</label>
                 <select id="selected_client_id" required>
-                    <option value="">اختر العميل المسجل أولاً من القائمة</option>
+                    <option value="">اختر العميل المسجل من القائمة أولاً</option>
                 </select>
             </div>
 
@@ -129,26 +148,7 @@
         </form>
     </div>
 
-    <!-- جدول العملاء المسجلين -->
-    <div class="section">
-        <h3>قائمة العملاء المسجلين</h3>
-        <table id="clientsTable">
-            <thead>
-                <tr>
-                    <th>معرف العميل</th>
-                    <th>اسم العميل</th>
-                    <th>رقم الجوال</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td colspan="3">لا توجد عملاء مسجلين حتى الآن</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- جدول السجلات المدخلة -->
+    <!-- 4. جدول العروض والطلبات المدخلة -->
     <div class="section">
         <h3>العروض والطلبات المدخلة حديثاً</h3>
         <table id="entriesTable">
@@ -172,7 +172,7 @@
         </table>
     </div>
 
-    <!-- جدول نتائج المطابقة الفورية -->
+    <!-- 5. جدول نتائج المطابقة الفورية -->
     <div class="section">
         <h3>نتائج المطابقة الفورية</h3>
         <table id="resultsTable">
@@ -187,7 +187,7 @@
             </thead>
             <tbody>
                 <tr>
-                    <td colspan="5">لا توجد نتائج مطابقة حتى الآن</td>
+                    <td colspan="5">لا توجد نتائج مطابقة لهذا الطلب حالياً</td>
                 </tr>
             </tbody>
         </table>
@@ -252,7 +252,7 @@
         updateClientsTable();
         updateClientDropdown();
 
-        alert(`تم تسجيل العميل (${name}) بنجاح وأصبح متاحاً في القائمة!`);
+        alert(`تم تسجيل العميل (${name}) بنجاح!`);
         this.reset();
     });
 
@@ -272,7 +272,7 @@
 
     function updateClientDropdown() {
         const dropdown = document.getElementById("selected_client_id");
-        dropdown.innerHTML = '<option value="">اختر العميل المسجل</option>';
+        dropdown.innerHTML = '<option value="">اختر العميل المسجل من القائمة</option>';
 
         clientsList.forEach(c => {
             let option = document.createElement("option");
@@ -290,7 +290,7 @@
         const selectedClient = clientsList.find(c => c.id === clientId);
 
         if (!selectedClient) {
-            alert("الرجاء تسجيل العميل أولاً واختياره من قائمة العملاء المسجلين.");
+            alert("الرجاء تسجيل العميل في الأعلى واختياره من قائمة العملاء أولاً.");
             return;
         }
 
