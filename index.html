@@ -218,8 +218,13 @@ async function saveListing() {
   const row = { type, client_id: v('l_client'), property_type: v('l_property_type'), city: v('l_city'), district: v('l_district'), rooms: n('l_rooms') || null, area: n('l_area') || null };
   if (type === 'offer') row.price = n('l_price');
   else { row.budget_min = n('l_budget_min'); row.budget_max = n('l_budget_max'); }
-  const { error } = await supabaseClient.from('listings').insert([row]);
+ const { data, error } = await supabaseClient
+  .from('listings')
+  .insert([row])
+  .select()
+  .single();
   if (error) return msg('listings', '❌ ' + error.message, false);
+  console.log(data);
   await loadData(); ['l_city','l_district','l_rooms','l_area','l_price','l_budget_min','l_budget_max'].forEach(f => document.getElementById(f).value = '');
   document.getElementById('btn-save-listing').disabled = true;
   msg('listings', '✅ تم الحفظ');
