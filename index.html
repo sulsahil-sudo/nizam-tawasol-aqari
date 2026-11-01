@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>مكتب وجه التواصل للعقار</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:Tahoma,sans-serif}
@@ -63,10 +63,17 @@ tr:nth-child(even){background:#f9fafc}
     <div><label>الاسم *</label><input type="text" id="c_name" oninput="checkClientForm()"></div>
     <div><label>الجوال *</label><input type="text" id="c_phone" maxlength="10" oninput="checkClientForm()"></div>
     <div><label>المدينة *</label><input type="text" id="c_city" oninput="checkClientForm()"></div>
+    <div><label>الجنس *</label>
+      <select id="c_gender" onchange="checkClientForm()">
+        <option value="">اختر</option>
+        <option>ذكر</option>
+        <option>أنثى</option>
+      </select>
+    </div>
   </div>
   <div class="buttons"><button class="btn-save" onclick="saveClient()" id="btn-save-client" disabled>💾 حفظ</button></div>
   <div class="msg" id="m-clients"></div>
-  <div class="table-container"><table><thead><tr><th>#</th><th>الرقم</th><th>الاسم</th><th>الجوال</th><th>المدينة</th><th>حذف</th></tr></thead><tbody id="t-clients"></tbody></table></div>
+  <div class="table-container"><table><thead><tr><th>#</th><th>الرقم</th><th>الاسم</th><th>الجوال</th><th>المدينة</th><th>الجنس</th><th>حذف</th></tr></thead><tbody id="t-clients"></tbody></table></div>
 </div>
 
 <div class="screen view" id="v-listings">
@@ -129,6 +136,13 @@ tr:nth-child(even){background:#f9fafc}
     <div class="form-group"><label>الاسم *</label><input type="text" id="new_c_name"></div>
     <div class="form-group"><label>الجوال</label><input type="text" id="new_c_phone"></div>
     <div class="form-group"><label>المدينة</label><input type="text" id="new_c_city"></div>
+    <div class="form-group"><label>الجنس *</label>
+      <select id="new_c_gender" style="width:100%;padding:12px;border:1px solid #ccc;border-radius:8px;font-size:16px;">
+        <option value="">اختر</option>
+        <option>ذكر</option>
+        <option>أنثى</option>
+      </select>
+    </div>
     <button onclick="saveNewClient()" style="background:#3498db;color:#fff;border:none;padding:14px;border-radius:8px;font-size:16px;font-weight:bold;width:100%;margin-top:10px;cursor:pointer;">💾 حفظ العميل</button>
     <div class="msg" id="modalMsg"></div>
   </div>
@@ -137,12 +151,11 @@ tr:nth-child(even){background:#f9fafc}
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// الرابط والمفتاح الخاص بمشروعك الجديد (deep real state)
-const SUPABASE_URL = 'https://nqbqvuplbawdhlwikkpf.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_XuJkNWlXFHBIsD9u9cj9pg_Ps6Bc1r0';
+// الرابط والمفتاح الجديد الخاص بك
+const SUPABASE_URL = 'https://jlvtkghpbdssrjyyeeim.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpsdnRrZ2hwYmRzc3JqeWVlZWltIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM1MzE0NDYsImV4cCI6MjEwOTEwNzQ0Nn0.NPDSuDGxnQRKhjcreaTYdLCRTQkOliHIJaEz7Wbm5ZI';
 
-// السطر السحري لحل مشكلة 406 مع المفاتيح الجديدة
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { global: { headers: { 'apikey': SUPABASE_KEY } } });
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let DB = { clients: [], listings: [], deals: [] };
 
@@ -158,7 +171,7 @@ function toggleListingFields() {
   document.getElementById('requestBudgetGroup').style.display = t === 'request' ? 'grid' : 'none';
 }
 
-function checkClientForm() { const name = v('c_name'), phone = v('c_phone'), city = v('c_city'); const validPhone = (phone.length === 10 && (phone.startsWith('05') || phone.startsWith('06'))); document.getElementById('btn-save-client').disabled = !(name && validPhone && city); }
+function checkClientForm() { const name = v('c_name'), phone = v('c_phone'), city = v('c_city'), gender = v('c_gender'); const validPhone = (phone.length === 10 && (phone.startsWith('05') || phone.startsWith('06'))); document.getElementById('btn-save-client').disabled = !(name && validPhone && city && gender); }
 function checkListingForm() {
   const type = v('l_type'), client = v('l_client'), propType = v('l_property_type'), city = v('l_city'), district = v('l_district');
   let valid = !!(type && client && propType && city && district);
@@ -169,13 +182,14 @@ function checkListingForm() {
 function checkDealForm() { document.getElementById('btn-save-deal').disabled = !(v('d_listing') && n('d_amount')); }
 
 // ===== نافذة العميل =====
-function openClientModal() { document.getElementById('clientModal').style.display = 'flex'; document.getElementById('new_c_name').value = ''; document.getElementById('new_c_phone').value = ''; document.getElementById('new_c_city').value = ''; }
+function openClientModal() { document.getElementById('clientModal').style.display = 'flex'; document.getElementById('new_c_name').value = ''; document.getElementById('new_c_phone').value = ''; document.getElementById('new_c_city').value = ''; document.getElementById('new_c_gender').value = ''; }
 function closeClientModal() { document.getElementById('clientModal').style.display = 'none'; }
 
 async function saveNewClient() {
   const name = document.getElementById('new_c_name').value.trim();
-  if (!name) return alert('اكتب الاسم');
-  const row = { name, phone: document.getElementById('new_c_phone').value.trim(), city: document.getElementById('new_c_city').value.trim() };
+  const gender = document.getElementById('new_c_gender').value;
+  if (!name || !gender) return alert('اكتب الاسم واختر الجنس');
+  const row = { name, phone: document.getElementById('new_c_phone').value.trim(), city: document.getElementById('new_c_city').value.trim(), gender };
   const { error } = await supabaseClient.from('clients').insert([row]);
   if (error) return alert('❌ خطأ: ' + error.message);
   await loadData();
@@ -192,10 +206,10 @@ async function loadData() {
 }
 
 async function saveClient() {
-  const row = { name: v('c_name'), phone: v('c_phone'), city: v('c_city') };
+  const row = { name: v('c_name'), phone: v('c_phone'), city: v('c_city'), gender: v('c_gender') };
   const { error } = await supabaseClient.from('clients').insert([row]);
   if (error) return msg('clients', '❌ ' + error.message, false);
-  await loadData(); ['c_name','c_phone','c_city'].forEach(f => document.getElementById(f).value = '');
+  await loadData(); ['c_name','c_phone','c_city'].forEach(f => document.getElementById(f).value = ''); document.getElementById('c_gender').value = '';
   document.getElementById('btn-save-client').disabled = true;
   msg('clients', '✅ تم الحفظ');
 }
@@ -222,7 +236,7 @@ async function saveDeal() {
 }
 
 function renderAll() {
-  document.getElementById('t-clients').innerHTML = DB.clients.map((c, i) => `<tr><td>${i+1}</td><td>${c.id}</td><td>${c.name}</td><td>${c.phone}</td><td>${c.city}</td><td><button class="btn-del" onclick="delClient('${c.id}')">حذف</button></td></tr>`).join('');
+  document.getElementById('t-clients').innerHTML = DB.clients.map((c, i) => `<tr><td>${i+1}</td><td>${c.id}</td><td>${c.name}</td><td>${c.phone}</td><td>${c.city}</td><td>${c.gender || '—'}</td><td><button class="btn-del" onclick="delClient('${c.id}')">حذف</button></td></tr>`).join('');
   document.getElementById('t-listings').innerHTML = DB.listings.map((l, i) => {
     const priceTxt = l.type === 'offer' ? (l.price ? l.price.toLocaleString('ar-SA') + ' ريال' : '-') : `من ${l.budget_min} إلى ${l.budget_max}`;
     return `<tr><td>${i+1}</td><td>${l.type === 'offer' ? '🏠 عرض' : '🔍 طلب'}</td><td>${getClientName(l.client_id)}</td><td>${l.property_type}</td><td>${l.city} - ${l.district}</td><td>${priceTxt}</td><td><button class="btn-del" onclick="delListing('${l.id}')">حذف</button></td></tr>`;
@@ -246,7 +260,7 @@ function doSearch() {
   let html = '', total = 0;
   if (scope === 'all' || scope === 'clients') {
     const rows = DB.clients.filter(c => Object.values(c).some(v => String(v).toLowerCase().includes(q)));
-    if (rows.length) { total += rows.length; html += `<h3>العملاء (${rows.length})</h3><table><thead><tr><th>الرقم</th><th>الاسم</th><th>الجوال</th><th>المدينة</th></tr></thead><tbody>${rows.map(c => `<tr><td>${c.id}</td><td>${c.name}</td><td>${c.phone}</td><td>${c.city}</td></tr>`).join('')}</tbody></table>`; }
+    if (rows.length) { total += rows.length; html += `<h3>العملاء (${rows.length})</h3><table><thead><tr><th>الرقم</th><th>الاسم</th><th>الجوال</th><th>المدينة</th><th>الجنس</th></tr></thead><tbody>${rows.map(c => `<tr><td>${c.id}</td><td>${c.name}</td><td>${c.phone}</td><td>${c.city}</td><td>${c.gender || '—'}</td></tr>`).join('')}</tbody></table>`; }
   }
   if (scope === 'all' || scope === 'listings') {
     const rows = DB.listings.filter(l => Object.values(l).some(v => String(v).toLowerCase().includes(q)));
