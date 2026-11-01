@@ -140,8 +140,10 @@ tr:nth-child(even){background:#f9fafc}
 const SUPABASE_URL = 'https://nqbqvuplbawdhlwikkpf.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_XuJkNWlXFHBIsD9u9cj9pg_Ps6Bc1r0';
 
-// السطر السحري لحل مشكلة خطأ 406
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { global: { headers: { 'apikey': SUPABASE_KEY } } });
+// الحل الجذري لمشكلة 406: إرسال المفتاح في الهيدر المخصص
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { 
+    global: { headers: { 'apikey': SUPABASE_KEY } } 
+});
 
 let DB = { clients: [], listings: [], deals: [] };
 
@@ -183,9 +185,12 @@ async function saveNewClient() {
 }
 
 async function loadData() {
-  const { data: c } = await supabaseClient.from('clients').select('*').order('id');
-  const { data: l } = await supabaseClient.from('listings').select('*').order('id');
-  const { data: d } = await supabaseClient.from('deals').select('*').order('id');
+  const { data: c, error: e1 } = await supabaseClient.from('clients').select('*').order('id');
+  const { data: l, error: e2 } = await supabaseClient.from('listings').select('*').order('id');
+  const { data: d, error: e3 } = await supabaseClient.from('deals').select('*').order('id');
+  
+  if (e1 || e2 || e3) console.error("خطأ:", e1 || e2 || e3);
+
   DB.clients = c || []; DB.listings = l || []; DB.deals = d || [];
   renderAll(); refreshSelects();
 }
