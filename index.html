@@ -139,7 +139,9 @@ tr:nth-child(even){background:#f9fafc}
 <script>
 const SUPABASE_URL = 'https://nqbqvuplbawdhlwikkpf.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_XuJkNWlXFHBIsD9u9cj9pg_Ps6Bc1r0';
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+  global: { headers: { 'apikey': SUPABASE_KEY } }
+});
 
 let DB = { clients: [], listings: [], deals: [] };
 
