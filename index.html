@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>مكتب وجه التواصل للعقار</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:Tahoma,sans-serif}
@@ -18,15 +18,13 @@ h1{color:#1e3c72;font-size:22px}
 .home-buttons{display:grid;grid-template-columns:1fr;gap:12px;margin-top:20px}
 .home-btn{display:flex;align-items:center;justify-content:flex-start;gap:15px;padding:20px;border:none;border-radius:12px;cursor:pointer;font-size:16px;font-weight:bold;color:#fff;transition:transform .2s;width:100%}
 .home-btn:active{transform:scale(.98)}.home-btn .icon{font-size:28px}
-.b1{background:linear-gradient(135deg,#2980b9,#3498db)}.b2{background:linear-gradient(135deg,#27ae60,#2ecc71)}.b3{background:linear-gradient(135deg,#e67e22,#f39c12)}.b4{background:linear-gradient(135deg,#8e44ad,#9b59b6)}.b5{background:linear-gradient(135deg,#c0392b,#e74c3c)}.b6{background:linear-gradient(135deg,#16a085,#1abc9c)}
+.b1{background:linear-gradient(135deg,#2980b9,#3498db)}.b2{background:linear-gradient(135deg,#27ae60,#2ecc71)}.b3{background:linear-gradient(135deg,#e67e22,#f39c12)}.b5{background:linear-gradient(135deg,#c0392b,#e74c3c)}.b6{background:linear-gradient(135deg,#16a085,#1abc9c)}
 .form-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:15px}
 label{display:block;font-weight:bold;color:#34495e;margin-bottom:6px;font-size:14px}
 input,select,textarea{width:100%;padding:12px;border:1px solid #ccc;border-radius:8px;font-size:16px;font-family:inherit}
 .buttons{display:flex;flex-direction:column;gap:10px;margin-bottom:15px}
 .btn-save{background:#27ae60;color:#fff;border:none;padding:15px;border-radius:8px;cursor:pointer;font-size:16px;font-weight:bold;width:100%}
 .btn-save:disabled{background:#bdc3c7;cursor:not-allowed}
-.btn-search-modal{background:#2980b9;color:#fff;border:none;padding:15px;border-radius:8px;cursor:pointer;font-size:16px;font-weight:bold;width:100%}
-.btn-edit{background:#f39c12;color:#fff;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:bold}
 .btn-del{background:#e74c3c;color:#fff;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:13px}
 .table-container{width:100%;overflow-x:auto;margin-top:15px;border-radius:8px;border:1px solid #e1e5eb}
 table{width:100%;min-width:700px;border-collapse:collapse;font-size:14px}
@@ -38,23 +36,11 @@ tr:nth-child(even){background:#f9fafc}
 .search-bar{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
 .search-bar input,.search-bar select{width:100%;padding:12px;font-size:16px}
 .empty{text-align:center;color:#95a5a6;padding:25px;font-style:italic}
-.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);z-index:1000;justify-content:center;align-items:flex-end}
-.modal-content{background:#fff;padding:20px;border-radius:20px 20px 0 0;width:100%;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 -5px 15px rgba(0,0,0,.3);overflow-y:auto}
-.modal-header{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #ecf0f1;padding-bottom:10px;margin-bottom:15px}
-.modal-header h3{color:#2c3e50;margin:0;font-size:18px}
-.close-btn{background:#e74c3c;color:white;border:none;padding:8px 12px;border-radius:5px;cursor:pointer;font-weight:bold;font-size:14px}
-.modal-search{width:100%;padding:12px;margin-bottom:15px;border:1px solid #ccc;border-radius:8px;font-size:16px}
-.modal-table-container{overflow-y:auto;flex-grow:1}
-.modal-table-container table{width:100%;min-width:500px;border-collapse:collapse}
-.modal-table-container th,.modal-table-container td{border:1px solid #ddd;padding:10px;text-align:center}
-.modal-table-container th{background:#34495e;color:white;position:sticky;top:0}
-.modal-table-container tbody tr{cursor:pointer;transition:background .2s}
-.modal-table-container tbody tr:hover{background:#d5f5e3}
 </style>
 </head>
 <body>
 <div class="screen view active" id="v-home">
-  <div class="header"><div class="logo" style="font-size:50px; text-align:center;">🏢</div><h1>مكتب وجه التواصل للعقار</h1><p class="subtitle">نظام إدارة العقارات (عروض وطلبات)</p></div>
+  <div class="header"><div class="logo" style="font-size:50px; text-align:center;">🏢</div><h1>مكتب وجه التواصل للعقار</h1><p class="subtitle">نظام إدارة العقارات (سحابي)</p></div>
   <div class="home-buttons">
     <button class="home-btn b1" onclick="go('clients')"><span class="icon">👥</span><span>إدخال العملاء</span></button>
     <button class="home-btn b2" onclick="go('listings')"><span class="icon">🏠</span><span>إدخال العروض والطلبات</span></button>
@@ -67,86 +53,76 @@ tr:nth-child(even){background:#f9fafc}
 <div class="screen view" id="v-clients">
   <div class="view-header"><h2>👥 العملاء</h2><button class="back-btn" onclick="go('home')">← الرئيسية</button></div>
   <div class="form-grid">
-    <div><label>الاسم <span style="color:red">*</span></label><input type="text" id="c_name" oninput="checkClientForm()"></div>
-    <div><label>الجوال <span style="color:red">*</span></label><input type="text" id="c_phone" maxlength="10" oninput="checkClientForm()"></div>
-    <div><label>المدينة <span style="color:red">*</span></label><input type="text" id="c_city" oninput="checkClientForm()"></div>
+    <div><label>الاسم *</label><input type="text" id="c_name" oninput="checkClientForm()"></div>
+    <div><label>الجوال *</label><input type="text" id="c_phone" maxlength="10" oninput="checkClientForm()"></div>
+    <div><label>المدينة *</label><input type="text" id="c_city" oninput="checkClientForm()"></div>
   </div>
-  <div class="buttons"><button class="btn-save" onclick="saveClient()" id="btn-save-client" disabled>💾 حفظ العميل</button><button class="btn-search-modal" onclick="openModal('clients')">🔍 بحث وتعديل</button></div>
+  <div class="buttons"><button class="btn-save" onclick="saveClient()" id="btn-save-client" disabled>💾 حفظ</button></div>
   <div class="msg" id="m-clients"></div>
-  <div class="table-container"><table><thead><tr><th>#</th><th>الرقم</th><th>الاسم</th><th>الجوال</th><th>المدينة</th><th>إجراءات</th></tr></thead><tbody id="t-clients"></tbody></table></div>
+  <div class="table-container"><table><thead><tr><th>#</th><th>الرقم</th><th>الاسم</th><th>الجوال</th><th>المدينة</th><th>حذف</th></tr></thead><tbody id="t-clients"></tbody></table></div>
 </div>
 
 <div class="screen view" id="v-listings">
   <div class="view-header"><h2>🏠 العروض والطلبات</h2><button class="back-btn" onclick="go('home')">← الرئيسية</button></div>
   <div class="form-grid">
-    <div><label>نوع السجل <span style="color:red">*</span></label>
-      <select id="l_type" onchange="toggleListingFields()">
-        <option value="offer">🏠 عرض عقار</option>
-        <option value="request">🔍 طلب عقار</option>
-      </select>
-    </div>
-    <div><label>العميل <span style="color:red">*</span></label>
-      <select id="l_client" onchange="checkListingForm()"><option value="">اختر العميل</option></select>
-    </div>
-    <div><label>نوع العقار <span style="color:red">*</span></label>
-      <select id="l_property_type" onchange="checkListingForm()">
-        <option value="">اختر</option><option>شقة</option><option>فيلا</option><option>أرض</option><option>عمارة</option>
-      </select>
+    <div><label>نوع السجل *</label><select id="l_type" onchange="toggleListingFields()"><option value="offer">🏠 عرض عقار</option><option value="request">🔍 طلب عقار</option></select></div>
+    <div><label>العميل *</label><select id="l_client" onchange="checkListingForm()"><option value="">اختر</option></select></div>
+    <div><label>نوع العقار *</label><select id="l_property_type" onchange="checkListingForm()"><option value="">اختر</option><option>شقة</option><option>فيلا</option><option>أرض</option></select></div>
+    <div class="row" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div><label>المدينة *</label><input type="text" id="l_city" oninput="checkListingForm()"></div>
+      <div><label>الحي *</label><input type="text" id="l_district" oninput="checkListingForm()"></div>
     </div>
     <div class="row" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-      <div><label>المدينة <span style="color:red">*</span></label><input type="text" id="l_city" oninput="checkListingForm()"></div>
-      <div><label>الحي <span style="color:red">*</span></label><input type="text" id="l_district" oninput="checkListingForm()"></div>
+      <div><label>الغرف</label><input type="number" id="l_rooms" min="0"></div>
+      <div><label>المساحة</label><input type="number" id="l_area" min="0"></div>
     </div>
-    <div class="row" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-      <div><label>عدد الغرف</label><input type="number" id="l_rooms" min="0"></div>
-      <div><label>المساحة (م²)</label><input type="number" id="l_area" min="0"></div>
-    </div>
-    <div id="offerPriceGroup"><label>السعر المطلوب <span style="color:red">*</span></label><input type="number" id="l_price" min="0" oninput="checkListingForm()"></div>
+    <div id="offerPriceGroup"><label>السعر *</label><input type="number" id="l_price" min="0" oninput="checkListingForm()"></div>
     <div class="row" id="requestBudgetGroup" style="display:none;grid-template-columns:1fr 1fr;gap:12px">
-      <div><label>الميزانية من <span style="color:red">*</span></label><input type="number" id="l_budget_min" min="0" oninput="checkListingForm()"></div>
-      <div><label>إلى <span style="color:red">*</span></label><input type="number" id="l_budget_max" min="0" oninput="checkListingForm()"></div>
+      <div><label>الميزانية من *</label><input type="number" id="l_budget_min" min="0" oninput="checkListingForm()"></div>
+      <div><label>إلى *</label><input type="number" id="l_budget_max" min="0" oninput="checkListingForm()"></div>
     </div>
   </div>
-  <div class="buttons"><button class="btn-save" onclick="saveListing()" id="btn-save-listing" disabled>💾 حفظ السجل</button><button class="btn-search-modal" onclick="openModal('listings')">🔍 بحث وتعديل</button></div>
+  <div class="buttons"><button class="btn-save" onclick="saveListing()" id="btn-save-listing" disabled>💾 حفظ</button></div>
   <div class="msg" id="m-listings"></div>
-  <div class="table-container"><table><thead><tr><th>#</th><th>النوع</th><th>العميل</th><th>نوع العقار</th><th>المدينة/الحي</th><th>السعر/الميزانية</th><th>إجراءات</th></tr></thead><tbody id="t-listings"></tbody></table></div>
+  <div class="table-container"><table><thead><tr><th>#</th><th>النوع</th><th>العميل</th><th>نوع العقار</th><th>المدينة/الحي</th><th>السعر/الميزانية</th><th>حذف</th></tr></thead><tbody id="t-listings"></tbody></table></div>
 </div>
 
 <div class="screen view" id="v-deals">
   <div class="view-header"><h2>💰 الصفقات</h2><button class="back-btn" onclick="go('home')">← الرئيسية</button></div>
   <div class="form-grid">
-    <div><label>السجل (عرض/طلب) <span style="color:red">*</span></label><select id="d_listing" onchange="checkDealForm()"><option value="">اختر</option></select></div>
-    <div><label>النوع <span style="color:red">*</span></label><select id="d_type" onchange="checkDealForm()"><option>بيع</option><option>إيجار</option></select></div>
-    <div><label>المبلغ <span style="color:red">*</span></label><input type="number" id="d_amount" min="0" oninput="checkDealForm()"></div>
+    <div><label>السجل *</label><select id="d_listing" onchange="checkDealForm()"><option value="">اختر</option></select></div>
+    <div><label>النوع *</label><select id="d_type" onchange="checkDealForm()"><option>بيع</option><option>إيجار</option></select></div>
+    <div><label>المبلغ *</label><input type="number" id="d_amount" min="0" oninput="checkDealForm()"></div>
     <div><label>العمولة</label><input type="number" id="d_commission" min="0"></div>
   </div>
-  <div class="buttons"><button class="btn-save" onclick="saveDeal()" id="btn-save-deal" disabled>💾 حفظ الصفقة</button><button class="btn-search-modal" onclick="openModal('deals')">🔍 بحث وتعديل</button></div>
+  <div class="buttons"><button class="btn-save" onclick="saveDeal()" id="btn-save-deal" disabled>💾 حفظ</button></div>
   <div class="msg" id="m-deals"></div>
-  <div class="table-container"><table><thead><tr><th>#</th><th>السجل</th><th>النوع</th><th>المبلغ</th><th>العمولة</th><th>التاريخ</th><th>إجراء</th></tr></thead><tbody id="t-deals"></tbody></table></div>
+  <div class="table-container"><table><thead><tr><th>#</th><th>السجل</th><th>النوع</th><th>المبلغ</th><th>العمولة</th><th>التاريخ</th><th>حذف</th></tr></thead><tbody id="t-deals"></tbody></table></div>
 </div>
 
 <div class="screen view" id="v-search">
-  <div class="view-header"><h2>🔍 البحث الشامل</h2><button class="back-btn" onclick="go('home')">← الرئيسية</button></div>
+  <div class="view-header"><h2>🔍 البحث</h2><button class="back-btn" onclick="go('home')">← الرئيسية</button></div>
   <div class="search-bar"><input type="text" id="searchInput" placeholder="ابحث..." onkeydown="if(event.key==='Enter') doSearch()"><select id="searchScope"><option value="all">الكل</option><option value="clients">العملاء</option><option value="listings">العروض والطلبات</option><option value="deals">الصفقات</option></select><button class="btn-save" onclick="doSearch()">🔎 بحث</button></div>
   <div id="searchResults" class="results"><div class="empty">اكتب كلمة للبحث...</div></div>
 </div>
 
-<div id="searchModal" class="modal"><div class="modal-content"><div class="modal-header"><h3 id="modalTitle">اختر السجل</h3><button class="close-btn" onclick="closeModal()">إغلاق ✖</button></div><input type="text" id="modalSearchInput" class="modal-search" placeholder="ابحث..." onkeyup="filterModalData()"><div class="modal-table-container"><table id="modalTable"><thead id="modalTableHead"></thead><tbody id="modalTableBody"></tbody></table></div></div></div>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-let DB = JSON.parse(localStorage.getItem('aqariDBLocal') || '{"clients":[],"listings":[],"deals":[]}');
-function saveDB() { localStorage.setItem('aqariDBLocal', JSON.stringify(DB)); }
-let nextId = { clients: 1, listings: 1, deals: 1 };
-for (let k in DB) { if (DB[k].length) nextId[k] = Math.max(...DB[k].map(x => x.id)) + 1; }
-function getNextId(table) { return nextId[table]++; }
-function go(name) { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.getElementById('v-' + name).classList.add('active'); if (name === 'search') document.getElementById('searchResults').innerHTML = '<div class="empty">اكتب كلمة للبحث...</div>'; }
+const SUPABASE_URL = 'https://nqbqvuplbawdhlwikkpf.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_XuJkNWlXFHBIsD9u9cj9pg_Ps6Bc1r0';
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let DB = { clients: [], listings: [], deals: [] };
+
+function go(name) { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.getElementById('v-' + name).classList.add('active'); }
 function v(id) { return document.getElementById(id).value.trim(); }
 function n(id) { return Math.abs(Number(document.getElementById(id).value)); }
 function msg(key, text, ok = true) { const el = document.getElementById('m-' + key); el.textContent = text; el.className = 'msg ' + (ok ? 'ok' : 'err'); setTimeout(() => el.className = 'msg', 3000); }
 function getClientName(id) { const c = DB.clients.find(c => String(c.id) === String(id)); return c ? c.name : '⚠️'; }
 
 function toggleListingFields() {
-  const t = document.getElementById('l_type').value;
+  const t = v('l_type');
   document.getElementById('offerPriceGroup').style.display = t === 'offer' ? 'block' : 'none';
   document.getElementById('requestBudgetGroup').style.display = t === 'request' ? 'grid' : 'none';
 }
@@ -161,81 +137,62 @@ function checkListingForm() {
 }
 function checkDealForm() { document.getElementById('btn-save-deal').disabled = !(v('d_listing') && n('d_amount')); }
 
-function saveClient() { const row = { id: getNextId('clients'), name: v('c_name'), phone: v('c_phone'), city: v('c_city') }; DB.clients.push(row); saveDB(); renderAll(); refreshSelects(); ['c_name','c_phone','c_city'].forEach(f => document.getElementById(f).value = ''); msg('clients', '✅ تم حفظ العميل'); }
-
-function saveListing() {
-  const type = v('l_type');
-  const row = { 
-    id: getNextId('listings'), 
-    type, 
-    client_id: v('l_client'), 
-    property_type: v('l_property_type'), 
-    city: v('l_city'), 
-    district: v('l_district'), 
-    rooms: n('l_rooms') || null, 
-    area: n('l_area') || null 
-  };
-  if (type === 'offer') row.price = n('l_price');
-  else { row.budget_min = n('l_budget_min'); row.budget_max = n('l_budget_max'); }
-  
-  DB.listings.push(row); saveDB(); renderAll(); refreshSelects();
-  ['l_city','l_district','l_rooms','l_area','l_price','l_budget_min','l_budget_max'].forEach(f => document.getElementById(f).value = '');
-  msg('listings', '✅ تم حفظ السجل');
+async function loadData() {
+  const { data: c } = await supabaseClient.from('clients').select('*').order('id');
+  const { data: l } = await supabaseClient.from('listings').select('*').order('id');
+  const { data: d } = await supabaseClient.from('deals').select('*').order('id');
+  DB.clients = c || []; DB.listings = l || []; DB.deals = d || [];
+  renderAll(); refreshSelects();
 }
 
-function saveDeal() {
-  const row = { 
-    id: getNextId('deals'), 
-    listing_id: v('d_listing'), 
-    type: v('d_type'), 
-    amount: n('d_amount'), 
-    commission: n('d_commission'), 
-    date: new Date().toISOString().slice(0,10) 
-  };
-  DB.deals.push(row); saveDB(); renderAll(); refreshSelects(); ['d_amount','d_commission'].forEach(f => document.getElementById(f).value = '');
-  msg('deals', '✅ تم حفظ الصفقة');
+async function saveClient() {
+  const row = { name: v('c_name'), phone: v('c_phone'), city: v('c_city') };
+  const { error } = await supabaseClient.from('clients').insert([row]);
+  if (error) return msg('clients', '❌ ' + error.message, false);
+  await loadData(); ['c_name','c_phone','c_city'].forEach(f => document.getElementById(f).value = '');
+  document.getElementById('btn-save-client').disabled = true;
+  msg('clients', '✅ تم الحفظ');
+}
+
+async function saveListing() {
+  const type = v('l_type');
+  const row = { type, client_id: v('l_client'), property_type: v('l_property_type'), city: v('l_city'), district: v('l_district'), rooms: n('l_rooms') || null, area: n('l_area') || null };
+  if (type === 'offer') row.price = n('l_price');
+  else { row.budget_min = n('l_budget_min'); row.budget_max = n('l_budget_max'); }
+  const { error } = await supabaseClient.from('listings').insert([row]);
+  if (error) return msg('listings', '❌ ' + error.message, false);
+  await loadData(); ['l_city','l_district','l_rooms','l_area','l_price','l_budget_min','l_budget_max'].forEach(f => document.getElementById(f).value = '');
+  document.getElementById('btn-save-listing').disabled = true;
+  msg('listings', '✅ تم الحفظ');
+}
+
+async function saveDeal() {
+  const row = { listing_id: v('d_listing'), type: v('d_type'), amount: n('d_amount'), commission: n('d_commission'), date: new Date().toISOString().slice(0,10) };
+  const { error } = await supabaseClient.from('deals').insert([row]);
+  if (error) return msg('deals', '❌ ' + error.message, false);
+  await loadData(); ['d_amount','d_commission'].forEach(f => document.getElementById(f).value = '');
+  document.getElementById('btn-save-deal').disabled = true;
+  msg('deals', '✅ تم الحفظ');
 }
 
 function renderAll() {
   document.getElementById('t-clients').innerHTML = DB.clients.map((c, i) => `<tr><td>${i+1}</td><td>${c.id}</td><td>${c.name}</td><td>${c.phone}</td><td>${c.city}</td><td><button class="btn-del" onclick="delClient('${c.id}')">حذف</button></td></tr>`).join('');
-  
   document.getElementById('t-listings').innerHTML = DB.listings.map((l, i) => {
     const priceTxt = l.type === 'offer' ? (l.price ? l.price.toLocaleString('ar-SA') + ' ريال' : '-') : `من ${l.budget_min} إلى ${l.budget_max}`;
     return `<tr><td>${i+1}</td><td>${l.type === 'offer' ? '🏠 عرض' : '🔍 طلب'}</td><td>${getClientName(l.client_id)}</td><td>${l.property_type}</td><td>${l.city} - ${l.district}</td><td>${priceTxt}</td><td><button class="btn-del" onclick="delListing('${l.id}')">حذف</button></td></tr>`;
   }).join('');
-  
   document.getElementById('t-deals').innerHTML = DB.deals.map((d, i) => `<tr><td>${i+1}</td><td>سجل #${d.listing_id}</td><td>${d.type}</td><td>${d.amount}</td><td>${d.commission}</td><td>${d.date}</td><td><button class="btn-del" onclick="delDeal('${d.id}')">حذف</button></td></tr>`).join('');
 }
 
 function refreshSelects() {
-  const clients = '<option value="">اختر العميل</option>' + DB.clients.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+  const clients = '<option value="">اختر</option>' + DB.clients.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
   document.getElementById('l_client').innerHTML = clients;
-  
-  const listings = '<option value="">اختر السجل</option>' + DB.listings.map(l => `<option value="${l.id}">${l.type === 'offer' ? 'عرض' : 'طلب'} #${l.id} - ${l.property_type} (${l.city})</option>`).join('');
-  document.getElementById('d_listing').innerHTML = listings;
+  document.getElementById('d_listing').innerHTML = '<option value="">اختر</option>' + DB.listings.map(l => `<option value="${l.id}">${l.type === 'offer' ? 'عرض' : 'طلب'} #${l.id}</option>`).join('');
 }
 
-function delClient(id) { if (!confirm('حذف؟')) return; DB.clients = DB.clients.filter(c => String(c.id) !== String(id)); saveDB(); renderAll(); refreshSelects(); }
-function delListing(id) { if (!confirm('حذف؟')) return; DB.listings = DB.listings.filter(l => String(l.id) !== String(id)); saveDB(); renderAll(); refreshSelects(); }
-function delDeal(id) { if (!confirm('حذف؟')) return; DB.deals = DB.deals.filter(d => String(d.id) !== String(id)); saveDB(); renderAll(); refreshSelects(); }
-
-function openModal(type) {
-  const box = document.getElementById('modalTableBody');
-  let html = '';
-  if (type === 'clients') {
-    document.getElementById('modalTitle').textContent = 'العملاء';
-    html = DB.clients.map(c => `<tr><td>${c.id}</td><td>${c.name}</td><td>${c.phone}</td><td>${c.city}</td></tr>`).join('');
-  } else if (type === 'listings') {
-    document.getElementById('modalTitle').textContent = 'العروض والطلبات';
-    html = DB.listings.map(l => `<tr><td>${l.id}</td><td>${l.type === 'offer' ? 'عرض' : 'طلب'}</td><td>${getClientName(l.client_id)}</td><td>${l.property_type}</td><td>${l.city}</td></tr>`).join('');
-  } else if (type === 'deals') {
-    document.getElementById('modalTitle').textContent = 'الصفقات';
-    html = DB.deals.map(d => `<tr><td>${d.id}</td><td>${d.type}</td><td>${d.amount}</td><td>${d.date}</td></tr>`).join('');
-  }
-  box.innerHTML = html || '<tr><td colspan="4">لا توجد بيانات</td></tr>';
-  document.getElementById('searchModal').style.display = 'flex';
-}
-function closeModal() { document.getElementById('searchModal').style.display = 'none'; }
+async function delClient(id) { if (!confirm('حذف؟')) return; await supabaseClient.from('clients').delete().eq('id', id); await loadData(); }
+async function delListing(id) { if (!confirm('حذف؟')) return; await supabaseClient.from('listings').delete().eq('id', id); await loadData(); }
+async function delDeal(id) { if (!confirm('حذف؟')) return; await supabaseClient.from('deals').delete().eq('id', id); await loadData(); }
 
 function doSearch() {
   const q = v('searchInput').toLowerCase(), scope = v('searchScope'), box = document.getElementById('searchResults');
@@ -264,8 +221,7 @@ function exportExcel() {
   XLSX.writeFile(wb, 'النظام_العقاري.xlsx');
 }
 
-renderAll();
-refreshSelects();
+loadData();
 </script>
 </body>
 </html>
