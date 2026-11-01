@@ -26,6 +26,8 @@ input,select,textarea{width:100%;padding:12px;border:1px solid #ccc;border-radiu
 .btn-save{background:#27ae60;color:#fff;border:none;padding:15px;border-radius:8px;cursor:pointer;font-size:16px;font-weight:bold;width:100%}
 .btn-save:disabled{background:#bdc3c7;cursor:not-allowed}
 .btn-del{background:#e74c3c;color:#fff;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:13px}
+.btn-add{background:#3498db;color:#fff;border:none;padding:0 15px;border-radius:8px;cursor:pointer;font-size:20px;font-weight:bold;height:42px;margin-right:8px}
+.input-row{display:flex;gap:8px}
 .table-container{width:100%;overflow-x:auto;margin-top:15px;border-radius:8px;border:1px solid #e1e5eb}
 table{width:100%;min-width:700px;border-collapse:collapse;font-size:14px}
 th,td{border:1px solid #e1e5eb;padding:12px 8px;text-align:center}
@@ -36,6 +38,11 @@ tr:nth-child(even){background:#f9fafc}
 .search-bar{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
 .search-bar input,.search-bar select{width:100%;padding:12px;font-size:16px}
 .empty{text-align:center;color:#95a5a6;padding:25px;font-style:italic}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);z-index:1000;justify-content:center;align-items:center}
+.modal-content{background:#fff;padding:25px;border-radius:12px;width:90%;max-width:450px;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
+.modal-header h3{margin:0;border:none;padding:0}
+.close-btn{background:#e74c3c;border:none;color:#fff;padding:6px 12px;border-radius:6px;cursor:pointer;font-weight:bold;width:auto}
 </style>
 </head>
 <body>
@@ -66,7 +73,13 @@ tr:nth-child(even){background:#f9fafc}
   <div class="view-header"><h2>🏠 العروض والطلبات</h2><button class="back-btn" onclick="go('home')">← الرئيسية</button></div>
   <div class="form-grid">
     <div><label>نوع السجل *</label><select id="l_type" onchange="toggleListingFields()"><option value="offer">🏠 عرض عقار</option><option value="request">🔍 طلب عقار</option></select></div>
-    <div><label>العميل *</label><select id="l_client" onchange="checkListingForm()"><option value="">اختر</option></select></div>
+    <div>
+      <label>العميل *</label>
+      <div class="input-row">
+        <select id="l_client" onchange="checkListingForm()"><option value="">اختر</option></select>
+        <button class="btn-add" onclick="openClientModal()" title="إضافة عميل جديد">+</button>
+      </div>
+    </div>
     <div><label>نوع العقار *</label><select id="l_property_type" onchange="checkListingForm()"><option value="">اختر</option><option>شقة</option><option>فيلا</option><option>أرض</option></select></div>
     <div class="row" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
       <div><label>المدينة *</label><input type="text" id="l_city" oninput="checkListingForm()"></div>
@@ -106,6 +119,21 @@ tr:nth-child(even){background:#f9fafc}
   <div id="searchResults" class="results"><div class="empty">اكتب كلمة للبحث...</div></div>
 </div>
 
+<!-- نافذة إضافة عميل جديد -->
+<div id="clientModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>➕ إضافة عميل جديد</h3>
+      <button class="close-btn" onclick="closeClientModal()">إغلاق ✖</button>
+    </div>
+    <div class="form-group"><label>الاسم *</label><input type="text" id="new_c_name"></div>
+    <div class="form-group"><label>الجوال</label><input type="text" id="new_c_phone"></div>
+    <div class="form-group"><label>المدينة</label><input type="text" id="new_c_city"></div>
+    <button onclick="saveNewClient()" style="background:#3498db;color:#fff;border:none;padding:14px;border-radius:8px;font-size:16px;font-weight:bold;width:100%;margin-top:10px;cursor:pointer;">💾 حفظ العميل</button>
+    <div class="msg" id="modalMsg"></div>
+  </div>
+</div>
+
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -118,7 +146,7 @@ let DB = { clients: [], listings: [], deals: [] };
 function go(name) { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.getElementById('v-' + name).classList.add('active'); }
 function v(id) { return document.getElementById(id).value.trim(); }
 function n(id) { return Math.abs(Number(document.getElementById(id).value)); }
-function msg(key, text, ok = true) { const el = document.getElementById('m-' + key); el.textContent = text; el.className = 'msg ' + (ok ? 'ok' : 'err'); setTimeout(() => el.className = 'msg', 3000); }
+function msg(key, text, ok = true, elId = 'msg') { const el = document.getElementById('m-' + key); el.textContent = text; el.className = 'msg ' + (ok ? 'ok' : 'err'); setTimeout(() => el.className = 'msg', 3000); }
 function getClientName(id) { const c = DB.clients.find(c => String(c.id) === String(id)); return c ? c.name : '⚠️'; }
 
 function toggleListingFields() {
@@ -136,6 +164,21 @@ function checkListingForm() {
   document.getElementById('btn-save-listing').disabled = !valid;
 }
 function checkDealForm() { document.getElementById('btn-save-deal').disabled = !(v('d_listing') && n('d_amount')); }
+
+// ===== نافذة العميل =====
+function openClientModal() { document.getElementById('clientModal').style.display = 'flex'; document.getElementById('new_c_name').value = ''; document.getElementById('new_c_phone').value = ''; document.getElementById('new_c_city').value = ''; }
+function closeClientModal() { document.getElementById('clientModal').style.display = 'none'; }
+
+async function saveNewClient() {
+  const name = document.getElementById('new_c_name').value.trim();
+  if (!name) return alert('اكتب الاسم');
+  const row = { name, phone: document.getElementById('new_c_phone').value.trim(), city: document.getElementById('new_c_city').value.trim() };
+  const { error } = await supabaseClient.from('clients').insert([row]);
+  if (error) return alert('❌ خطأ: ' + error.message);
+  await loadData();
+  closeClientModal();
+  alert('✅ تم حفظ العميل');
+}
 
 async function loadData() {
   const { data: c } = await supabaseClient.from('clients').select('*').order('id');
