@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>مكتب وجه التواصل للعقار</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:Tahoma,sans-serif}
@@ -137,13 +137,12 @@ tr:nth-child(even){background:#f9fafc}
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+// الرابط والمفتاح الخاص بمشروعك الجديد (deep real state)
 const SUPABASE_URL = 'https://nqbqvuplbawdhlwikkpf.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_XuJkNWlXFHBIsD9u9cj9pg_Ps6Bc1r0';
 
-// الحل الجذري لمشكلة 406: إرسال المفتاح في الهيدر المخصص
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { 
-    global: { headers: { 'apikey': SUPABASE_KEY } } 
-});
+// السطر السحري لحل مشكلة 406 مع المفاتيح الجديدة
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { global: { headers: { 'apikey': SUPABASE_KEY } } });
 
 let DB = { clients: [], listings: [], deals: [] };
 
@@ -185,12 +184,9 @@ async function saveNewClient() {
 }
 
 async function loadData() {
-  const { data: c, error: e1 } = await supabaseClient.from('clients').select('*').order('id');
-  const { data: l, error: e2 } = await supabaseClient.from('listings').select('*').order('id');
-  const { data: d, error: e3 } = await supabaseClient.from('deals').select('*').order('id');
-  
-  if (e1 || e2 || e3) console.error("خطأ:", e1 || e2 || e3);
-
+  const { data: c } = await supabaseClient.from('clients').select('*').order('id');
+  const { data: l } = await supabaseClient.from('listings').select('*').order('id');
+  const { data: d } = await supabaseClient.from('deals').select('*').order('id');
   DB.clients = c || []; DB.listings = l || []; DB.deals = d || [];
   renderAll(); refreshSelects();
 }
