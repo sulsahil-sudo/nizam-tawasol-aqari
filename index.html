@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>مكتب وجه التواصل للعقار</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:Tahoma,sans-serif}
@@ -151,7 +151,6 @@ tr:nth-child(even){background:#f9fafc}
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// ⚠️ تم وضع الرابط والمفتاح الجديد الخاص بك هنا
 const SUPABASE_URL = 'https://jlvtkghpbdssrjyyeeim.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpsdnRrZ2hwYmRzc3JqeWVlZWltIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM1MzE0NDYsImV4cCI6MjEwOTEwNzQ0Nn0.NPDSuDGxnQRKhjcreaTYdLCRTQkOliHIJaEz7Wbm5ZI';
 
@@ -181,7 +180,6 @@ function checkListingForm() {
 }
 function checkDealForm() { document.getElementById('btn-save-deal').disabled = !(v('d_listing') && n('d_amount')); }
 
-// ===== نافذة العميل =====
 function openClientModal() { document.getElementById('clientModal').style.display = 'flex'; document.getElementById('new_c_name').value = ''; document.getElementById('new_c_phone').value = ''; document.getElementById('new_c_city').value = ''; document.getElementById('new_c_gender').value = ''; }
 function closeClientModal() { document.getElementById('clientModal').style.display = 'none'; }
 
