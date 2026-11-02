@@ -254,12 +254,12 @@ async function saveClient() {
 
   await loadData();
 
-  [
-    'c_name',
-    'c_phone',
-    'c_email',
-    'c_city',
-    'c_notes'
+[
+  'c_name',
+  'c_phone',
+  'c_email',
+  'c_city'
+]
   ].forEach(f =>
     document.getElementById(f).value = ''
   );
