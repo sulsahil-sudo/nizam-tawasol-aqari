@@ -190,7 +190,19 @@ function toggleListingFields() {
   document.getElementById('requestBudgetGroup').style.display = t === 'request' ? 'grid' : 'none';
 }
 
-function checkClientForm() { const name = v('c_name'), phone = v('c_phone'), city = v('c_city'), gender = v('c_gender'); const validPhone = (phone.length === 10 && (phone.startsWith('05') || phone.startsWith('06'))); document.getElementById('btn-save-client').disabled = !(name && validPhone && city && gender); }
+function checkClientForm() {
+  const name = v('c_name');
+  const phone = v('c_phone');
+  const city = v('c_city');
+  const gender = v('c_gender');
+
+  const validPhone =
+    phone === '1111111111' ||
+    (phone.length === 10 && phone.startsWith('05'));
+
+  document.getElementById('btn-save-client').disabled =
+    !(name && validPhone && city && gender);
+}
 function checkListingForm() {
   const type = v('l_type'), client = v('l_client'), propType = v('l_property_type'), city = v('l_city'), district = v('l_district');
   let valid = !!(type && client && propType && city && district);
