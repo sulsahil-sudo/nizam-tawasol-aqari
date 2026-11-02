@@ -252,12 +252,14 @@ async function saveClient() {
   if (error)
     return msg('clients', '❌ ' + error.message, false);
 
-await loadData();
+  await loadData();
 
-document.getElementById('c_name').value = '';
-document.getElementById('c_phone').value = '';
-document.getElementById('c_email').value = '';
-document.getElementById('c_city').value = '';
+  [
+    'c_name',
+    'c_phone',
+    'c_email',
+    'c_city',
+    'c_notes'
   ].forEach(f =>
     document.getElementById(f).value = ''
   );
@@ -340,7 +342,13 @@ function exportExcel() {
   XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(DB.deals), 'الصفقات');
   XLSX.writeFile(wb, 'النظام_العقاري.xlsx');
 }
-loadData();
+
+async function startApp() {
+  await loadData();
+  await loadRegions();
+}
+
+startApp();
 </script>
 </body>
 </html>
