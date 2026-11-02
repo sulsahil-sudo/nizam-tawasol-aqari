@@ -100,14 +100,14 @@ tr:nth-child(even){background:#f9fafc}
 
 <div>
   <label>المدينة *</label>
-  <select id="l_city" onchange="loadDistricts(this.value)">
+  <select id="l_city" onchange="checkListingForm()">
     <option value="">اختر المدينة</option>
   </select>
 </div>
 
 <div>
   <label>الحي *</label>
-  <select id="l_district">
+ <select id="l_district" onchange="checkListingForm()">
     <option value="">اختر الحي</option>
   </select>
 </div>
