@@ -222,10 +222,6 @@ async function saveClient() {
 
     gender: v('c_gender'),
 
-    source: v('c_source'),
-
-    notes: v('c_notes'),
-
     phone_verified: false,
 
     email_verified: false,
@@ -254,7 +250,6 @@ async function saveClient() {
   );
 
   document.getElementById('c_gender').value = '';
-  document.getElementById('c_source').value = '';
 
   document.getElementById('btn-save-client').disabled = true;
 
