@@ -342,7 +342,7 @@ function exportExcel() {
   XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(DB.deals), 'الصفقات');
   XLSX.writeFile(wb, 'النظام_العقاري.xlsx');
 }
-
+loadData();
 </script>
 </body>
 </html>
