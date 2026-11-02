@@ -252,14 +252,12 @@ async function saveClient() {
   if (error)
     return msg('clients', '❌ ' + error.message, false);
 
-  await loadData();
+await loadData();
 
-[
-  'c_name',
-  'c_phone',
-  'c_email',
-  'c_city'
-]
+document.getElementById('c_name').value = '';
+document.getElementById('c_phone').value = '';
+document.getElementById('c_email').value = '';
+document.getElementById('c_city').value = '';
   ].forEach(f =>
     document.getElementById(f).value = ''
   );
