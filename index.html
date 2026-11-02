@@ -319,6 +319,7 @@ function renderAll() {
 }
 
 function refreshSelects() {
+  console.log(DB.clients);
   const clients = '<option value="">اختر</option>' + DB.clients.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
   document.getElementById('l_client').innerHTML = clients;
   document.getElementById('d_listing').innerHTML = '<option value="">اختر</option>' + DB.listings.map(l => `<option value="${l.id}">${l.type === 'offer' ? 'عرض' : 'طلب'} #${l.id}</option>`).join('');
