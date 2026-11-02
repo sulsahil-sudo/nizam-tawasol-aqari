@@ -62,6 +62,10 @@ tr:nth-child(even){background:#f9fafc}
   <div class="form-grid">
     <div><label>الاسم *</label><input type="text" id="c_name" oninput="checkClientForm()"></div>
     <div><label>الجوال *</label><input type="text" id="c_phone" maxlength="10" oninput="checkClientForm()"></div>
+    <div>
+  <label>البريد الإلكتروني</label>
+  <input type="email" id="c_email">
+</div>
     <div><label>المدينة *</label><input type="text" id="c_city" oninput="checkClientForm()"></div>
     <div><label>الجنس *</label>
       <select id="c_gender" onchange="checkClientForm()">
@@ -205,11 +209,55 @@ async function loadData() {
 }
 
 async function saveClient() {
-  const row = { name: v('c_name'), phone: v('c_phone'), city: v('c_city'), gender: v('c_gender') };
-  const { error } = await supabaseClient.from('clients').insert([row]);
-  if (error) return msg('clients', '❌ ' + error.message, false);
-  await loadData(); ['c_name','c_phone','c_city'].forEach(f => document.getElementById(f).value = ''); document.getElementById('c_gender').value = '';
+
+  const row = {
+
+    name: v('c_name'),
+
+    phone: v('c_phone') || '1111111111',
+
+    email: v('c_email'),
+
+    city: v('c_city'),
+
+    gender: v('c_gender'),
+
+    source: v('c_source'),
+
+    notes: v('c_notes'),
+
+    phone_verified: false,
+
+    email_verified: false,
+
+    client_status: 'جديد'
+
+  };
+
+  const { error } = await supabaseClient
+    .from('clients')
+    .insert([row]);
+
+  if (error)
+    return msg('clients', '❌ ' + error.message, false);
+
+  await loadData();
+
+  [
+    'c_name',
+    'c_phone',
+    'c_email',
+    'c_city',
+    'c_notes'
+  ].forEach(f =>
+    document.getElementById(f).value = ''
+  );
+
+  document.getElementById('c_gender').value = '';
+  document.getElementById('c_source').value = '';
+
   document.getElementById('btn-save-client').disabled = true;
+
   msg('clients', '✅ تم الحفظ');
 }
 
