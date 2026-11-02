@@ -91,11 +91,26 @@ tr:nth-child(even){background:#f9fafc}
         <button class="btn-add" onclick="openClientModal()" title="إضافة عميل جديد">+ إضافة عميل</button>
       </div>
     </div>
-    <div><label>نوع العقار *</label><select id="l_property_type" onchange="checkListingForm()"><option value="">اختر</option><option>شقة</option><option>فيلا</option><option>أرض</option></select></div>
-    <div class="row" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-      <div><label>المدينة *</label><input type="text" id="l_city" oninput="checkListingForm()"></div>
-      <div><label>الحي *</label><input type="text" id="l_district" oninput="checkListingForm()"></div>
-    </div>
+    <div>
+  <label>المنطقة *</label>
+  <select id="l_region" onchange="loadCities(this.value)">
+    <option value="">اختر المنطقة</option>
+  </select>
+</div>
+
+<div>
+  <label>المدينة *</label>
+  <select id="l_city" onchange="loadDistricts(this.value)">
+    <option value="">اختر المدينة</option>
+  </select>
+</div>
+
+<div>
+  <label>الحي *</label>
+  <select id="l_district">
+    <option value="">اختر الحي</option>
+  </select>
+</div>
     <div class="row" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
       <div><label>الغرف</label><input type="number" id="l_rooms" min="0"></div>
       <div><label>المساحة</label><input type="number" id="l_area" min="0"></div>
@@ -328,7 +343,12 @@ function exportExcel() {
   XLSX.writeFile(wb, 'النظام_العقاري.xlsx');
 }
 
-loadData();
+async function startApp() {
+  await loadData();
+  await loadRegions();
+}
+
+startApp();
 </script>
 </body>
 </html>
