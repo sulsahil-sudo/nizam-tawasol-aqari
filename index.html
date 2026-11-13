@@ -48,6 +48,34 @@ tr:nth-child(even){background:#f9fafc}
 <body>
 <div class="screen view active" id="v-home">
   <div class="header"><div class="logo" style="font-size:50px; text-align:center;">🏢</div><h1>مكتب وجه التواصل للعقار</h1><p class="subtitle">نظام إدارة العقارات (سحابي)</p></div>
+  <div class="dashboard">
+
+  <div class="card">
+    <div class="num" id="statClients">0</div>
+    <div class="title">العملاء</div>
+  </div>
+
+  <div class="card">
+    <div class="num" id="statOffers">0</div>
+    <div class="title">العروض</div>
+  </div>
+
+  <div class="card">
+    <div class="num" id="statRequests">0</div>
+    <div class="title">الطلبات</div>
+  </div>
+
+  <div class="card">
+    <div class="num" id="statDeals">0</div>
+    <div class="title">الصفقات</div>
+  </div>
+
+  <div class="card">
+    <div class="num" id="statCommission">0</div>
+    <div class="title">إجمالي العمولات</div>
+  </div>
+
+</div>
   <div class="home-buttons">
     <button class="home-btn b1" onclick="go('clients')"><span class="icon">👥</span><span>إدخال العملاء</span></button>
     <button class="home-btn b2" onclick="go('listings')"><span class="icon">🏠</span><span>إدخال العروض والطلبات</span></button>
