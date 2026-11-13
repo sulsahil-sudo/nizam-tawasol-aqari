@@ -282,13 +282,33 @@ async function saveNewClient() {
 }
 
 async function loadData() {
-  const { data: c } = await supabaseClient.from('clients').select('*').order('id');
-  const { data: l } = await supabaseClient.from('listings').select('*').order('id');
-  const { data: d } = await supabaseClient.from('deals').select('*').order('id');
-  DB.clients = c || []; DB.listings = l || []; DB.deals = d || [];
-  renderAll(); refreshSelects();
-}
 
+  const { data: c } =
+    await supabaseClient
+      .from('clients')
+      .select('*')
+      .order('id');
+
+  const { data: l } =
+    await supabaseClient
+      .from('listings')
+      .select('*')
+      .order('id');
+
+  const { data: d } =
+    await supabaseClient
+      .from('deals')
+      .select('*')
+      .order('id');
+
+  DB.clients = c || [];
+  DB.listings = l || [];
+  DB.deals = d || [];
+
+  renderAll();
+  refreshSelects();
+  updateDashboard();
+}
 async function saveClient() {
 
   const row = {
@@ -401,7 +421,27 @@ function doSearch() {
   }
   box.innerHTML = total === 0 ? '<div class="empty">لا توجد نتائج</div>' : `<div style="color:#27ae60;font-weight:bold;margin-bottom:10px">✅ ${total} نتيجة</div>` + html;
 }
+function updateDashboard() {
 
+  document.getElementById('statClients').textContent =
+    DB.clients.length;
+
+  document.getElementById('statOffers').textContent =
+    DB.listings.filter(x => x.type === 'offer').length;
+
+  document.getElementById('statRequests').textContent =
+    DB.listings.filter(x => x.type === 'request').length;
+
+  document.getElementById('statDeals').textContent =
+    DB.deals.length;
+
+  document.getElementById('statCommission').textContent =
+    DB.deals.reduce(
+      (sum, d) => sum + (Number(d.commission) || 0),
+      0
+    ).toLocaleString('ar-SA');
+
+}
 function exportExcel() {
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(DB.clients), 'العملاء');
