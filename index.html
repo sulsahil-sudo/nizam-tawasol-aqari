@@ -115,14 +115,13 @@ tr:nth-child(even){background:#f9fafc}
   <div class="view-header"><h2>👥 العملاء</h2><button class="back-btn" onclick="go('home')">← الرئيسية</button></div>
   <div class="form-grid">
     <div><label>الاسم *</label><input type="text" id="c_name" oninput="checkClientForm()"></div>
-    <div><label>الجوال *</label><input
+ <input
   type="tel"
   id="c_phone"
   maxlength="10"
   inputmode="numeric"
-  pattern="05[0-9]{8}"
   oninput="
-    this.value=this.value.replace(/[^0-9]/g,'');
+    this.value=this.value.replace(/\D/g,'').slice(0,10);
     checkClientForm();
   ">
     <div>
