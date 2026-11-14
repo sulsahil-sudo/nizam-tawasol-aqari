@@ -21,9 +21,9 @@ h1{color:#1e3c72;font-size:22px}
 .b1{background:linear-gradient(135deg,#2980b9,#3498db)}.b2{background:linear-gradient(135deg,#27ae60,#2ecc71)}.b3{background:linear-gradient(135deg,#e67e22,#f39c12)}.b5{background:linear-gradient(135deg,#c0392b,#e74c3c)}.b6{background:linear-gradient(135deg,#16a085,#1abc9c)}
 .form-grid{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
+  grid-template-columns:
+  repeat(3,1fr);
   gap:12px;
-  margin-bottom:15px;
 }
 label{display:block;font-weight:bold;color:#34495e;margin-bottom:6px;font-size:14px}
 input,select,textarea{width:100%;padding:12px;border:1px solid #ccc;border-radius:8px;font-size:16px;font-family:inherit}
@@ -129,48 +129,54 @@ tr:nth-child(even){background:#f9fafc}
   style="display:none">
 </div>
 <div class="form-grid">
-    <div><label>الاسم *</label><input type="text" id="c_name" oninput="checkClientForm()"></div>
- <div>
-  <label>الجوال *</label>
 
-  <input
-    type="tel"
-    id="c_phone"
-    maxlength="10"
-    inputmode="numeric"
-    oninput="
-      this.value=this.value.replace(/\D/g,'').slice(0,10);
-      checkClientForm();
-    ">
-</div>
-    <div>
-       <label>البريد الإلكتروني</label>
-<input
-  type="email"
-  id="c_email"
-placeholder="example@gmail.com"
-</div>
-    <div>
-  <label>المنطقة *</label>
-  <select id="c_region" onchange="loadClientCities()">
-    <option value="">اختر المنطقة</option>
-  </select>
-</div>
-
-<div>
-  <label>المدينة *</label>
-  <select id="c_city" onchange="checkClientForm()">
-    <option value="">اختر المدينة</option>
-  </select>
-</div>
-    <div><label>الجنس *</label>
-      <select id="c_gender" onchange="checkClientForm()">
-        <option value="">اختر</option>
-        <option>ذكر</option>
-        <option>أنثى</option>
-      </select>
-    </div>
+  <div>
+    <label>الاسم *</label>
+    <input type="text" id="c_name"
+      oninput="checkClientForm()">
   </div>
+
+  <div>
+    <label>الجوال *</label>
+    <input type="tel" id="c_phone"
+      maxlength="10"
+      oninput="checkClientForm()">
+  </div>
+
+  <div>
+    <label>البريد الإلكتروني</label>
+    <input type="email"
+      id="c_email"
+      placeholder="example@gmail.com">
+  </div>
+
+  <div>
+    <label>المنطقة *</label>
+    <select id="c_region"
+      onchange="loadClientCities()">
+      <option value="">اختر المنطقة</option>
+    </select>
+  </div>
+
+  <div>
+    <label>المدينة *</label>
+    <select id="c_city"
+      onchange="checkClientForm()">
+      <option value="">اختر المدينة</option>
+    </select>
+  </div>
+
+  <div>
+    <label>الجنس *</label>
+    <select id="c_gender"
+      onchange="checkClientForm()">
+      <option value="">اختر</option>
+      <option>ذكر</option>
+      <option>أنثى</option>
+    </select>
+  </div>
+
+</div>
   <div class="buttons"><button class="btn-save" onclick="saveClient()" id="btn-save-client" disabled>💾 حفظ</button></div>
   <div class="msg" id="m-clients"></div>
   <div class="table-container"><table><thead><tr><th>#</th><th>الرقم</th><th>الاسم</th><th>الجوال</th><th>البريد</th><th>المدينة</th><th>الجنس</th><th>حذف</th></tr></thead><tbody id="t-clients"></tbody></table></div>
