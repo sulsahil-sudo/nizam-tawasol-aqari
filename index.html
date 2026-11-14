@@ -457,11 +457,36 @@ function checkClientForm() {
   !(name && validPhone && city && gender);
 }
 function checkListingForm() {
-  const type = v('l_type'), client = v('l_client'), propType = v('l_property_type'), city = v('l_city'), district = v('l_district');
-  let valid = !!(type && client && propType && city && district);
-  if (type === 'offer') valid = valid && !!n('l_price');
-  else valid = valid && !!n('l_budget_min') && !!n('l_budget_max');
-  document.getElementById('btn-save-listing').disabled = !valid;
+
+  const type =
+    document.getElementById('l_type').value;
+
+  const client =
+    document.getElementById('l_client').value;
+
+  const city =
+    document.getElementById('l_city').value;
+
+  const district =
+    document.getElementById('l_district').value;
+
+  const price =
+    document.getElementById('l_price')
+      ? document.getElementById('l_price').value
+      : '';
+
+  let valid =
+    client &&
+    city &&
+    district;
+
+  if (type === 'offer') {
+    valid = valid && price;
+  }
+
+  document.getElementById(
+    'btn-save-listing'
+  ).disabled = !valid;
 }
 function checkDealForm() { document.getElementById('btn-save-deal').disabled = !(v('d_listing') && n('d_amount')); }
 
