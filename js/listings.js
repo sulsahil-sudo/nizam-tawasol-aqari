@@ -60,11 +60,9 @@ async function saveListing() {
 
   } else {
 
-    row.budget_min =
-      n('l_budget_min');
+    row.budget_min = n('l_budget_min');
+    row.budget_max = n('l_budget_max');
 
-    row.budget_max =
-      n('l_budget_max');
   }
 
   const { error } =
@@ -84,6 +82,9 @@ async function saveListing() {
   }
 
   await loadData();
+
+  document.getElementById('l_city').value = '';
+  document.getElementById('l_district').value = '';
 
   msg(
     'listings',
