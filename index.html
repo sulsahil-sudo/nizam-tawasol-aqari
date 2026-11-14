@@ -21,8 +21,8 @@ h1{color:#1e3c72;font-size:22px}
 .b1{background:linear-gradient(135deg,#2980b9,#3498db)}.b2{background:linear-gradient(135deg,#27ae60,#2ecc71)}.b3{background:linear-gradient(135deg,#e67e22,#f39c12)}.b5{background:linear-gradient(135deg,#c0392b,#e74c3c)}.b6{background:linear-gradient(135deg,#16a085,#1abc9c)}
 .form-grid{
   display:grid;
-  grid-template-columns:repeat(3,minmax(200px,1fr));
-  gap:10px;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
   margin-bottom:15px;
 }
 label{display:block;font-weight:bold;color:#34495e;margin-bottom:6px;font-size:14px}
@@ -128,7 +128,7 @@ tr:nth-child(even){background:#f9fafc}
   class="msg ok"
   style="display:none">
 </div>
- <div class="clients-grid">
+<div class="form-grid">
     <div><label>الاسم *</label><input type="text" id="c_name" oninput="checkClientForm()"></div>
  <div>
   <label>الجوال *</label>
@@ -173,7 +173,7 @@ placeholder="example@gmail.com"
   </div>
   <div class="buttons"><button class="btn-save" onclick="saveClient()" id="btn-save-client" disabled>💾 حفظ</button></div>
   <div class="msg" id="m-clients"></div>
-  <div class="table-container"><table><thead><tr><th>#</th><th>الرقم</th><th>الاسم</th><th>الجوال</th><th>المدينة</th><th>الجنس</th><th>حذف</th></tr></thead><tbody id="t-clients"></tbody></table></div>
+  <div class="table-container"><table><thead><tr><th>#</th><th>الرقم</th><th>الاسم</th><th>الجوال</th><th>البريد</th><th>المدينة</th><th>الجنس</th><th>حذف</th></tr></thead><tbody id="t-clients"></tbody></table></div>
 </div>
 <div class="screen view" id="v-listings">
 
