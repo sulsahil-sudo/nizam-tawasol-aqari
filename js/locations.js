@@ -114,6 +114,9 @@ function loadListingDistricts() {
   const city =
     document.getElementById('l_city').value;
 
+  console.log('REGION=', region);
+  console.log('CITY=', city);
+
   const districtSelect =
     document.getElementById('l_district');
 
@@ -127,12 +130,14 @@ function loadListingDistricts() {
         x.city === city
     );
 
+  console.log('DISTRICTS=', districts);
+
   districts.forEach(item => {
 
     districtSelect.innerHTML +=
       `<option value="${item.district}">
         ${item.district}
       </option>`;
-
   });
+}
 }
