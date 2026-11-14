@@ -54,7 +54,12 @@ tr:nth-child(even){background:#f9fafc}
   gap:12px;
   margin:20px 0;
 }
-
+.clients-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:12px;
+  align-items:end;
+}
 .card{
   background:#fff;
   border-radius:12px;
@@ -123,7 +128,7 @@ tr:nth-child(even){background:#f9fafc}
   class="msg ok"
   style="display:none">
 </div>
-  <div class="form-grid">
+ <div class="clients-grid">
     <div><label>الاسم *</label><input type="text" id="c_name" oninput="checkClientForm()"></div>
  <div>
   <label>الجوال *</label>
