@@ -143,7 +143,7 @@ tr:nth-child(even){background:#f9fafc}
 <input
   type="email"
   id="c_email"
-  placeholder="example@gmail.com">
+placeholder="example@gmail.com"
 </div>
     <div>
   <label>المنطقة *</label>
@@ -572,7 +572,7 @@ async function saveDeal() {
 }
 
 function renderAll() {
-  document.getElementById('t-clients').innerHTML = DB.clients.map((c, i) => `<tr><td>${i+1}</td><td>${c.id}</td><td>${c.name}</td><td>${c.phone}</td><td>${c.city}</td><td>${c.gender || '—'}</td><td><button class="btn-del" onclick="delClient('${c.id}')">حذف</button></td></tr>`).join('');
+  document.getElementById('t-clients').innerHTML = DB.clients.map((c, i) => `<tr><td>${i+1}</td><td>${c.id}</td><td>${c.name}</td><td>${c.phone}</td>  <td>${c.email || '-'}</td><td>${c.city}</td><td>${c.gender || '—'}</td><td><button class="btn-del" onclick="delClient('${c.id}')">حذف</button></td></tr>`).join('');
   document.getElementById('t-listings').innerHTML = DB.listings.map((l, i) => {
     const priceTxt = l.type === 'offer' ? (l.price ? l.price.toLocaleString('ar-SA') + ' ريال' : '-') : `من ${l.budget_min} إلى ${l.budget_max}`;
     return `<tr><td>${i+1}</td><td>${l.type === 'offer' ? '🏠 عرض' : '🔍 طلب'}</td><td>${getClientName(l.client_id)}</td><td>${l.property_type}</td><td>${l.city} - ${l.district}</td><td>${priceTxt}</td><td><button class="btn-del" onclick="delListing('${l.id}')">حذف</button></td></tr>`;
