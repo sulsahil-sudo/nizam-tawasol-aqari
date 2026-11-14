@@ -19,7 +19,12 @@ h1{color:#1e3c72;font-size:22px}
 .home-btn{display:flex;align-items:center;justify-content:flex-start;gap:15px;padding:20px;border:none;border-radius:12px;cursor:pointer;font-size:16px;font-weight:bold;color:#fff;transition:transform .2s;width:100%}
 .home-btn:active{transform:scale(.98)}.home-btn .icon{font-size:28px}
 .b1{background:linear-gradient(135deg,#2980b9,#3498db)}.b2{background:linear-gradient(135deg,#27ae60,#2ecc71)}.b3{background:linear-gradient(135deg,#e67e22,#f39c12)}.b5{background:linear-gradient(135deg,#c0392b,#e74c3c)}.b6{background:linear-gradient(135deg,#16a085,#1abc9c)}
-.form-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:15px}
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(200px,1fr));
+  gap:10px;
+  margin-bottom:15px;
+}
 label{display:block;font-weight:bold;color:#34495e;margin-bottom:6px;font-size:14px}
 input,select,textarea{width:100%;padding:12px;border:1px solid #ccc;border-radius:8px;font-size:16px;font-family:inherit}
 .buttons{display:flex;flex-direction:column;gap:10px;margin-bottom:15px}
@@ -113,6 +118,11 @@ tr:nth-child(even){background:#f9fafc}
 
 <div class="screen view" id="v-clients">
   <div class="view-header"><h2>👥 العملاء</h2><button class="back-btn" onclick="go('home')">← الرئيسية</button></div>
+  <div
+  id="lastClientSaved"
+  class="msg ok"
+  style="display:none">
+</div>
   <div class="form-grid">
     <div><label>الاسم *</label><input type="text" id="c_name" oninput="checkClientForm()"></div>
  <div>
@@ -129,8 +139,10 @@ tr:nth-child(even){background:#f9fafc}
     ">
 </div>
     <div>
-  <label>البريد الإلكتروني</label>
-  <input type="email" id="c_email">
+<input
+  type="email"
+  id="c_email"
+  placeholder="example@gmail.com">
 </div>
     <div>
   <label>المنطقة *</label>
