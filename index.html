@@ -456,6 +456,7 @@ disabled>
 <th>الاسم</th>
 <th>الجوال</th>
 <th>البريد</th>
+<th>المنطقة</th>
 <th>المدينة</th>
 <th>الجنس</th>
 <th>حذف</th>
@@ -1183,19 +1184,27 @@ function checkDealForm() {
 
 async function saveClient() {
 
-  const row = {
+ const row = {
 
-    name: v('c_name'),
-    phone: v('c_phone'),
-    email: v('c_email'),
-    city: v('c_city'),
-    gender: v('c_gender'),
+  name: v('c_name'),
 
-    phone_verified:false,
-    email_verified:false,
-    client_status:'جديد'
+  phone: v('c_phone'),
 
-  };
+  email: v('c_email'),
+
+  region: v('c_region'),
+
+  city: v('c_city'),
+
+  gender: v('c_gender'),
+
+  phone_verified:false,
+
+  email_verified:false,
+
+  client_status:'جديد'
+
+};
 
   const { error } =
     await supabaseClient
@@ -1399,7 +1408,7 @@ async function saveDeal() {
     <td>${c.phone}</td>
 
     <td>${c.email || '-'}</td>
-
+    <td>${c.region || '-'}</td>
     <td>${c.city}</td>
 
     <td>${c.gender || '—'}</td>
