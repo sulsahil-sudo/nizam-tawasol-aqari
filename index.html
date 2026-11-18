@@ -209,6 +209,7 @@ tr:nth-child(even){background:#f9fafc}
 
       <select
         id="l_city"
+        onchange="checkListingForm();loadListingDistricts()">
         onchange="checkListingForm()">
 
         <option value="">
@@ -702,6 +703,35 @@ function loadClientCities() {
   });
 
   checkClientForm();
+}
+  function loadListingDistricts() {
+
+  const region =
+    document.getElementById('l_region').value;
+
+  const city =
+    document.getElementById('l_city').value;
+
+  const districtSelect =
+    document.getElementById('l_district');
+
+  districtSelect.innerHTML =
+    '<option value="">اختر الحي</option>';
+
+  const districts =
+    locationsData.filter(
+      x =>
+        x.region === region &&
+        x.city === city
+    );
+
+  districts.forEach(item => {
+
+    districtSelect.innerHTML +=
+      `<option value="${item.district}">
+        ${item.district}
+      </option>`;
+  });
 }
 function exportExcel() {
   const wb = XLSX.utils.book_new();
